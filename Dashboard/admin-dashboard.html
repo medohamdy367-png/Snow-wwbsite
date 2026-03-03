@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* إضافات خاصة بلوحة الإدارة */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(10, 31, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 2px solid #4aa3ff;
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .admin-main {
+            flex: 1;
+            margin-right: 280px;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .admin-search {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .admin-search input {
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(74,163,255,0.3);
+            border-radius: 20px;
+            color: white;
+            width: 300px;
+        }
+        
+        .admin-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74,163,255,0.3);
+        }
+        
+        .admin-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #0a1f2e;
+        }
+        
+        .admin-card-value {
+            font-size: 2rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .admin-table {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            overflow-x: auto;
+        }
+        
+        .admin-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th {
+            text-align: right;
+            padding: 1rem;
+            background: rgba(74,163,255,0.2);
+            color: #a8e6ff;
+        }
+        
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+        }
+        
+        .admin-table tr:hover {
+            background: rgba(74,163,255,0.1);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .status-active {
+            background: #00cc6620;
+            color: #00cc66;
+            border: 1px solid #00cc66;
+        }
+        
+        .status-warning {
+            background: #ffaa0020;
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+        }
+        
+        .status-blocked {
+            background: #ff444420;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .admin-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .btn-edit {
+            background: #4aa3ff20;
+            color: #4aa3ff;
+            border: 1px solid #4aa3ff;
+        }
+        
+        .btn-edit:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+        
+        .btn-delete {
+            background: #ff444420;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+        
+        .btn-delete:hover {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .btn-promote {
+            background: #00cc6620;
+            color: #00cc66;
+            border: 1px solid #00cc66;
+        }
+        
+        .btn-promote:hover {
+            background: #00cc66;
+            color: #0a1f2e;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            padding: 0.8rem 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab:hover,
+        .admin-tab.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            border-color: #4aa3ff;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .quick-action {
+            background: rgba(74,163,255,0.1);
+            border: 2px dashed #4aa3ff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: scale(1.05);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #0a1f2e;
+            border: 2px solid #4aa3ff;
+            border-radius: 30px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-close {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ff4444;
+        }
+        
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .log-item {
+            padding: 0.8rem;
+            border-right: 3px solid #4aa3ff;
+            background: rgba(255,255,255,0.02);
+            margin: 0.5rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .admin-main {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- القائمة الجانبية -->
+        <aside class="admin-sidebar">
+            <div class="logo" style="margin-bottom: 2rem;">
+                <span class="snow-icon">❄️</span>
+                <h1>ADMIN</h1>
+            </div>
+            
+            <div class="user-info" style="text-align: center; margin-bottom: 2rem;">
+                <div class="user-avatar" style="font-size: 4rem;">👑</div>
+                <div class="user-name" style="font-size: 1.3rem;">الإمبراطور</div>
+                <div class="user-rank" style="color: gold;">فـانـتـيـاس</div>
+            </div>
+            
+            <ul class="dashboard-menu">
+                <li><a href="#" class="active" onclick="showSection('dashboard')">📊 الرئيسية</a></li>
+                <li><a href="#" onclick="showSection('members')">👥 إدارة الأعضاء</a></li>
+                <li><a href="#" onclick="showSection('ranks')">👑 إدارة الرتب</a></li>
+                <li><a href="#" onclick="showSection('events')">🎮 إدارة الفعاليات</a></li>
+                <li><a href="#" onclick="showSection('punishments')">⚠️ نظام العقوبات</a></li>
+                <li><a href="#" onclick="showSection('points')">💰 نظام النقاط</a></li>
+                <li><a href="#" onclick="showSection('messages')">📬 رسائل التواصل</a></li>
+                <li><a href="#" onclick="showSection('reports')">📈 التقارير</a></li>
+                <li><a href="#" onclick="showSection('settings')">⚙️ الإعدادات</a></li>
+                <li><a href="../index.html">🔙 العودة للموقع</a></li>
+            </ul>
+        </aside>
+        
+        <!-- المحتوى الرئيسي -->
+        <main class="admin-main" id="adminMain">
+            <!-- رأس الصفحة -->
+            <div class="admin-header">
+                <h2>مرحباً فـانـتـيـاس 👑</h2>
+                <div class="admin-search">
+                    <input type="text" placeholder="بحث عن عضو..." id="searchInput" onkeyup="searchMembers()">
+                    <span class="snow-icon">🔍</span>
+                </div>
+            </div>
+            
+            <!-- الأقسام المختلفة -->
+            <div id="dashboard-section">
+                <!-- بطاقات الإحصائيات -->
+                <div class="admin-cards">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div class="admin-card-icon">👥</div>
+                            <span>إجمالي الأعضاء</span>
+                        </div>
+                        <div class="admin-card-value" id="totalMembers">50</div>
+                        <div style="color: #00cc66;">+12 هذا الشهر</div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div class="admin-card-icon">📊</div>
+                            <span>النشاط اليومي</span>
+                        </div>
+                        <div class="admin-card-value" id="activeToday">35</div>
+                        <div style="color: #ffaa00;">نشط الآن: 12</div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div class="admin-card-icon">🎮</div>
+                            <span>فعاليات هذا الشهر</span>
+                        </div>
+                        <div class="admin-card-value" id="totalEvents">8</div>
+                        <div>4 فعاليات قادمة</div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <div class="admin-card-icon">⚠️</div>
+                            <span>إنذارات نشطة</span>
+                        </div>
+                        <div class="admin-card-value" id="activeWarnings">3</div>
+                        <div style="color: #ff4444;">2 أعضاء محظورين</div>
+                    </div>
+                </div>
+                
+                <!-- الإجراءات السريعة -->
+                <h3>⚡ إجراءات سريعة</h3>
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="openAddMemberModal()">
+                        <div style="font-size: 2rem;">➕</div>
+                        <div>إضافة عضو</div>
+                    </div>
+                    <div class="quick-action" onclick="createEvent()">
+                        <div style="font-size: 2rem;">🎮</div>
+                        <div>فعالية جديدة</div>
+                    </div>
+                    <div class="quick-action" onclick="sendNotification()">
+                        <div style="font-size: 2rem;">📢</div>
+                        <div>إرسال إشعار</div>
+                    </div>
+                    <div class="quick-action" onclick="backupData()">
+                        <div style="font-size: 2rem;">💾</div>
+                        <div>نسخ احتياطي</div>
+                    </div>
+                </div>
+                
+                <!-- آخر الأعضاء المنضمين -->
+                <div class="admin-table" style="margin-top: 2rem;">
+                    <h3>🆕 آخر الأعضاء المنضمين</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>العضو</th>
+                                <th>الرتبة</th>
+                                <th>تاريخ الانضمام</th>
+                                <th>الحالة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="newMembersTable">
+                            <!-- هتتعبأ بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- آخر النشاطات -->
+                <div class="admin-table" style="margin-top: 2rem;">
+                    <h3>📋 آخر النشاطات</h3>
+                    <div class="activity-log" id="activityLog">
+                        <div class="log-item">✅ تم ترقية "زورو" إلى رتبة جنرال</div>
+                        <div class="log-item">🎮 تم إنشاء فعالية جديدة: مشاهدة Attack on Titan</div>
+                        <div class="log-item">⚠️ تم إنذار "عضو ١" بسبب مخالفة القوانين</div>
+                        <div class="log-item">👥 انضم عضو جديد: "ليفاي"</div>
+                        <div class="log-item">💰 حصل "سانجي" على ٥٠ نقطة تفاعل</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- قسم إدارة الأعضاء (يظهر عند الضغط) -->
+            <div id="members-section" style="display: none;">
+                <h2>👥 إدارة الأعضاء</h2>
+                
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="filterMembers('all')">الكل</button>
+                    <button class="admin-tab" onclick="filterMembers('active')">نشط</button>
+                    <button class="admin-tab" onclick="filterMembers('warning')">محذرين</button>
+                    <button class="admin-tab" onclick="filterMembers('blocked')">محظورين</button>
+                </div>
+                
+                <div class="admin-table">
+                    <table id="membersTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم العضو</th>
+                                <th>الرتبة</th>
+                                <th>النقاط</th>
+                                <th>الحالة</th>
+                                <th>آخر نشاط</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allMembersTable">
+                            <!-- هتتعبأ بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- قسم إدارة الرتب -->
+            <div id="ranks-section" style="display: none;">
+                <h2>👑 إدارة الرتب</h2>
+                
+                <div class="quick-actions" style="margin-bottom: 2rem;">
+                    <div class="quick-action" onclick="openAddRankModal()">
+                        <div style="font-size: 2rem;">➕</div>
+                        <div>إضافة رتبة جديدة</div>
+                    </div>
+                </div>
+                
+                <div class="admin-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الرتبة</th>
+                                <th>عدد الأعضاء</th>
+                                <th>متوسط النقاط</th>
+                                <th>شروط الترقية</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>الامبراطور ⛓️</td>
+                                <td>١</td>
+                                <td>٥٠٠٠</td>
+                                <td>مؤسس النقابة</td>
+                                <td class="admin-actions">
+                                    <button class="admin-btn btn-edit">تعديل</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>نائب الامبراطور ⛄</td>
+                                <td>٢</td>
+                                <td>٤٥٠٠</td>
+                                <td>٣٠٠٠ نقطة + موافقة</td>
+                                <td class="admin-actions">
+                                    <button class="admin-btn btn-edit">تعديل</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>المستشار 🌹</td>
+                                <td>١</td>
+                                <td>٤٠٠٠</td>
+                                <td>٢٥٠٠ نقطة</td>
+                                <td class="admin-actions">
+                                    <button class="admin-btn btn-edit">تعديل</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- قسم العقوبات -->
+            <div id="punishments-section" style="display: none;">
+                <h2>⚠️ نظام العقوبات</h2>
+                
+                <div class="admin-cards">
+                    <div class="admin-card">
+                        <div class="admin-card-value">٣</div>
+                        <div>إنذارات نشطة</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-value">٢</div>
+                        <div>أعضاء محظورين</div>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-value">٥</div>
+                        <div>مقيدين مؤقتاً</div>
+                    </div>
+                </div>
+                
+                <div class="admin-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>العضو</th>
+                                <th>المخالفة</th>
+                                <th>العقوبة</th>
+                                <th>تاريخ المخالفة</th>
+                                <th>الحالة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>عضو ١</td>
+                                <td>كثرة الإزعاج</td>
+                                <td>إنذار</td>
+                                <td>2026-03-01</td>
+                                <td><span class="status-badge status-warning">نشط</span></td>
+                                <td class="admin-actions">
+                                    <button class="admin-btn btn-delete">رفع</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>عضو ٢</td>
+                                <td>روابط مخالفة</td>
+                                <td>تقييد يومين</td>
+                                <td>2026-03-05</td>
+                                <td><span class="status-badge status-blocked">منفذة</span></td>
+                                <td class="admin-actions">
+                                    <button class="admin-btn btn-edit">تعديل</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="quick-action" style="margin-top: 2rem;" onclick="openPunishmentModal()">
+                    <div style="font-size: 2rem;">➕</div>
+                    <div>إضافة مخالفة جديدة</div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- مودال إضافة عضو -->
+    <div class="modal" id="addMemberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>➕ إضافة عضو جديد</h3>
+                <span class="modal-close" onclick="closeModal('addMemberModal')">&times;</span>
+            </div>
+            
+            <form onsubmit="addMember(event)">
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>الرتبة</label>
+                    <select>
+                        <option>متدرب 🧸</option>
+                        <option>حامل راية 🎀</option>
+                        <option>حامل بريق ✨</option>
+                        <option>ملازم ⚔️</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>رقم الواتساب</label>
+                    <input type="tel" placeholder="01xxxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label>نقاط البداية</label>
+                    <input type="number" value="0">
+                </div>
+                <button type="submit" class="submit-btn">إضافة العضو</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // بيانات وهمية للأعضاء
+        const members = [
+            { id: 1, name: 'فـانـتـيـاس', rank: 'الامبراطور ⛓️', points: 5000, status: 'active', lastActive: 'الآن', joinDate: '2024-01-15' },
+            { id: 2, name: 'سـكـونـا', rank: 'نائب الامبراطور ⛄', points: 4500, status: 'active', lastActive: 'منذ 5 دقائق', joinDate: '2024-01-20' },
+            { id: 3, name: 'هـيـنـاتـا', rank: 'نائب الامبراطور ⛄', points: 4400, status: 'active', lastActive: 'منذ ساعة', joinDate: '2024-01-20' },
+            { id: 4, name: 'جان 🔥', rank: 'المستشار 🌹', points: 4000, status: 'active', lastActive: 'منذ 3 ساعات', joinDate: '2024-02-01' },
+            { id: 5, name: 'زورو', rank: 'جنرال ⚙️', points: 3500, status: 'active', lastActive: 'منذ 10 دقائق', joinDate: '2024-02-15' },
+            { id: 6, name: 'سانجي', rank: 'نائب جنرال 🧭', points: 3200, status: 'warning', lastActive: 'منذ يوم', joinDate: '2024-02-20' },
+            { id: 7, name: 'نورمان', rank: 'عميد 🕯', points: 3000, status: 'active', lastActive: 'منذ 2 ساعة', joinDate: '2024-03-01' },
+            { id: 8, name: 'رايو', rank: 'تشيبوكاي 🧮', points: 2800, status: 'blocked', lastActive: 'منذ 3 أيام', joinDate: '2024-03-10' },
+        ];
+        
+        // عرض الأقسام
+        function showSection(section) {
+            // إخفاء الكل
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('members-section').style.display = 'none';
+            document.getElementById('ranks-section').style.display = 'none';
+            document.getElementById('punishments-section').style.display = 'none';
+            
+            // إظهار المطلوب
+            if (section === 'dashboard') {
+                document.getElementById('dashboard-section').style.display = 'block';
+            } else if (section === 'members') {
+                document.getElementById('members-section').style.display = 'block';
+                loadMembersTable();
+            } else if (section === 'ranks') {
+                document.getElementById('ranks-section').style.display = 'block';
+            } else if (section === 'punishments') {
+                document.getElementById('punishments-section').style.display = 'block';
+            }
+            
+            // تحديث الكلاس النشط في القائمة
+            document.querySelectorAll('.dashboard-menu a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        // تحميل جدول الأعضاء
+        function loadMembersTable() {
+            const tbody = document.getElementById('allMembersTable');
+            tbody.innerHTML = '';
+            
+            members.forEach((member, index) => {
+                const statusClass = member.status === 'active' ? 'status-active' : 
+                                   member.status === 'warning' ? 'status-warning' : 'status-blocked';
+                const statusText = member.status === 'active' ? 'نشط' : 
+                                  member.status === 'warning' ? 'محذر' : 'محظور';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${member.name}</td>
+                        <td>${member.rank}</td>
+                        <td>${member.points}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${member.lastActive}</td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">تعديل</button>
+                            <button class="admin-btn btn-promote" onclick="promoteMember(${member.id})">ترقية</button>
+                            <button class="admin-btn btn-delete" onclick="deleteMember(${member.id})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // تحميل آخر الأعضاء
+            loadNewMembers();
+        }
+        
+        // آخر الأعضاء
+        function loadNewMembers() {
+            const tbody = document.getElementById('newMembersTable');
+            const newMembers = members.slice(-3);
+            
+            tbody.innerHTML = '';
+            newMembers.forEach(member => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${member.name}</td>
+                        <td>${member.rank}</td>
+                        <td>${member.joinDate}</td>
+                        <td><span class="status-badge status-active">نشط</span></td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">عرض</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // فلترة الأعضاء
+        function filterMembers(filter) {
+            // تحديث التبز
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // فلترة حسب الحالة
+            const filtered = filter === 'all' ? members : members.filter(m => m.status === filter);
+            
+            const tbody = document.getElementById('allMembersTable');
+            tbody.innerHTML = '';
+            
+            filtered.forEach((member, index) => {
+                const statusClass = member.status === 'active' ? 'status-active' : 
+                                   member.status === 'warning' ? 'status-warning' : 'status-blocked';
+                const statusText = member.status === 'active' ? 'نشط' : 
+                                  member.status === 'warning' ? 'محذر' : 'محظور';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${member.name}</td>
+                        <td>${member.rank}</td>
+                        <td>${member.points}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${member.lastActive}</td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">تعديل</button>
+                            <button class="admin-btn btn-promote" onclick="promoteMember(${member.id})">ترقية</button>
+                            <button class="admin-btn btn-delete" onclick="deleteMember(${member.id})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // بحث في الأعضاء
+        function searchMembers() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchText) {
+                loadMembersTable();
+                return;
+            }
+            
+            const filtered = members.filter(m => m.name.toLowerCase().includes(searchText));
+            
+            const tbody = document.getElementById('allMembersTable');
+            tbody.innerHTML = '';
+            
+            filtered.forEach((member, index) => {
+                const statusClass = member.status === 'active' ? 'status-active' : 
+                                   member.status === 'warning' ? 'status-warning' : 'status-blocked';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${member.name}</td>
+                        <td>${member.rank}</td>
+                        <td>${member.points}</td>
+                        <td><span class="status-badge ${statusClass}">${member.status}</span></td>
+                        <td>${member.lastActive}</td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">تعديل</button>
+                            <button class="admin-btn btn-promote" onclick="promoteMember(${member.id})">ترقية</button>
+                            <button class="admin-btn btn-delete" onclick="deleteMember(${member.id})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // دوال الإجراءات
+        function editMember(id) {
+            alert(`تعديل بيانات العضو رقم ${id}`);
+        }
+        
+        function promoteMember(id) {
+            if (confirm('هل أنت متأكد من ترقية هذا العضو؟')) {
+                alert(`تم ترقية العضو ${id}`);
+            }
+        }
+        
+        function deleteMember(id) {
+            if (confirm('⚠️ تحذير: هل أنت متأكد من حذف هذا العضو؟')) {
+                alert(`تم حذف العضو ${id}`);
+            }
+        }
+        
+        function openAddMemberModal() {
+            document.getElementById('addMemberModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function addMember(event) {
+            event.preventDefault();
+            alert('✅ تم إضافة العضو بنجاح');
+            closeModal('addMemberModal');
+        }
+        
+        function createEvent() {
+            alert('🌟 سيتم فتح نافذة إنشاء فعالية جديدة');
+        }
+        
+        function sendNotification() {
+            alert('📢 سيتم فتح نافذة إرسال الإشعارات');
+        }
+        
+        function backupData() {
+            alert('💾 تم أخذ نسخة احتياطية من البيانات');
+        }
+        
+        function openAddRankModal() {
+            alert('➕ إضافة رتبة جديدة');
+        }
+        
+        function openPunishmentModal() {
+            alert('⚠️ إضافة مخالفة جديدة');
+        }
+        
+        // تحميل البيانات عند فتح الصفحة
+        window.onload = function() {
+            loadMembersTable();
+        };
+    </script>
+</body>
+  </html>
