@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا - مملكة SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+        
+        .contact-info {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .contact-title {
+            font-size: 2rem;
+            color: #a8e6ff;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .contact-detail:hover {
+            border-color: #4aa3ff;
+            transform: translateX(-10px);
+            background: rgba(74,163,255,0.1);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #0a1f2e;
+        }
+        
+        .contact-text {
+            flex: 1;
+        }
+        
+        .contact-text h4 {
+            color: #a8e6ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-text p {
+            color: #e0f2fe;
+            direction: ltr;
+            text-align: left;
+            font-size: 1.2rem;
+        }
+        
+        .contact-text .phone-number {
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            font-size: 1.5rem;
+            color: #4aa3ff;
+            font-weight: bold;
+        }
+        
+        .contact-form {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b0d9ff;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(74,163,255,0.3);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4aa3ff;
+            box-shadow: 0 0 20px rgba(74,163,255,0.3);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border: none;
+            border-radius: 15px;
+            color: #0a1f2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px #4aa3ff;
+        }
+        
+        .social-section {
+            margin-top: 4rem;
+            text-align: center;
+        }
+        
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .social-card {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .social-card:hover {
+            transform: translateY(-10px);
+            background: #4aa3ff;
+            color: #0a1f2e;
+            box-shadow: 0 10px 30px #4aa3ff;
+        }
+        
+        .social-card:hover .social-icon {
+            color: #0a1f2e;
+        }
+        
+        .social-icon {
+            font-size: 3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-section {
+            margin: 4rem 0;
+        }
+        
+        .faq-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .faq-question h4 {
+            color: #a8e6ff;
+        }
+        
+        .faq-answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(74,163,255,0.3);
+            color: #b0d9ff;
+        }
+        
+        .whatsapp-direct {
+            background: #25D36620;
+            border: 2px solid #25D366;
+        }
+        
+        .whatsapp-direct .contact-icon {
+            background: #25D366;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="about.html">عن النقابة</a></li>
+                <li><a href="events.html">الفعاليات</a></li>
+                <li><a href="rules.html">القوانين</a></li>
+                <li><a href="contact.html" class="active">التواصل</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>📞 تواصل مع مملكة SNOW KORAL 📞</h2>
+            <p>نحن هنا للإجابة على استفساراتك واقتراحاتك</p>
+        </section>
+
+        <div class="contact-container">
+            <!-- معلومات التواصل -->
+            <div class="contact-info">
+                <h3 class="contact-title">❄️ معلومات الاتصال</h3>
+                
+                <!-- رقم الهاتف - الخاص بك -->
+                <div class="contact-detail whatsapp-direct" onclick="copyPhoneNumber()">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-text">
+                        <h4>رقم المؤسس / الإدارة</h4>
+                        <p class="phone-number" id="phoneNumber">01204479735</p>
+                        <small style="color: #25D366;">اضغط لنسخ الرقم</small>
+                    </div>
+                </div>
+                
+                <!-- رابط جروب الواتساب -->
+                <div class="contact-detail">
+                    <div class="contact-icon">💬</div>
+                    <div class="contact-text">
+                        <h4>جروب الواتساب الرسمي</h4>
+                        <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" target="_blank" style="color: #4aa3ff;">انضم الآن</a>
+                    </div>
+                </div>
+                
+                <!-- البريد الإلكتروني -->
+                <div class="contact-detail">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-text">
+                        <h4>البريد الإلكتروني</h4>
+                        <p>snow.koral@anime.eg</p>
+                    </div>
+                </div>
+                
+                <!-- موقع النقابة -->
+                <div class="contact-detail">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-text">
+                        <h4>المملكة</h4>
+                        <p>مملكة SNOW KORAL - على واتساب</p>
+                    </div>
+                </div>
+                
+                <!-- ساعات العمل -->
+                <div class="contact-detail">
+                    <div class="contact-icon">⏰</div>
+                    <div class="contact-text">
+                        <h4>أوقات النشاط</h4>
+                        <p>على مدار الساعة - الفعاليات ٨-١٢ مساءً</p>
+                    </div>
+                </div>
+                
+                <!-- إحصائيات سريعة -->
+                <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="text-align: center; background: rgba(74,163,255,0.1); padding: 1rem; border-radius: 15px;">
+                        <div style="font-size: 2rem; color: #a8e6ff;">٥٠</div>
+                        <div>عضو</div>
+                    </div>
+                    <div style="text-align: center; background: rgba(74,163,255,0.1); padding: 1rem; border-radius: 15px;">
+                        <div style="font-size: 2rem; color: #a8e6ff;">٢٤/٧</div>
+                        <div>نشاط</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- نموذج التواصل -->
+            <div class="contact-form">
+                <h3 class="contact-title">📝 أرسل لنا رسالة</h3>
+                
+                <form id="contactForm" onsubmit="sendMessage(event)">
+                    <div class="form-group">
+                        <label for="name">الاسم</label>
+                        <input type="text" id="name" required placeholder="أدخل اسمك">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" required placeholder="example@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">رقم الواتساب</label>
+                        <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">نوع الرسالة</label>
+                        <select id="subject">
+                            <option value="general">استفسار عام</option>
+                            <option value="join">طلب انضمام</option>
+                            <option value="event">اقتراح فعالية</option>
+                            <option value="problem">مشكلة أو شكوى</option>
+                            <option value="cooperation">تعاون أو شراكة</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">الرسالة</label>
+                        <textarea id="message" required placeholder="اكتب رسالتك هنا..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">إرسال الرسالة ❄️</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- وسائل التواصل الاجتماعي -->
+        <div class="social-section">
+            <h3 class="section-title">تابعنا على</h3>
+            <div class="social-grid">
+                <a href="#" class="social-card" target="_blank">
+                    <div class="social-icon">📱</div>
+                    <span>واتساب</span>
+                </a>
+                <a href="#" class="social-card" target="_blank">
+                    <div class="social-icon">💬</div>
+                    <span>تليجرام</span>
+                </a>
+                <a href="#" class="social-card" target="_blank">
+                    <div class="social-icon">📷</div>
+                    <span>انستغرام</span>
+                </a>
+                <a href="#" class="social-card" target="_blank">
+                    <div class="social-icon">🐦</div>
+                    <span>تويتر</span>
+                </a>
+                <a href="#" class="social-card" target="_blank">
+                    <div class="social-icon">▶️</div>
+                    <span>يوتيوب</span>
+                </a>
+                <a href="#" class="social-card" target="_blank">
+                    <div class="social-icon">🎮</div>
+                    <span>ديسكورد</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- الأسئلة الشائعة -->
+        <div class="faq-section">
+            <h3 class="section-title">❓ الأسئلة الشائعة</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>كيف أنضم للنقابة؟</h4>
+                    <span style="font-size: 1.5rem;">➕</span>
+                </div>
+                <div class="faq-answer" style="display: none;">
+                    يمكنك الانضمام عن طريق الضغط على رابط الواتساب الموجود في الصفحة، أو التسجيل في الموقع والتواصل مع الإدارة.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>ما هي شروط الترقية؟</h4>
+                    <span style="font-size: 1.5rem;">➕</span>
+                </div>
+                <div class="faq-answer" style="display: none;">
+                    الترقية تعتمد على التفاعل اليومي، المشاركة في الفعاليات، الالتزام بالقوانين، وعدد النقاط التي تحصل عليها.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>هل يوجد رسوم للانضمام؟</h4>
+                    <span style="font-size: 1.5rem;">➕</span>
+                </div>
+                <div class="faq-answer" style="display: none;">
+                    لا، الانضمام إلى مملكة SNOW KORAL مجاني تماماً! فقط أحب الأنمي والتزم بالقوانين.
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h4>كيف أحصل على النقاط؟</h4>
+                    <span style="font-size: 1.5rem;">➕</span>
+                </div>
+                <div class="faq-answer" style="display: none;">
+                    النقاط تمنح مقابل: التفاعل اليومي، الفوز في المسابقات، المشاركة في الفعاليات، مساعدة الأعضاء الجدد، النشاط المستمر.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>❄️ SNOW KORAL</h3>
+                <p>نقابة الأنمي الرسمية - مملكة الثلج</p>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <a href="ranks.html">الرتب</a>
+                <a href="members.html">الأعضاء</a>
+                <a href="contact.html">اتصل بنا</a>
+            </div>
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" target="_blank">جروب الواتساب</a>
+                <p style="direction: ltr;">01204479735</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // نسخ رقم الهاتف
+        function copyPhoneNumber() {
+            const phoneNumber = document.getElementById('phoneNumber').innerText;
+            navigator.clipboard.writeText(phoneNumber).then(() => {
+                alert('✅ تم نسخ الرقم: ' + phoneNumber);
+            }).catch(() => {
+                alert('❌ حدث خطأ في النسخ');
+            });
+        }
+        
+        // إرسال النموذج
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // هنا ممكن نضيف إرسال للبريد أو لقاعدة البيانات
+            
+            alert(`✅ شكراً ${name}، تم استلام رسالتك. سنتواصل معك قريباً على واتساب`);
+            
+            // تفريغ النموذج
+            event.target.reset();
+        }
+        
+        // فتح وإغلاق الأسئلة الشائعة
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('span');
+            
+            if (answer.style.display === 'none' || answer.style.display === '') {
+                answer.style.display = 'block';
+                icon.innerText = '➖';
+            } else {
+                answer.style.display = 'none';
+                icon.innerText = '➕';
+            }
+        }
+    </script>
+</body>
+</html>

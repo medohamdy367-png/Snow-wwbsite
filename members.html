@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأعضاء - مملكة SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .members-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 20px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            border-color: #4aa3ff;
+        }
+        
+        .member-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .member-stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .member-stat-value {
+            font-size: 2rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .member-stat-label {
+            color: #b0d9ff;
+            margin-top: 0.5rem;
+        }
+        
+        .member-card {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .member-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .member-points {
+            margin-top: 1rem;
+            color: gold;
+            font-weight: bold;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 3rem 0;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 10px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .page-btn:hover,
+        .page-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html" class="active">الأعضاء</a></li>
+                <li><a href="about.html">عن النقابة</a></li>
+                <li><a href="events.html">الفعاليات</a></li>
+                <li><a href="contact.html">التواصل</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>❄️ أعضاء مملكة SNOW KORAL ❄️</h2>
+            <p>تعرف على أعضاء النقابة الـ 50 وألقابهم الملكية</p>
+        </section>
+
+        <!-- إحصائيات الأعضاء -->
+        <div class="member-stats">
+            <div class="member-stat-card">
+                <div class="member-stat-value">٥٠</div>
+                <div class="member-stat-label">إجمالي الأعضاء</div>
+            </div>
+            <div class="member-stat-card">
+                <div class="member-stat-value">٣٥</div>
+                <div class="member-stat-label">نشط هذا الأسبوع</div>
+            </div>
+            <div class="member-stat-card">
+                <div class="member-stat-value">٢٢</div>
+                <div class="member-stat-label">رتبة مختلفة</div>
+            </div>
+        </div>
+
+        <!-- فلتر الرتب -->
+        <div class="members-filter">
+            <button class="filter-btn active" data-filter="all">الكل</button>
+            <button class="filter-btn" data-filter="imperial">الإمبراطورية</button>
+            <button class="filter-btn" data-filter="royal">الملكية</button>
+            <button class="filter-btn" data-filter="minister">الوزارية</button>
+            <button class="filter-btn" data-filter="admin">الإدارية</button>
+            <button class="filter-btn" data-filter="weekly">ملوك الاسبوع</button>
+        </div>
+
+        <!-- شبكة الأعضاء -->
+        <div class="members-grid" id="membersGrid">
+            <!-- الأعضاء هيتم إضافتهم ديناميكياً بالجافاسكريبت -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn active">١</button>
+            <button class="page-btn">٢</button>
+            <button class="page-btn">٣</button>
+            <button class="page-btn">٤</button>
+            <button class="page-btn">٥</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>❄️ SNOW KORAL</h3>
+                <p>نقابة الأنمي الرسمية - مملكة الثلج</p>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <a href="ranks.html">الرتب</a>
+                <a href="members.html">الأعضاء</a>
+                <a href="rules.html">القوانين</a>
+            </div>
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" target="_blank">جروب الواتساب</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // بيانات الأعضاء (محاكاة للـ 50 عضو)
+        const members = [
+            // الرتب العليا
+            { name: 'فـانـتـيـاس 🌹🌑', rank: 'الامبراطور ⛓️', rankType: 'imperial', avatar: '👑', points: 5000, joinDate: '2024-01-15', status: 'active' },
+            { name: 'سـكـونـا', rank: 'نائب الامبراطور ⛄', rankType: 'imperial', avatar: '👥', points: 4500, joinDate: '2024-01-20', status: 'active' },
+            { name: 'هـيـنـاتـا', rank: 'نائب الامبراطور ⛄', rankType: 'imperial', avatar: '👥', points: 4400, joinDate: '2024-01-20', status: 'active' },
+            { name: 'جان 🔥', rank: 'المستشار 🌹', rankType: 'royal', avatar: '📜', points: 4000, joinDate: '2024-02-01', status: 'active' },
+            
+            // أعضاء إداريين
+            { name: 'زورو', rank: 'جنرال ⚙️', rankType: 'admin', avatar: '⚔️', points: 3500, joinDate: '2024-02-15', status: 'active' },
+            { name: 'سانجي', rank: 'نائب جنرال 🧭', rankType: 'admin', avatar: '🧭', points: 3200, joinDate: '2024-02-20', status: 'active' },
+            { name: 'نورمان', rank: 'عميد 🕯', rankType: 'admin', avatar: '🕯', points: 3000, joinDate: '2024-03-01', status: 'active' },
+            { name: 'رايو', rank: 'تشيبوكاي 🧮', rankType: 'admin', avatar: '🧮', points: 2800, joinDate: '2024-03-10', status: 'active' },
+            
+            // ملوك الاسبوع
+            { name: 'ليفاي', rank: 'ملك التفاعل 🔥', rankType: 'weekly', avatar: '🔥', points: 1200, joinDate: '2024-04-01', status: 'hot' },
+            { name: 'إيرين', rank: 'ملك الفعاليات 🌨️', rankType: 'weekly', avatar: '🌨️', points: 1100, joinDate: '2024-04-01', status: 'hot' },
+            { name: 'ميكاسا', rank: 'ملكة السوالف ☕', rankType: 'weekly', avatar: '☕', points: 1000, joinDate: '2024-04-01', status: 'hot' },
+        ];
+
+        // إضافة أعضاء عشوائيين حتى نصل لـ 50 عضو
+        for (let i = 1; i <= 39; i++) {
+            const ranks = ['متدرب 🧸', 'حامل راية 🎀', 'حامل بريق ✨', 'ملازم ⚔️'];
+            const rankTypes = ['admin', 'admin', 'admin', 'admin'];
+            const randomRank = Math.floor(Math.random() * ranks.length);
+            
+            members.push({
+                name: `عضو ${i}`,
+                rank: ranks[randomRank],
+                rankType: rankTypes[randomRank],
+                avatar: ['🧸', '🎀', '✨', '⚔️'][randomRank],
+                points: Math.floor(Math.random() * 500) + 100,
+                joinDate: '2026-01-01',
+                status: 'active'
+            });
+        }
+
+        // عرض الأعضاء
+        function displayMembers(filter = 'all') {
+            const grid = document.getElementById('membersGrid');
+            grid.innerHTML = '';
+            
+            const filteredMembers = filter === 'all' 
+                ? members 
+                : members.filter(m => m.rankType === filter);
+            
+            filteredMembers.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'member-card rank-card';
+                card.innerHTML = `
+                    <div class="member-badge">${member.status === 'hot' ? '🔥' : '❄️'}</div>
+                    <div class="member-avatar">${member.avatar}</div>
+                    <h3 class="member-name">${member.name}</h3>
+                    <div class="member-rank">${member.rank}</div>
+                    <div class="member-points">⭐ ${member.points} نقطة</div>
+                    <div style="font-size: 0.8rem; color: #6b8ca6; margin-top: 0.5rem;">
+                        عضو منذ: ${new Date(member.joinDate).toLocaleDateString('ar-EG')}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // فلترة
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                displayMembers(this.dataset.filter);
+            });
+        });
+
+        // عرض الكل في البداية
+        displayMembers();
+    </script>
+</body>
+</html>

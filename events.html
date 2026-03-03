@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفعاليات - مملكة SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .events-header {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .events-calendar {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-month {
+            font-size: 2rem;
+            color: #a8e6ff;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+        
+        .calendar-weekday {
+            padding: 1rem;
+            background: rgba(74,163,255,0.1);
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .calendar-day {
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            min-height: 80px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(74,163,255,0.2);
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.has-event {
+            background: rgba(74,163,255,0.3);
+            border: 2px solid #4aa3ff;
+        }
+        
+        .event-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 1.2rem;
+        }
+        
+        .events-list {
+            margin: 3rem 0;
+        }
+        
+        .event-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            transform: translateX(-10px);
+            box-shadow: 0 10px 30px rgba(74,163,255,0.3);
+        }
+        
+        .event-date {
+            text-align: center;
+            background: rgba(74,163,255,0.2);
+            padding: 1rem;
+            border-radius: 15px;
+            min-width: 100px;
+        }
+        
+        .event-day {
+            font-size: 2rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .event-month {
+            color: #b0d9ff;
+        }
+        
+        .event-title {
+            font-size: 1.3rem;
+            color: #a8e6ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .event-location {
+            color: #6b8ca6;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-type {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .type-watch {
+            background: #4aa3ff20;
+            color: #4aa3ff;
+            border: 1px solid #4aa3ff;
+        }
+        
+        .type-game {
+            background: #ffaa0020;
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
+        }
+        
+        .type-contest {
+            background: #ff444420;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+        
+        .event-prize {
+            font-size: 1.5rem;
+        }
+        
+        .join-event-btn {
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            color: #0a1f2e;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .join-event-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #4aa3ff;
+        }
+        
+        .event-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+        
+        .event-stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .event-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .event-date {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="about.html">عن النقابة</a></li>
+                <li><a href="events.html" class="active">الفعاليات</a></li>
+                <li><a href="contact.html">التواصل</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>🎮 فعاليات مملكة SNOW KORAL 🎮</h2>
+            <p>شارك في المسابقات والفعاليات الأسبوعية واربح الجوائز</p>
+        </section>
+
+        <!-- إحصائيات الفعاليات -->
+        <div class="event-stats">
+            <div class="event-stat-card">
+                <div class="stat-value">١٢</div>
+                <div class="stat-label">فعالية هذا الشهر</div>
+            </div>
+            <div class="event-stat-card">
+                <div class="stat-value">٤٥</div>
+                <div class="stat-label">مشارك الأسبوع الماضي</div>
+            </div>
+            <div class="event-stat-card">
+                <div class="stat-value">١٠٠٠+</div>
+                <div class="stat-label">جوائز مقدمة</div>
+            </div>
+            <div class="event-stat-card">
+                <div class="stat-value">٥</div>
+                <div class="stat-label">فعاليات جارية</div>
+            </div>
+        </div>
+
+        <!-- التقويم الشهري -->
+        <div class="events-calendar">
+            <div class="calendar-header">
+                <button class="btn btn-login">◀</button>
+                <h3 class="calendar-month">مارس 2026</h3>
+                <button class="btn btn-login">▶</button>
+            </div>
+            
+            <div class="calendar-grid">
+                <div class="calendar-weekday">أحد</div>
+                <div class="calendar-weekday">إثنين</div>
+                <div class="calendar-weekday">ثلاثاء</div>
+                <div class="calendar-weekday">أربعاء</div>
+                <div class="calendar-weekday">خميس</div>
+                <div class="calendar-weekday">جمعة</div>
+                <div class="calendar-weekday">سبت</div>
+                
+                <!-- أيام الشهر -->
+                <div class="calendar-day">٢٥</div>
+                <div class="calendar-day">٢٦</div>
+                <div class="calendar-day">٢٧</div>
+                <div class="calendar-day">٢٨</div>
+                <div class="calendar-day has-event">
+                    ١
+                    <span class="event-badge">🎮</span>
+                </div>
+                <div class="calendar-day">٢</div>
+                <div class="calendar-day">٣</div>
+                
+                <div class="calendar-day">٤</div>
+                <div class="calendar-day">٥</div>
+                <div class="calendar-day has-event">
+                    ٦
+                    <span class="event-badge">📺</span>
+                </div>
+                <div class="calendar-day">٧</div>
+                <div class="calendar-day">٨</div>
+                <div class="calendar-day">٩</div>
+                <div class="calendar-day">١٠</div>
+                
+                <div class="calendar-day has-event">
+                    ١١
+                    <span class="event-badge">🏆</span>
+                </div>
+                <div class="calendar-day">١٢</div>
+                <div class="calendar-day">١٣</div>
+                <div class="calendar-day">١٤</div>
+                <div class="calendar-day">١٥</div>
+                <div class="calendar-day has-event">
+                    ١٦
+                    <span class="event-badge">🎮</span>
+                </div>
+                <div class="calendar-day">١٧</div>
+                
+                <div class="calendar-day">١٨</div>
+                <div class="calendar-day">١٩</div>
+                <div class="calendar-day">٢٠</div>
+                <div class="calendar-day">٢١</div>
+                <div class="calendar-day">٢٢</div>
+                <div class="calendar-day">٢٣</div>
+                <div class="calendar-day has-event">
+                    ٢٤
+                    <span class="event-badge">📺</span>
+                </div>
+                
+                <div class="calendar-day">٢٥</div>
+                <div class="calendar-day">٢٦</div>
+                <div class="calendar-day">٢٧</div>
+                <div class="calendar-day">٢٨</div>
+                <div class="calendar-day">٢٩</div>
+                <div class="calendar-day">٣٠</div>
+                <div class="calendar-day">٣١</div>
+            </div>
+        </div>
+
+        <!-- الفعاليات القادمة -->
+        <div class="events-list">
+            <h2 class="section-title">📅 الفعاليات القادمة</h2>
+            
+            <div class="event-card">
+                <div class="event-date">
+                    <div class="event-day">١٥</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">🎬 مشاهدة جماعية - Attack on Titan</h3>
+                    <div class="event-location">
+                        <span>📍 جروب الواتساب الرئيسي</span>
+                        <span>⏰ ٩ مساءً</span>
+                    </div>
+                    <span class="event-type type-watch">مشاهدة جماعية</span>
+                </div>
+                <div>
+                    <div class="event-prize">🏆 ١٠٠ نقطة</div>
+                    <button class="join-event-btn" onclick="joinEvent(1)">سجل حضورك</button>
+                </div>
+            </div>
+            
+            <div class="event-card">
+                <div class="event-date">
+                    <div class="event-day">١٨</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">🎮 بطولة ناروتو Ninja Storm</h3>
+                    <div class="event-location">
+                        <span>📍 قناة البطولة</span>
+                        <span>⏰ ٨ مساءً</span>
+                    </div>
+                    <span class="event-type type-game">بطولة ألعاب</span>
+                </div>
+                <div>
+                    <div class="event-prize">🏆 ٢٠٠ نقطة + لقب</div>
+                    <button class="join-event-btn" onclick="joinEvent(2)">اشترك الآن</button>
+                </div>
+            </div>
+            
+            <div class="event-card">
+                <div class="event-date">
+                    <div class="event-day">٢١</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">🎨 مسابقة الرسم - شخصياتك المفضلة</h3>
+                    <div class="event-location">
+                        <span>📍 قناة الفنون</span>
+                        <span>⏰ طوال اليوم</span>
+                    </div>
+                    <span class="event-type type-contest">مسابقة فنية</span>
+                </div>
+                <div>
+                    <div class="event-prize">🏆 ٣٠٠ نقطة + هدية</div>
+                    <button class="join-event-btn" onclick="joinEvent(3)">شارك برسمك</button>
+                </div>
+            </div>
+            
+            <div class="event-card">
+                <div class="event-date">
+                    <div class="event-day">٢٤</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">❓ مسابقة ثقافة أنمي - ون بيس</h3>
+                    <div class="event-location">
+                        <span>📍 جروب المسابقات</span>
+                        <span>⏰ ١٠ مساءً</span>
+                    </div>
+                    <span class="event-type type-contest">مسابقة ثقافية</span>
+                </div>
+                <div>
+                    <div class="event-prize">🏆 ١٥٠ نقطة</div>
+                    <button class="join-event-btn" onclick="joinEvent(4)">شارك</button>
+                </div>
+            </div>
+            
+            <div class="event-card">
+                <div class="event-date">
+                    <div class="event-day">٢٨</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">🎤 نقاش مفتوح - أفضل أنمي الموسم</h3>
+                    <div class="event-location">
+                        <span>📍 جروب النقاشات</span>
+                        <span>⏰ ٨ مساءً</span>
+                    </div>
+                    <span class="event-type type-watch">نقاش</span>
+                </div>
+                <div>
+                    <div class="event-prize">🏆 ٥٠ نقطة للحضور</div>
+                    <button class="join-event-btn" onclick="joinEvent(5)">سأحضر</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- الفعاليات السابقة -->
+        <div class="events-list">
+            <h2 class="section-title">📜 الفعاليات السابقة</h2>
+            
+            <div class="event-card" style="opacity: 0.7;">
+                <div class="event-date">
+                    <div class="event-day">١٠</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">🏆 بطولة Demon Slayer</h3>
+                    <div class="event-location">
+                        <span>انتهت - الفائز: زورو</span>
+                    </div>
+                </div>
+                <div>✅</div>
+            </div>
+            
+            <div class="event-card" style="opacity: 0.7;">
+                <div class="event-date">
+                    <div class="event-day">٥</div>
+                    <div class="event-month">مارس</div>
+                </div>
+                <div>
+                    <h3 class="event-title">📺 مشاهدة فيلم Your Name</h3>
+                    <div class="event-location">
+                        <span>انتهت - ٢٠ مشارك</span>
+                    </div>
+                </div>
+                <div>✅</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>❄️ SNOW KORAL</h3>
+                <p>نقابة الأنمي الرسمية - مملكة الثلج</p>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <a href="ranks.html">الرتب</a>
+                <a href="members.html">الأعضاء</a>
+                <a href="events.html">الفعاليات</a>
+            </div>
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" target="_blank">جروب الواتساب</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function joinEvent(eventId) {
+            const currentUser = localStorage.getItem('snowKoralCurrentUser');
+            
+            if (!currentUser) {
+                alert('❌ يجب تسجيل الدخول أولاً');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            alert('✅ تم تسجيل حضورك! سيتم إرسال التفاصيل قريباً');
+        }
+    </script>
+</body>
+</html>

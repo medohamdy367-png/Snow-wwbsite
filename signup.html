@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انضم للمملكة - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .signup-progress {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .signup-progress::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(74,163,255,0.3);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            background: #0a1f2e;
+            border: 2px solid #4aa3ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4aa3ff;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: scale(1.2);
+            box-shadow: 0 0 20px #4aa3ff;
+        }
+        
+        .progress-step.completed {
+            background: #00cc66;
+            border-color: #00cc66;
+            color: #0a1f2e;
+        }
+        
+        .signup-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .signup-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .terms-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 1rem 0;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .terms-box p {
+            color: #b0d9ff;
+            line-height: 1.6;
+            margin: 0.5rem 0;
+        }
+        
+        .anime-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .anime-option {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .anime-option:hover,
+        .anime-option.selected {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #4aa3ff;
+        }
+        
+        .anime-option.selected .anime-icon {
+            color: #0a1f2e;
+        }
+        
+        .anime-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #4aa3ff;
+        }
+        
+        .password-strength {
+            height: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background: #ff4444; width: 25%; }
+        .strength-medium { background: #ffaa00; width: 50%; }
+        .strength-good { background: #4aa3ff; width: 75%; }
+        .strength-strong { background: #00cc66; width: 100%; }
+        
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+        
+        .captcha-image {
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            color: #0a1f2e;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="about.html">عن النقابة</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup active">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <div class="auth-card" style="max-width: 600px;">
+                <h2>انضم إلى مملكة SNOW KORAL ❄️</h2>
+                <p style="color: #b0d9ff; text-align: center; margin-bottom: 2rem;">أنشئ حسابك وابدأ رحلتك في المملكة</p>
+                
+                <!-- شريط التقدم -->
+                <div class="signup-progress">
+                    <div class="progress-step active" id="step1-indicator">1</div>
+                    <div class="progress-step" id="step2-indicator">2</div>
+                    <div class="progress-step" id="step3-indicator">3</div>
+                </div>
+                
+                <!-- نموذج التسجيل متعدد الخطوات -->
+                <form id="signupForm" onsubmit="return false;">
+                    <!-- الخطوة 1: المعلومات الأساسية -->
+                    <div class="signup-step active" id="step1">
+                        <h3 style="color: #a8e6ff; margin-bottom: 1.5rem;">📝 المعلومات الأساسية</h3>
+                        
+                        <div class="form-group">
+                            <label for="username">اسم المستخدم في النقابة</label>
+                            <input type="text" id="username" required placeholder="مثال: ليفاي, زورو, الخ">
+                            <small style="color: #6b8ca6;">سيظهر اسمك في النقابة والرتب</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">البريد الإلكتروني</label>
+                            <input type="email" id="email" required placeholder="example@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">رقم الواتساب (اختياري)</label>
+                            <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">كلمة المرور</label>
+                            <input type="password" id="password" required onkeyup="checkPasswordStrength()">
+                            <div class="password-strength">
+                                <div class="strength-bar" id="strengthBar"></div>
+                            </div>
+                            <small id="strengthText" style="color: #6b8ca6;">أدخل كلمة مرور قوية</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">تأكيد كلمة المرور</label>
+                            <input type="password" id="confirmPassword" required onkeyup="checkPasswordMatch()">
+                            <small id="matchText" style="color: #6b8ca6;"></small>
+                        </div>
+                        
+                        <div class="nav-buttons">
+                            <div></div>
+                            <button type="button" class="btn btn-login" onclick="nextStep(2)">التالي ➡️</button>
+                        </div>
+                    </div>
+                    
+                    <!-- الخطوة 2: الاهتمامات والأنمي المفضل -->
+                    <div class="signup-step" id="step2">
+                        <h3 style="color: #a8e6ff; margin-bottom: 1.5rem;">🎌 أخبرنا عن اهتماماتك</h3>
+                        
+                        <div class="form-group">
+                            <label>ما هي أنمياتك المفضلة؟ (اختر أكثر من واحد)</label>
+                            <div class="anime-options">
+                                <div class="anime-option" onclick="selectAnime(this, 'naruto')">
+                                    <div class="anime-icon">🍥</div>
+                                    <div>ناروتو</div>
+                                </div>
+                                <div class="anime-option" onclick="selectAnime(this, 'onepiece')">
+                                    <div class="anime-icon">🏴‍☠️</div>
+                                    <div>ون بيس</div>
+                                </div>
+                                <div class="anime-option" onclick="selectAnime(this, 'aot')">
+                                    <div class="anime-icon">⚔️</div>
+                                    <div>Attack on Titan</div>
+                                </div>
+                                <div class="anime-option" onclick="selectAnime(this, 'demon')">
+                                    <div class="anime-icon">👹</div>
+                                    <div>Demon Slayer</div>
+                                </div>
+                                <div class="anime-option" onclick="selectAnime(this, 'bleach')">
+                                    <div class="anime-icon">⚡</div>
+                                    <div>Bleach</div>
+                                </div>
+                                <div class="anime-option" onclick="selectAnime(this, 'jjk')">
+                                    <div class="anime-icon">🔮</div>
+                                    <div>Jujutsu Kaisen</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="howFound">كيف عرفت عن النقابة؟</label>
+                            <select id="howFound">
+                                <option value="friend">صديق</option>
+                                <option value="whatsapp">جروب واتساب آخر</option>
+                                <option value="facebook">فيسبوك</option>
+                                <option value="tiktok">تيك توك</option>
+                                <option value="other">آخر</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bio">عرفنا عن نفسك (اختياري)</label>
+                            <textarea id="bio" rows="3" placeholder="اكتب نبذة قصيرة عن نفسك"></textarea>
+                        </div>
+                        
+                        <div class="nav-buttons">
+                            <button type="button" class="btn btn-login" onclick="prevStep(1)">⬅️ السابق</button>
+                            <button type="button" class="btn btn-login" onclick="nextStep(3)">التالي ➡️</button>
+                        </div>
+                    </div>
+                    
+                    <!-- الخطوة 3: التأكيد والقوانين -->
+                    <div class="signup-step" id="step3">
+                        <h3 style="color: #a8e6ff; margin-bottom: 1.5rem;">⚖️ التأكيد والقوانين</h3>
+                        
+                        <div class="terms-box">
+                            <h4 style="color: #a8e6ff;">قوانين مملكة SNOW KORAL</h4>
+                            <p>📜 الاحترام المتبادل بين جميع الأعضاء</p>
+                            <p>📜 ممنوع السب أو التنمر بأي شكل</p>
+                            <p>📜 الالتزام بموضوع الأنمي في النقاشات</p>
+                            <p>📜 ممنوع نشر روابط خارجية دون إذن الإدارة</p>
+                            <p>📜 عدم إزعاج الأعضاء بالرسائل الخاصة</p>
+                            <p>📜 احترام أوقات النشاط (من ٨ صباحاً لـ ١٢ مساءً)</p>
+                            <p>📜 المشاركة في الفعاليات ليست إجبارية لكنها مفضلة</p>
+                            <p>📜 الإبلاغ عن أي مشكلة للمشرفين فوراً</p>
+                        </div>
+                        
+                        <!-- كابتشا بسيطة -->
+                        <div class="captcha-box">
+                            <span class="captcha-image" id="captchaCode">5 + 3 =</span>
+                            <input type="number" id="captcha" placeholder="أدخل الناتج" style="flex: 1;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 1rem;">
+                                <input type="checkbox" id="agreeTerms">
+                                <span>أوافق على جميع قوانين النقابة</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 1rem;">
+                                <input type="checkbox" id="agreeNews">
+                                <span>أرغب في استلام إشعارات الفعاليات والأخبار</span>
+                            </label>
+                        </div>
+                        
+                        <div class="nav-buttons">
+                            <button type="button" class="btn btn-login" onclick="prevStep(2)">⬅️ السابق</button>
+                            <button type="button" class="btn btn-signup" onclick="completeSignup()">إنشاء الحساب ✅</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>لديك حساب بالفعل؟ <a href="login.html">تسجيل دخول</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div style="text-align: center; padding: 2rem; color: #6b8ca6;">
+            © 2026 مملكة SNOW KORAL
+        </div>
+    </footer>
+
+    <script>
+        // متغيرات الخطوات
+        let currentStep = 1;
+        const selectedAnimes = [];
+        
+        // التنقل بين الخطوات
+        function nextStep(step) {
+            // التحقق من اكتمال الخطوة الحالية
+            if (currentStep === 1) {
+                const username = document.getElementById('username').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPass = document.getElementById('confirmPassword').value;
+                
+                if (!username || !email || !password || !confirmPass) {
+                    alert('❌ الرجاء ملء جميع الحقول المطلوبة');
+                    return;
+                }
+                
+                if (password !== confirmPass) {
+                    alert('❌ كلمة المرور غير متطابقة');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    alert('❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                    return;
+                }
+            }
+            
+            if (currentStep === 2) {
+                if (selectedAnimes.length === 0) {
+                    alert('❌ الرجاء اختيار أنمي مفضل على الأقل');
+                    return;
+                }
+            }
+            
+            // إخفاء الخطوة الحالية
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('completed');
+            
+            // إظهار الخطوة الجديدة
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('active');
+        }
+        
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('active');
+            
+            currentStep = step;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('active');
+        }
+        
+        // التحقق من قوة كلمة المرور
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            
+            if (password.length >= 6) strength += 25;
+            if (password.match(/[a-z]+/)) strength += 25;
+            if (password.match(/[A-Z]+/)) strength += 25;
+            if (password.match(/[0-9]+/)) strength += 25;
+            
+            if (strength <= 25) {
+                strengthBar.className = 'strength-bar strength-weak';
+                strengthText.textContent = 'كلمة مرور ضعيفة';
+            } else if (strength <= 50) {
+                strengthBar.className = 'strength-bar strength-medium';
+                strengthText.textContent = 'كلمة مرور متوسطة';
+            } else if (strength <= 75) {
+                strengthBar.className = 'strength-bar strength-good';
+                strengthText.textContent = 'كلمة مرور جيدة';
+            } else {
+                strengthBar.className = 'strength-bar strength-strong';
+                strengthText.textContent = 'كلمة مرور قوية جداً';
+            }
+        }
+        
+        // التحقق من تطابق كلمة المرور
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const matchText = document.getElementById('matchText');
+            
+            if (confirm === '') {
+                matchText.textContent = '';
+            } else if (password === confirm) {
+                matchText.textContent = '✅ كلمة المرور متطابقة';
+                matchText.style.color = '#00cc66';
+            } else {
+                matchText.textContent = '❌ كلمة المرور غير متطابقة';
+                matchText.style.color = '#ff4444';
+            }
+        }
+        
+        // اختيار الأنمي
+        function selectAnime(element, anime) {
+            element.classList.toggle('selected');
+            
+            if (element.classList.contains('selected')) {
+                selectedAnimes.push(anime);
+            } else {
+                const index = selectedAnimes.indexOf(anime);
+                if (index > -1) selectedAnimes.splice(index, 1);
+            }
+        }
+        
+        // إكمال التسجيل
+        function completeSignup() {
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            const captcha = document.getElementById('captcha').value;
+            
+            if (!agreeTerms) {
+                alert('❌ يجب الموافقة على قوانين النقابة');
+                return;
+            }
+            
+            if (captcha != 8) {
+                alert('❌ إجابة الكابتشا غير صحيحة');
+                return;
+            }
+            
+            // جمع البيانات
+            const userData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                password: document.getElementById('password').value,
+                favoriteAnime: selectedAnimes,
+                howFound: document.getElementById('howFound').value,
+                bio: document.getElementById('bio').value,
+                agreeNews: document.getElementById('agreeNews').checked,
+                rank: 'متدرب 🧸',
+                points: 100, // نقاط ترحيبية
+                joinDate: new Date().toISOString(),
+                isAdmin: false
+            };
+            
+            // حفظ في localStorage
+            let users = JSON.parse(localStorage.getItem('snowKoralUsers')) || [];
+            users.push(userData);
+            localStorage.setItem('snowKoralUsers', JSON.stringify(users));
+            
+            // تسجيل الدخول تلقائياً
+            localStorage.setItem('snowKoralCurrentUser', JSON.stringify(userData));
+            
+            alert('✅ مرحباً بك في مملكة SNOW KORAL! تم إنشاء حسابك بنجاح');
+            window.location.href = 'dashboard/member-dashboard.html';
+        }
+    </script>
+</body>
+</html>

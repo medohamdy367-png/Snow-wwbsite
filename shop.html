@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر النقابة - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .shop-header {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .user-points-card {
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 400px;
+            text-align: center;
+            color: #0a1f2e;
+            position: relative;
+            overflow: hidden;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .user-points-card::before {
+            content: '❄️';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            top: -20px;
+            left: -20px;
+            transform: rotate(15deg);
+        }
+        
+        .points-value {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .shop-categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            padding: 0.8rem 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 30px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: scale(1.1);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .product-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 2px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: cardAppear 0.5s ease;
+        }
+        
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #4aa3ff;
+            box-shadow: 0 20px 40px rgba(74,163,255,0.3);
+        }
+        
+        .product-card:hover .product-image {
+            transform: rotate(5deg) scale(1.1);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: gold;
+            color: #0a1f2e;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .product-image {
+            font-size: 5rem;
+            text-align: center;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .product-title {
+            font-size: 1.5rem;
+            color: #a8e6ff;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .product-description {
+            color: #b0d9ff;
+            text-align: center;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .price-value {
+            font-size: 2rem;
+            color: gold;
+            font-weight: bold;
+        }
+        
+        .price-label {
+            color: #6b8ca6;
+        }
+        
+        .buy-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border: none;
+            border-radius: 30px;
+            color: #0a1f2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .buy-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .buy-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #4aa3ff;
+        }
+        
+        .buy-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .limited-offer {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: #ff4444;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            animation: shake 0.5s ease infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .purchase-history {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-product {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .history-icon {
+            font-size: 2rem;
+        }
+        
+        .history-date {
+            color: #6b8ca6;
+            font-size: 0.9rem;
+        }
+        
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background: #4aa3ff;
+            top: -10px;
+            opacity: 0.8;
+            animation: confettiFall 3s ease-in infinite;
+        }
+        
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="chat.html">الشات</a></li>
+                <li><a href="events.html">الفعاليات</a></li>
+                <li><a href="shop.html" class="active">المتجر</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>🛒 متجر مملكة SNOW KORAL</h2>
+            <p>استبدل نقاطك بجوائز حصرية</p>
+        </section>
+        
+        <!-- نقاط المستخدم -->
+        <div class="user-points-card" id="userPointsCard">
+            <h3>رصيدك من النقاط</h3>
+            <div class="points-value" id="userPoints">1500</div>
+            <p>استمر في التفاعل لكسب المزيد!</p>
+        </div>
+        
+        <!-- تصنيفات المنتجات -->
+        <div class="shop-categories">
+            <button class="category-btn active" onclick="filterProducts('all')">الكل</button>
+            <button class="category-btn" onclick="filterProducts('ranks')">رتب مميزة</button>
+            <button class="category-btn" onclick="filterProducts('roles')">أدوار إدارية</button>
+            <button class="category-btn" onclick="filterProducts('badges')">شارات خاصة</button>
+            <button class="category-btn" onclick="filterProducts('gifts')">هدايا حقيقية</button>
+        </div>
+        
+        <!-- منتجات المتجر -->
+        <div class="products-grid" id="productsGrid">
+            <!-- المنتجات هتتعبأ بالجافاسكريبت -->
+        </div>
+        
+        <!-- سجل المشتريات -->
+        <div class="purchase-history">
+            <h3 style="color: #a8e6ff; margin-bottom: 1.5rem;">📜 سجل مشترياتك</h3>
+            <div id="purchaseHistory">
+                <!-- سجل المشتريات هيتعبأ هنا -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // بيانات المستخدم الحالي
+        const currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'زائر',
+            points: 1500
+        };
+        
+        // منتجات المتجر
+        const products = [
+            {
+                id: 1,
+                name: 'رتبة خاصة لمدة أسبوع',
+                description: 'احصل على رتبة "ملك التفاعل" لمدة أسبوع مع شاشة خاصة',
+                price: 500,
+                image: '👑',
+                category: 'ranks',
+                limited: true,
+                stock: 5
+            },
+            {
+                id: 2,
+                name: 'دور مشرف ليوم',
+                description: 'تولى دور المشرف في النقابة لمدة يوم كامل',
+                price: 800,
+                image: '🛡️',
+                category: 'roles',
+                limited: false
+            },
+            {
+                id: 3,
+                name: 'شارة "أسطورة النقابة"',
+                description: 'شارة خاصة تظهر بجانب اسمك مدى الحياة',
+                price: 1000,
+                image: '🌟',
+                category: 'badges',
+                limited: true,
+                stock: 3
+            },
+            {
+                id: 4,
+                name: 'بطاقة شحن رصيد 10 جنيه',
+                description: 'بطاقة شحن لأشهر شركات المحمول',
+                price: 2000,
+                image: '📱',
+                category: 'gifts',
+                limited: false
+            },
+            {
+                id: 5,
+                name: 'ترقية فورية لرتبة أعلى',
+                description: 'ترقية فورية لرتبة أعلى (حسب الشواغر)',
+                price: 1500,
+                image: '⬆️',
+                category: 'ranks',
+                limited: true,
+                stock: 2
+            },
+            {
+                id: 6,
+                name: 'تخصيص لقب خاص',
+                description: 'اختر لقباً خاصاً يظهر بجانب اسمك',
+                price: 600,
+                image: '🏷️',
+                category: 'badges',
+                limited: false
+            },
+            {
+                id: 7,
+                name: 'دردشة خاصة مع الإمبراطور',
+                description: 'محادثة خاصة مدتها 30 دقيقة مع الإمبراطور',
+                price: 1200,
+                image: '💬',
+                category: 'roles',
+                limited: true,
+                stock: 1
+            },
+            {
+                id: 8,
+                name: 'هدية مفاجئة',
+                description: 'هدية حقيقية تصلك للمنزل (مفاجأة)',
+                price: 3000,
+                image: '🎁',
+                category: 'gifts',
+                limited: true,
+                stock: 1
+            }
+        ];
+        
+        // سجل المشتريات
+        let purchaseHistory = JSON.parse(localStorage.getItem('snowKoralPurchases')) || [];
+        
+        // عرض المنتجات
+        function displayProducts(category = 'all') {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            filtered.forEach(product => {
+                const canBuy = currentUser.points >= product.price;
+                
+                grid.innerHTML += `
+                    <div class="product-card">
+                        ${product.limited ? '<div class="product-badge">🔥 محدود</div>' : ''}
+                        <div class="product-image">${product.image}</div>
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-price">
+                            <span class="price-value">${product.price}</span>
+                            <span class="price-label">نقطة</span>
+                        </div>
+                        ${product.stock ? `<div style="text-align: center; color: #ffaa00; margin-bottom: 1rem;">المتبقي: ${product.stock}</div>` : ''}
+                        <button class="buy-btn" onclick="buyProduct(${product.id})" ${!canBuy ? 'disabled' : ''}>
+                            ${canBuy ? '🛒 اشتري الآن' : '❌ رصيد غير كاف'}
+                        </button>
+                        ${product.stock && product.stock <= 2 ? '<div class="limited-offer">⏳ كمية محدودة</div>' : ''}
+                    </div>
+                `;
+            });
+        }
+        
+        // شراء منتج
+        function buyProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            if (currentUser.points < product.price) {
+                alert('❌ رصيدك غير كافٍ لشراء هذا المنتج');
+                return;
+            }
+            
+            if (product.stock && product.stock <= 0) {
+                alert('❌ نفذت الكمية');
+                return;
+            }
+            
+            if (confirm(`هل أنت متأكد من شراء ${product.name} ب ${product.price} نقطة؟`)) {
+                // خصم النقاط
+                currentUser.points -= product.price;
+                document.getElementById('userPoints').textContent = currentUser.points;
+                
+                // تحديث المخزون
+                if (product.stock) {
+                    product.stock--;
+                }
+                
+                // إضافة للسجل
+                const purchase = {
+                    id: Date.now(),
+                    productId: product.id,
+                    productName: product.name,
+                    productImage: product.image,
+                    price: product.price,
+                    date: new Date().toLocaleDateString('ar-EG'),
+                    time: new Date().toLocaleTimeString('ar-EG')
+                };
+                
+                purchaseHistory.push(purchase);
+                localStorage.setItem('snowKoralPurchases', JSON.stringify(purchaseHistory));
+                
+                // تحديث العرض
+                displayProducts();
+                displayPurchaseHistory();
+                
+                // تأثير احتفالي
+                celebrate();
+                
+                alert('✅ تهانينا! تم الشراء بنجاح');
+            }
+        }
+        
+        // عرض سجل المشتريات
+        function displayPurchaseHistory() {
+            const historyDiv = document.getElementById('purchaseHistory');
+            
+            if (purchaseHistory.length === 0) {
+                historyDiv.innerHTML = '<p style="color: #6b8ca6; text-align: center;">لا توجد مشتريات سابقة</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = '';
+            
+            purchaseHistory.slice().reverse().forEach(purchase => {
+                historyDiv.innerHTML += `
+                    <div class="history-item">
+                        <div class="history-product">
+                            <span class="history-icon">${purchase.productImage}</span>
+                            <div>
+                                <div style="color: #a8e6ff;">${purchase.productName}</div>
+                                <div class="history-date">${purchase.date} - ${purchase.time}</div>
+                            </div>
+                        </div>
+                        <div style="color: gold;">${purchase.price} نقطة</div>
+                    </div>
+                `;
+            });
+        }
+        
+        // فلترة المنتجات
+        function filterProducts(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayProducts(category);
+        }
+        
+        // تأثير احتفالي
+        function celebrate() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            
+            for (let i = 0; i < 50; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.animationDelay = Math.random() * 2 + 's';
+                piece.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confettiContainer.appendChild(piece);
+            }
+            
+            document.body.appendChild(confettiContainer);
+            
+            setTimeout(() => {
+                confettiContainer.remove();
+            }, 3000);
+        }
+        
+        // تحديث نقاط المستخدم
+        function updateUserPoints() {
+            document.getElementById('userPoints').textContent = currentUser.points;
+        }
+        
+        // تحميل أولي
+        displayProducts();
+        displayPurchaseHistory();
+        updateUserPoints();
+    </script>
+</body>
+</html>

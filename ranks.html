@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرتب - مملكة SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* إضافات خاصة بصفحة الرتب */
+        .ranks-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .imperial-badge { background: gold; box-shadow: 0 0 15px gold; }
+        .royal-badge { background: silver; box-shadow: 0 0 15px silver; }
+        .minister-badge { background: #cd7f32; box-shadow: 0 0 15px #cd7f32; }
+        
+        .rank-category {
+            margin: 4rem 0;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            color: #a8e6ff;
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .category-title::before,
+        .category-title::after {
+            content: '⚜️';
+            margin: 0 1rem;
+        }
+        
+        .rank-tree {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .rank-tree::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, #4aa3ff, transparent);
+            transform: translateX(-50%);
+        }
+        
+        @media (max-width: 768px) {
+            .rank-tree::before {
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html" class="active">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="about.html">عن النقابة</a></li>
+                <li><a href="events.html">الفعاليات</a></li>
+                <li><a href="contact.html">التواصل</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>⚜️ نظام الرتب الملكية ⚜️</h2>
+            <p>هيكل القيادة والتسلسل الهرمي لمملكة SNOW KORAL</p>
+        </section>
+
+        <!-- Legend -->
+        <div class="ranks-legend">
+            <div class="legend-item">
+                <div class="legend-color imperial-badge"></div>
+                <span>الرتب الإمبراطورية</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color royal-badge"></div>
+                <span>الرتب الملكية</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color minister-badge"></div>
+                <span>الرتب الوزارية</span>
+            </div>
+        </div>
+
+        <!-- الرتب العليا -->
+        <div class="rank-category">
+            <h2 class="category-title">✦ الرتب العليا لمملكة SNOW KORAL ✦</h2>
+            <div class="ranks-grid">
+                <div class="rank-card imperial-rank">
+                    <div class="rank-icon">👑⛓️</div>
+                    <h3 class="rank-title">الامبراطور ⛓️</h3>
+                    <div class="rank-member">فـانـتـيـاس 🌹🌑</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        قائد المملكة الأسمى
+                    </div>
+                </div>
+
+                <div class="rank-card imperial-rank">
+                    <div class="rank-icon">👥⛄</div>
+                    <h3 class="rank-title">نائب الامبراطور ⛄</h3>
+                    <div class="rank-member">سـكـونـا + هـيـنـاتـا</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        سندا الإمبراطور
+                    </div>
+                </div>
+
+                <div class="rank-card royal-rank">
+                    <div class="rank-icon">📜🌹</div>
+                    <h3 class="rank-title">المستشار 🌹</h3>
+                    <div class="rank-member">جان 🔥</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        مستشار المملكة
+                    </div>
+                </div>
+
+                <div class="rank-card royal-rank">
+                    <div class="rank-icon">🏰🌷</div>
+                    <h3 class="rank-title">اللورد 🌷</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        حارس العرش
+                    </div>
+                </div>
+
+                <div class="rank-card royal-rank">
+                    <div class="rank-icon">⚡🏰</div>
+                    <h3 class="rank-title">نائب اللورد ⚡</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        معاون اللورد
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الرتب الملكية -->
+        <div class="rank-category">
+            <h2 class="category-title">⌘ الرتب الملكية ⌘</h2>
+            <div class="ranks-grid">
+                <div class="rank-card royal-rank">
+                    <div class="rank-icon">👑🔱</div>
+                    <h3 class="rank-title">الملك 🔱</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        حاكم المملكة
+                    </div>
+                </div>
+
+                <div class="rank-card royal-rank">
+                    <div class="rank-icon">👑⚜️</div>
+                    <h3 class="rank-title">نائب الملك ⚜️</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        ولي العهد
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الرتب الوزارية -->
+        <div class="rank-category">
+            <h2 class="category-title">⌘ الرتب الوزارية ⌘</h2>
+            <div class="ranks-grid">
+                <div class="rank-card minister-rank">
+                    <div class="rank-icon">💼🔦</div>
+                    <h3 class="rank-title">الوزير 🔦</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        وزير المملكة
+                    </div>
+                </div>
+
+                <div class="rank-card minister-rank">
+                    <div class="rank-icon">⏱️💼</div>
+                    <h3 class="rank-title">نائب الوزير ⏱️</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                    <div class="rank-description" style="margin-top: 1rem; font-size: 0.9rem; color: #b0d9ff;">
+                        معاون الوزير
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الرتب الإدارية -->
+        <div class="rank-category">
+            <h2 class="category-title">✦ الرتب الإدارية الخاصة بالمملكة ✦</h2>
+            <div class="ranks-grid">
+                <div class="rank-card">
+                    <div class="rank-icon">⚙️</div>
+                    <h3 class="rank-title">جنرال ⚙️</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🧭</div>
+                    <h3 class="rank-title">نائب جنرال 🧭</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🕯</div>
+                    <h3 class="rank-title">عميد 🕯</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🧮</div>
+                    <h3 class="rank-title">تشيبوكاي 🧮</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">⚔️</div>
+                    <h3 class="rank-title">ملازم ⚔️</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">✨</div>
+                    <h3 class="rank-title">حامل بريق ✨</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🎀</div>
+                    <h3 class="rank-title">حامل راية 🎀</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🧸</div>
+                    <h3 class="rank-title">متدرب 🧸</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ملوك الاسبوع -->
+        <div class="rank-category">
+            <h2 class="category-title">ملـوك الاسبوع 👑</h2>
+            <div class="ranks-grid">
+                <div class="rank-card">
+                    <div class="rank-icon">🔥</div>
+                    <h3 class="rank-title">ملك التفاعل 🔥</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🌨️</div>
+                    <h3 class="rank-title">ملك الفعاليات 🌨️</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">☕</div>
+                    <h3 class="rank-title">ملك السوالف ☕</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🍷</div>
+                    <h3 class="rank-title">العضو الذهبي 🍷</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🫧</div>
+                    <h3 class="rank-title">المشرف الذهبي 🫧</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">🌙</div>
+                    <h3 class="rank-title">ملك النشر 🌙</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+                <div class="rank-card">
+                    <div class="rank-icon">💢</div>
+                    <h3 class="rank-title">المشرف المتخاذل 💢</h3>
+                    <div class="rank-member empty-rank">[ شاغر ]</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- روابط -->
+        <div style="text-align: center; margin: 4rem 0;">
+            <h3 style="margin-bottom: 1rem;">الـروابـطـ Link ❗❗</h3>
+            <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" class="whatsapp-btn" target="_blank">
+                <span>🛡️</span> رابط الاعلانات
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>❄️ SNOW KORAL</h3>
+                <p>نقابة الأنمي الرسمية - مملكة الثلج</p>
+                <p>عدد الأعضاء: ٥٠ عضو</p>
+            </div>
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <a href="ranks.html">الرتب</a>
+                <a href="members.html">الأعضاء</a>
+                <a href="rules.html">القوانين</a>
+                <a href="events.html">الفعاليات</a>
+            </div>
+            <div class="footer-section">
+                <h3>تواصل معنا</h3>
+                <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" target="_blank">جروب الواتساب</a>
+                <div class="social-links">
+                    <a href="#">📱</a>
+                    <a href="#">💬</a>
+                    <a href="#">📧</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem; color: #6b8ca6;">
+            © 2026 مملكة SNOW KORAL - جميع الحقوق محفوظة
+        </div>
+    </footer>
+</body>
+</html>
