@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">الرئيسية</a></li>
+                <li><a href="../ranks.html">الرتب</a></li>
+                <li><a href="../members.html">الأعضاء</a></li>
+                <li><a href="../events.html">الفعاليات</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="#" id="logoutBtn" class="btn btn-login">تسجيل خروج</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="dashboard-container">
+            <aside class="dashboard-sidebar">
+                <div class="user-info" id="userInfo">
+                    <div class="user-avatar">❄️</div>
+                    <div class="user-name" id="displayName">جاري التحميل...</div>
+                    <div class="user-rank" id="displayRank">...</div>
+                </div>
+                <ul class="dashboard-menu">
+                    <li><a href="#" class="active" data-page="overview">الرئيسية</a></li>
+                    <li><a href="#" data-page="profile">ملفي الشخصي</a></li>
+                    <li><a href="#" data-page="ranks">الرتب</a></li>
+                    <li><a href="#" data-page="events">الفعاليات</a></li>
+                    <li><a href="#" data-page="members">الأعضاء</a></li>
+                    <li><a href="#" data-page="settings">الإعدادات</a></li>
+                </ul>
+            </aside>
+
+            <main class="dashboard-main" id="dashboardContent">
+                <!-- المحتوى هيتم تحميله ديناميكياً بالجافاسكريبت -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalMembers">50</div>
+                        <div class="stat-label">إجمالي الأعضاء</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="userRank">متدرب 🧸</div>
+                        <div class="stat-label">رتبتك الحالية</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="userPoints">0</div>
+                        <div class="stat-label">نقاط التميز</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="joinDate">2026</div>
+                        <div class="stat-label">تاريخ الانضمام</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3>❄️ أحدث الفعاليات</h3>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-top: 1rem;">
+                        <p>📅 فعالية مشاهدة أنمي الجمعة - 8 مساءً</p>
+                        <p>🎮 بطولة ألعاب نهاية الأسبوع</p>
+                        <p>🏆 مسابقة أفضل تفاعل</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3>📊 إحصائيات النقابة</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="background: rgba(74,163,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <p>⭐ الأعضاء النشطون اليوم: <strong>35</strong></p>
+                        </div>
+                        <div style="background: rgba(74,163,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <p>📝 الرتب المتاحة: <strong>22</strong></p>
+                        </div>
+                        <div style="background: rgba(74,163,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <p>🎯 الفعاليات هذا الشهر: <strong>8</strong></p>
+                        </div>
+                        <div style="background: rgba(74,163,255,0.1); padding: 1rem; border-radius: 10px;">
+                            <p>💬 متوسط التفاعل: <strong>عالٍ</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </main>
+
+    <footer>
+        <div style="text-align: center; padding: 2rem; color: #6b8ca6;">
+            © 2026 مملكة SNOW KORAL - لوحة تحكم العضو
+        </div>
+    </footer>
+
+    <script>
+        // التحقق من تسجيل الدخول
+        const currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser'));
+        
+        if (!currentUser) {
+            window.location.href = '../login.html';
+        }
+
+        // عرض بيانات المستخدم
+        document.getElementById('displayName').textContent = currentUser.username;
+        document.getElementById('displayRank').textContent = currentUser.rank;
+        document.getElementById('userRank').textContent = currentUser.rank;
+        document.getElementById('userPoints').textContent = currentUser.profile.points;
+        
+        const joinDate = new Date(currentUser.joinDate);
+        document.getElementById('joinDate').textContent = joinDate.toLocaleDateString('ar-EG');
+
+        // تسجيل الخروج
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('snowKoralCurrentUser');
+            window.location.href = '../index.html';
+        });
+
+        // تبديل الصفحات في الداشبورد
+        document.querySelectorAll('.dashboard-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // إزالة active من الكل
+                document.querySelectorAll('.dashboard-menu a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // هنا هنضيف تغيير المحتوى حسب الصفحة
+                const page = this.dataset.page;
+                // loadPageContent(page); - هنضيفها بعدين
+            });
+        });
+    </script>
+</body>
+                  </html>
