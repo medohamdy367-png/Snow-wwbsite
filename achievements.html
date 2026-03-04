@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإنجازات - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .achievements-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* بطاقة اللاعب */
+        .player-profile {
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: #0a1f2e;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .player-avatar {
+            width: 120px;
+            height: 120px;
+            background: #0a1f2e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border: 4px solid gold;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-rank {
+            background: #0a1f2e;
+            color: gold;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .player-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* فئات الإنجازات */
+        .categories {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.8rem 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 30px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        /* شبكة الإنجازات */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .achievement-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(0.7);
+        }
+
+        .achievement-card.unlocked {
+            border-color: gold;
+            box-shadow: 0 0 30px gold;
+            background: rgba(255,215,0,0.1);
+        }
+
+        .achievement-card.unlocked::before {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 30px;
+            height: 30px;
+            background: gold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a1f2e;
+            font-weight: bold;
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-title {
+            font-size: 1.3rem;
+            color: #a8e6ff;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            color: #b0d9ff;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .achievement-progress {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4aa3ff, gold);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.3rem;
+            color: #b0d9ff;
+            font-size: 0.8rem;
+        }
+
+        .achievement-reward {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid gold;
+            border-radius: 20px;
+            padding: 0.5rem;
+            text-align: center;
+            color: gold;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        /* شارات العرض */
+        .showcase {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .badge-item {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            position: relative;
+            cursor: help;
+        }
+
+        .badge-item.unlocked {
+            background: rgba(255,215,0,0.2);
+            border: 1px solid gold;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+        }
+
+        .badge-name {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #b0d9ff;
+        }
+
+        .badge-locked {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* آخر الإنجازات */
+        .recent-achievements {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .recent-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+        }
+
+        .recent-icon {
+            font-size: 2rem;
+        }
+
+        .recent-info {
+            flex: 1;
+        }
+
+        .recent-title {
+            color: #a8e6ff;
+        }
+
+        .recent-date {
+            color: #6b8ca6;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="achievements.html" class="active">🏆 الإنجازات</a></li>
+                <li><a href="attendance.html">📅 الحضور</a></li>
+                <li><a href="bank.html">🏦 البنك</a></li>
+                <li><a href="games.html">🎮 الألعاب</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="achievements-container">
+        <!-- بروفايل اللاعب -->
+        <div class="player-profile" id="playerProfile">
+            <div class="player-avatar" id="playerAvatar">👤</div>
+            <div class="player-info">
+                <div class="player-name" id="playerName">فـانـتـيـاس</div>
+                <div class="player-rank" id="playerRank">الامبراطور ⛓️</div>
+                <div class="player-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="totalPoints">5000</div>
+                        <div class="stat-label">إجمالي النقاط</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="achievementsCount">12</div>
+                        <div class="stat-label">إنجازات مفتوحة</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="badgesCount">8</div>
+                        <div class="stat-label">شارات</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="completionRate">45%</div>
+                        <div class="stat-label">اكتمال</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- فئات الإنجازات -->
+        <div class="categories">
+            <button class="category-btn active" onclick="filterAchievements('all')">الكل</button>
+            <button class="category-btn" onclick="filterAchievements('attendance')">📅 حضور</button>
+            <button class="category-btn" onclick="filterAchievements('games')">🎮 ألعاب</button>
+            <button class="category-btn" onclick="filterAchievements('social')">🤝 اجتماعي</button>
+            <button class="category-btn" onclick="filterAchievements('special')">✨ خاصة</button>
+        </div>
+
+        <!-- شبكة الإنجازات -->
+        <div class="achievements-grid" id="achievementsGrid">
+            <!-- هيتحمّل بالجافاسكريبت -->
+        </div>
+
+        <!-- شارات العرض -->
+        <div class="showcase">
+            <h2 style="color: #a8e6ff; margin-bottom: 1rem;">🖼️ شاراتك</h2>
+            <div class="badges-grid" id="badgesGrid">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- آخر الإنجازات -->
+        <div class="recent-achievements">
+            <h2 style="color: #a8e6ff; margin-bottom: 1rem;">🆕 آخر الإنجازات</h2>
+            <div id="recentAchievements">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'فـانـتـيـاس',
+            rank: 'الامبراطور ⛓️',
+            points: 5000
+        };
+
+        // بيانات الإنجازات
+        let achievementsData = JSON.parse(localStorage.getItem('snowKoralAchievements')) || {
+            users: {}
+        };
+
+        // تهيئة بيانات المستخدم
+        if (!achievementsData.users[currentUser.username]) {
+            achievementsData.users[currentUser.username] = {
+                unlocked: [],
+                badges: [],
+                recent: []
+            };
+            saveAchievementsData();
+        }
+
+        function saveAchievementsData() {
+            localStorage.setItem('snowKoralAchievements', JSON.stringify(achievementsData));
+        }
+
+        // قائمة الإنجازات
+        const achievements = [
+            // إنجازات الحضور
+            { 
+                id: 1,
+                category: 'attendance',
+                icon: '📅',
+                title: 'بداية موفقة',
+                description: 'سجل حضورك لأول مرة',
+                requirement: 1,
+                type: 'attendance',
+                reward: 50,
+                badge: '🌟'
+            },
+            { 
+                id: 2,
+                category: 'attendance',
+                icon: '🔥',
+                title: 'سلسلة نارية',
+                description: '7 أيام حضور متواصل',
+                requirement: 7,
+                type: 'attendance',
+                reward: 200,
+                badge: '🔥'
+            },
+            { 
+                id: 3,
+                category: 'attendance',
+                icon: '👑',
+                title: 'أسطورة المواظبة',
+                description: '30 يوم حضور متواصل',
+                requirement: 30,
+                type: 'attendance',
+                reward: 500,
+                badge: '👑'
+            },
+
+            // إنجازات الألعاب
+            { 
+                id: 4,
+                category: 'games',
+                icon: '🎰',
+                title: 'محظوظ',
+                description: 'اربح في لعبة الحظ 10 مرات',
+                requirement: 10,
+                type: 'slotWins',
+                reward: 300,
+                badge: '🍀'
+            },
+            { 
+                id: 5,
+                category: 'games',
+                icon: '🎯',
+                title: 'ملك الأسئلة',
+                description: 'أجب على 50 سؤال بشكل صحيح',
+                requirement: 50,
+                type: 'quizCorrect',
+                reward: 400,
+                badge: '🎯'
+            },
+            { 
+                id: 6,
+                category: 'games',
+                icon: '🏆',
+                title: 'بطل الألعاب',
+                description: 'اربح 100 لعبة',
+                requirement: 100,
+                type: 'gamesWon',
+                reward: 1000,
+                badge: '🏆'
+            },
+
+            // إنجازات اجتماعية
+            { 
+                id: 7,
+                category: 'social',
+                icon: '🤝',
+                title: 'اجتماعي',
+                description: 'أضف 5 أصدقاء',
+                requirement: 5,
+                type: 'friends',
+                reward: 100,
+                badge: '🤝'
+            },
+            { 
+                id: 8,
+                category: 'social',
+                icon: '💬',
+                title: 'ثرثار',
+                description: 'أرسل 500 رسالة في الشات',
+                requirement: 500,
+                type: 'messages',
+                reward: 300,
+                badge: '💬'
+            },
+            { 
+                id: 9,
+                category: 'social',
+                icon: '🎁',
+                title: 'كريم',
+                description: 'تبرع بـ 1000 نقطة للأعضاء',
+                requirement: 1000,
+                type: 'donated',
+                reward: 500,
+                badge: '🎁'
+            },
+
+            // إنجازات خاصة
+            { 
+                id: 10,
+                category: 'special',
+                icon: '💰',
+                title: 'مليونير',
+                description: 'اجمع 10000 نقطة',
+                requirement: 10000,
+                type: 'points',
+                reward: 1000,
+                badge: '💰'
+            },
+            { 
+                id: 11,
+                category: 'special',
+                icon: '👥',
+                title: 'قائد',
+                description: 'ساعد 20 عضو جديد',
+                requirement: 20,
+                type: 'helped',
+                reward: 800,
+                badge: '👥'
+            },
+            { 
+                id: 12,
+                category: 'special',
+                icon: '❄️',
+                title: 'أسطورة SNOW',
+                description: 'افتح كل الإنجازات',
+                requirement: 11,
+                type: 'all',
+                reward: 2000,
+                badge: '❄️'
+            }
+        ];
+
+        // تحديث واجهة المستخدم
+        function updateUI() {
+            const userData = achievementsData.users[currentUser.username];
+            
+            document.getElementById('playerName').textContent = currentUser.username;
+            document.getElementById('playerRank').textContent = currentUser.rank;
+            document.getElementById('totalPoints').textContent = currentUser.points;
+            document.getElementById('achievementsCount').textContent = userData.unlocked.length;
+            document.getElementById('badgesCount').textContent = userData.badges.length;
+            document.getElementById('completionRate').textContent = 
+                Math.round((userData.unlocked.length / achievements.length) * 100) + '%';
+            
+            loadAchievements();
+            loadBadges();
+            loadRecent();
+        }
+
+        // تحميل الإنجازات
+        function loadAchievements(filter = 'all') {
+            const grid = document.getElementById('achievementsGrid');
+            const userData = achievementsData.users[currentUser.username];
+            
+            let filtered = achievements;
+            if (filter !== 'all') {
+                filtered = achievements.filter(a => a.category === filter);
+            }
+            
+            grid.innerHTML = '';
+            
+            filtered.forEach(achievement => {
+                const isUnlocked = userData.unlocked.includes(achievement.id);
+                const progress = getProgress(achievement);
+                const progressPercent = Math.min(100, (progress.current / progress.required) * 100);
+                
+                grid.innerHTML += `
+                    <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <h3 class="achievement-title">${achievement.title}</h3>
+                        <p class="achievement-desc">${achievement.description}</p>
+                        
+                        <div class="achievement-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span>${progress.current} / ${progress.required}</span>
+                                <span>${Math.round(progressPercent)}%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement-reward">
+                            🏆 ${achievement.reward} نقطة + ${achievement.badge}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // حساب التقدم
+        function getProgress(achievement) {
+            // هنا هتجيب البيانات الحقيقية من localStorage
+            // حالياً بيانات تجريبية
+            return {
+                current: Math.floor(Math.random() * achievement.requirement),
+                required: achievement.requirement
+            };
+        }
+
+        // تحميل الشارات
+        function loadBadges() {
+            const grid = document.getElementById('badgesGrid');
+            const userData = achievementsData.users[currentUser.username];
+            
+            const allBadges = achievements.map(a => ({
+                icon: a.badge,
+                name: a.title,
+                id: a.id
+            }));
+            
+            grid.innerHTML = '';
+            
+            allBadges.forEach(badge => {
+                const isUnlocked = userData.unlocked.includes(badge.id);
+                
+                grid.innerHTML += `
+                    <div class="badge-item ${isUnlocked ? 'unlocked' : ''}" title="${badge.name}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-name">${badge.name}</div>
+                        ${!isUnlocked ? '<div class="badge-locked">🔒</div>' : ''}
+                    </div>
+                `;
+            });
+        }
+
+        // تحميل آخر الإنجازات
+        function loadRecent() {
+            const container = document.getElementById('recentAchievements');
+            const userData = achievementsData.users[currentUser.username];
+            
+            if (userData.recent.length === 0) {
+                container.innerHTML = '<p style="color: #6b8ca6;">لا توجد إنجازات حديثة</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            userData.recent.slice(-5).reverse().forEach(rec => {
+                const achievement = achievements.find(a => a.id === rec.id);
+                
+                container.innerHTML += `
+                    <div class="recent-item">
+                        <div class="recent-icon">${achievement.icon}</div>
+                        <div class="recent-info">
+                            <div class="recent-title">${achievement.title}</div>
+                            <div class="recent-date">${rec.date}</div>
+                        </div>
+                        <div style="color: gold;">+${achievement.reward}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // فلترة الإنجازات
+        function filterAchievements(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadAchievements(category);
+        }
+
+        // فتح إنجاز جديد
+        function unlockAchievement(achievementId) {
+            const userData = achievementsData.users[currentUser.username];
+            
+            if (!userData.unlocked.includes(achievementId)) {
+                userData.unlocked.push(achievementId);
+                
+                const achievement = achievements.find(a => a.id === achievementId);
+                userData.badges.push(achievement.badge);
+                userData.recent.push({
+                    id: achievementId,
+                    date: new Date().toLocaleDateString('ar-EG')
+                });
+                
+                // إضافة النقاط
+                currentUser.points += achievement.reward;
+                localStorage.setItem('snowKoralCurrentUser', JSON.stringify(currentUser));
+                
+                saveAchievementsData();
+                updateUI();
+                
+                showCelebration(achievement);
+            }
+        }
+
+        // احتفالية
+        function showCelebration(achievement) {
+            const msg = document.createElement('div');
+            msg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, gold, orange);
+                color: #0a1f2e;
+                padding: 2rem 4rem;
+                border-radius: 50px;
+                font-size: 2rem;
+                font-weight: bold;
+                z-index: 1000;
+                animation: popIn 0.5s ease;
+                text-align: center;
+                box-shadow: 0 0 50px gold;
+            `;
+            msg.innerHTML = `
+                🏆 إنجاز جديد!<br>
+                <span style="font-size: 1.5rem;">${achievement.title}</span><br>
+                <span style="font-size: 1rem;">+${achievement.reward} نقطة</span>
+            `;
+            document.body.appendChild(msg);
+            
+            setTimeout(() => msg.remove(), 4000);
+        }
+
+        // تحميل الصفحة
+        window.onload = function() {
+            updateUI();
+            
+            // إضافة animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes popIn {
+                    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+                    80% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+                    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        };
+    </script>
+</body>
+</html>
