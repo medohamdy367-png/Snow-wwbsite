@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأصدقاء - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .friends-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* رأس الصفحة */
+        .friends-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #b0d9ff;
+            font-size: 0.9rem;
+        }
+
+        /* أزرار الإجراءات */
+        .actions-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.8rem 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 30px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        .action-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        /* شبكة الأصدقاء */
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .friend-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-5px);
+            border-color: #4aa3ff;
+            box-shadow: 0 10px 30px rgba(74,163,255,0.3);
+        }
+
+        .friend-card.online {
+            border-right: 4px solid #00cc66;
+        }
+
+        .friend-card.offline {
+            border-right: 4px solid #6b8ca6;
+        }
+
+        .friend-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 2px solid #0a1f2e;
+        }
+
+        .online { background: #00cc66; }
+        .offline { background: #6b8ca6; }
+
+        .friend-name {
+            font-size: 1.3rem;
+            color: #a8e6ff;
+            text-align: center;
+            margin-bottom: 0.3rem;
+        }
+
+        .friend-rank {
+            text-align: center;
+            color: gold;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .friend-status {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #b0d9ff;
+            margin-bottom: 1rem;
+        }
+
+        .friend-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .friend-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .friend-action:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: scale(1.1);
+        }
+
+        /* طلبات الصداقة */
+        .requests-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .request-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+        }
+
+        .request-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .request-info {
+            flex: 1;
+        }
+
+        .request-name {
+            color: #a8e6ff;
+            margin-bottom: 0.2rem;
+        }
+
+        .request-time {
+            color: #6b8ca6;
+            font-size: 0.8rem;
+        }
+
+        .request-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .accept-btn {
+            background: #00cc6620;
+            color: #00cc66;
+            border: 1px solid #00cc66;
+        }
+
+        .reject-btn {
+            background: #ff444420;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        /* بحث عن أصدقاء */
+        .search-section {
+            margin: 2rem 0;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 1rem;
+            color: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+
+        .search-btn {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            border: none;
+            border-radius: 30px;
+            padding: 0.8rem 2rem;
+            cursor: pointer;
+        }
+
+        /* نتائج البحث */
+        .search-results {
+            margin-top: 2rem;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            margin: 0.5rem 0;
+        }
+
+        .add-friend-btn {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+        }
+
+        /* هدايا */
+        .gifts-section {
+            margin-top: 2rem;
+        }
+
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .gift-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gift-item:hover {
+            transform: scale(1.1);
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        .gift-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gift-price {
+            color: gold;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="friends.html" class="active">🤝 الأصدقاء</a></li>
+                <li><a href="notifications.html">🔔 الإشعارات</a></li>
+                <li><a href="profile.html">👤 الملف</a></li>
+                <li><a href="achievements.html">🏆 الإنجازات</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="friends-container">
+        <!-- رأس الصفحة -->
+        <div class="friends-header">
+            <h1 style="color: #a8e6ff;">🤝 الأصدقاء</h1>
+            <div class="header-stats">
+                <div class="stat">
+                    <div class="stat-number" id="friendsCount">12</div>
+                    <div class="stat-label">صديق</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="onlineCount">5</div>
+                    <div class="stat-label">متصل</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="requestsCount">3</div>
+                    <div class="stat-label">طلبات</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="actions-bar">
+            <button class="action-btn active" onclick="showSection('all')">👥 كل الأصدقاء</button>
+            <button class="action-btn" onclick="showSection('online')">🟢 المتصلون</button>
+            <button class="action-btn" onclick="showSection('requests')">📨 الطلبات (3)</button>
+            <button class="action-btn" onclick="showSection('search')">🔍 بحث</button>
+            <button class="action-btn" onclick="showSection('gifts')">🎁 هدايا</button>
+        </div>
+
+        <!-- قسم كل الأصدقاء -->
+        <div id="allFriendsSection">
+            <div class="friends-grid" id="friendsGrid">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- قسم الطلبات -->
+        <div id="requestsSection" style="display: none;">
+            <div class="requests-section">
+                <h2 style="color: #a8e6ff; margin-bottom: 1.5rem;">📨 طلبات الصداقة</h2>
+                <div id="requestsList">
+                    <!-- هيتحمّل بالجافاسكريبت -->
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم البحث -->
+        <div id="searchSection" style="display: none;">
+            <div class="search-section">
+                <h2 style="color: #a8e6ff; margin-bottom: 1.5rem;">🔍 بحث عن أصدقاء</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="ابحث باسم العضو...">
+                    <button class="search-btn" onclick="searchFriends()">بحث</button>
+                </div>
+                <div class="search-results" id="searchResults">
+                    <!-- نتائج البحث هتظهر هنا -->
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم الهدايا -->
+        <div id="giftsSection" style="display: none;">
+            <div class="gifts-section">
+                <h2 style="color: #a8e6ff; margin-bottom: 1.5rem;">🎁 إرسال هدية لصديق</h2>
+                
+                <select id="giftFriend" style="width: 100%; padding: 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(74,163,255,0.3); border-radius: 10px; color: white; margin-bottom: 2rem;">
+                    <option value="">اختر صديق...</option>
+                </select>
+                
+                <div class="gifts-grid" id="giftsGrid">
+                    <div class="gift-item" onclick="sendGift('🎮')">
+                        <div class="gift-icon">🎮</div>
+                        <div>لعبة</div>
+                        <div class="gift-price">50 نقطة</div>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('📚')">
+                        <div class="gift-icon">📚</div>
+                        <div>مانجا</div>
+                        <div class="gift-price">100 نقطة</div>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('🎨')">
+                        <div class="gift-icon">🎨</div>
+                        <div>رسمة</div>
+                        <div class="gift-price">150 نقطة</div>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('👑')">
+                        <div class="gift-icon">👑</div>
+                        <div>تاج</div>
+                        <div class="gift-price">200 نقطة</div>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('💎')">
+                        <div class="gift-icon">💎</div>
+                        <div>ماسة</div>
+                        <div class="gift-price">300 نقطة</div>
+                    </div>
+                    <div class="gift-item" onclick="sendGift('❄️')">
+                        <div class="gift-icon">❄️</div>
+                        <div>ثلج</div>
+                        <div class="gift-price">500 نقطة</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'فـانـتـيـاس',
+            rank: 'الامبراطور ⛓️',
+            points: 5000
+        };
+
+        // بيانات الأصدقاء
+        let friendsData = JSON.parse(localStorage.getItem('snowKoralFriends')) || {
+            friends: [
+                { id: 1, name: 'سـكـونـا', rank: 'نائب الامبراطور ⛄', avatar: '⛄', online: true, lastSeen: 'الآن' },
+                { id: 2, name: 'هـيـنـاتـا', rank: 'نائب الامبراطور ⛄', avatar: '👥', online: true, lastSeen: 'منذ 5 دقائق' },
+                { id: 3, name: 'جان 🔥', rank: 'المستشار 🌹', avatar: '🔥', online: false, lastSeen: 'منذ ساعتين' },
+                { id: 4, name: 'زورو', rank: 'جنرال ⚙️', avatar: '⚔️', online: true, lastSeen: 'منذ 10 دقائق' },
+                { id: 5, name: 'سانجي', rank: 'نائب جنرال 🧭', avatar: '🍜', online: false, lastSeen: 'منذ يوم' }
+            ],
+            requests: [
+                { id: 6, name: 'نورمان', rank: 'عميد 🕯', avatar: '🕯', time: 'منذ 30 دقيقة' },
+                { id: 7, name: 'رايو', rank: 'تشيبوكاي 🧮', avatar: '🧮', time: 'منذ ساعة' }
+            ],
+            gifts: []
+        };
+
+        function saveFriendsData() {
+            localStorage.setItem('snowKoralFriends', JSON.stringify(friendsData));
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            document.getElementById('friendsCount').textContent = friendsData.friends.length;
+            document.getElementById('onlineCount').textContent = friendsData.friends.filter(f => f.online).length;
+            document.getElementById('requestsCount').textContent = friendsData.requests.length;
+        }
+
+        // عرض الأصدقاء
+        function loadFriends(filter = 'all') {
+            const grid = document.getElementById('friendsGrid');
+            
+            let friends = friendsData.friends;
+            if (filter === 'online') {
+                friends = friends.filter(f => f.online);
+            }
+            
+            grid.innerHTML = '';
+            
+            friends.forEach(friend => {
+                const statusClass = friend.online ? 'online' : 'offline';
+                const statusText = friend.online ? 'متصل الآن' : `آخر ظهور ${friend.lastSeen}`;
+                
+                grid.innerHTML += `
+                    <div class="friend-card ${statusClass}">
+                        <div class="friend-avatar">
+                            ${friend.avatar}
+                            <span class="online-indicator ${statusClass}"></span>
+                        </div>
+                        <h3 class="friend-name">${friend.name}</h3>
+                        <div class="friend-rank">${friend.rank}</div>
+                        <div class="friend-status">${statusText}</div>
+                        <div class="friend-actions">
+                            <button class="friend-action" onclick="messageFriend(${friend.id})" title="رسالة">💬</button>
+                            <button class="friend-action" onclick="giftFriend(${friend.id})" title="إرسال هدية">🎁</button>
+                            <button class="friend-action" onclick="removeFriend(${friend.id})" title="حذف">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // عرض طلبات الصداقة
+        function loadRequests() {
+            const list = document.getElementById('requestsList');
+            
+            if (friendsData.requests.length === 0) {
+                list.innerHTML = '<p style="color: #6b8ca6; text-align: center;">لا توجد طلبات صداقة</p>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            
+            friendsData.requests.forEach(request => {
+                list.innerHTML += `
+                    <div class="request-item">
+                        <div class="request-avatar">${request.avatar}</div>
+                        <div class="request-info">
+                            <div class="request-name">${request.name}</div>
+                            <div class="request-rank">${request.rank}</div>
+                            <div class="request-time">${request.time}</div>
+                        </div>
+                        <div class="request-buttons">
+                            <button class="action-btn accept-btn" onclick="acceptRequest(${request.id})">قبول</button>
+                            <button class="action-btn reject-btn" onclick="rejectRequest(${request.id})">رفض</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // تحميل قائمة الأصدقاء في الهدايا
+        function loadGiftFriends() {
+            const select = document.getElementById('giftFriend');
+            select.innerHTML = '<option value="">اختر صديق...</option>';
+            
+            friendsData.friends.forEach(friend => {
+                select.innerHTML += `<option value="${friend.id}">${friend.name}</option>`;
+            });
+        }
+
+        // إرسال هدية
+        function sendGift(gift) {
+            const friendId = document.getElementById('giftFriend').value;
+            
+            if (!friendId) {
+                alert('❌ اختر صديق أولاً');
+                return;
+            }
+            
+            // أسعار الهدايا
+            const prices = {
+                '🎮': 50,
+                '📚': 100,
+                '🎨': 150,
+                '👑': 200,
+                '💎': 300,
+                '❄️': 500
+            };
+            
+            const price = prices[gift];
+            
+            if (currentUser.points < price) {
+                alert('❌ رصيد غير كافٍ');
+                return;
+            }
+            
+            // خصم النقاط
+            currentUser.points -= price;
+            localStorage.setItem('snowKoralCurrentUser', JSON.stringify(currentUser));
+            
+            // تسجيل الهدية
+            const friend = friendsData.friends.find(f => f.id == friendId);
+            friendsData.gifts.push({
+                from: currentUser.username,
+                to: friend.name,
+                gift: gift,
+                price: price,
+                date: new Date().toISOString()
+            });
+            
+            saveFriendsData();
+            
+            alert(`✅ تم إرسال ${gift} إلى ${friend.name}`);
+            
+            // إضافة إشعار
+            addNotification('🎁', 'هدية جديدة', `أرسلت ${gift} إلى ${friend.name}`);
+        }
+
+        // قبول طلب صداقة
+        function acceptRequest(id) {
+            const request = friendsData.requests.find(r => r.id === id);
+            
+            // تحويل لصديق
+            friendsData.friends.push({
+                id: request.id,
+                name: request.name,
+                rank: request.rank,
+                avatar: request.avatar,
+                online: false,
+                lastSeen: 'منذ قليل'
+            });
+            
+            // حذف الطلب
+            friendsData.requests = friendsData.requests.filter(r => r.id !== id);
+            
+            saveFriendsData();
+            loadRequests();
+            updateStats();
+            
+            alert(`✅ تم قبول طلب الصداقة من ${request.name}`);
+        }
+
+        // رفض طلب صداقة
+        function rejectRequest(id) {
+            friendsData.requests = friendsData.requests.filter(r => r.id !== id);
+            saveFriendsData();
+            loadRequests();
+            updateStats();
+        }
+
+        // حذف صديق
+        function removeFriend(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الصديق؟')) {
+                friendsData.friends = friendsData.friends.filter(f => f.id !== id);
+                saveFriendsData();
+                loadFriends();
+                updateStats();
+            }
+        }
+
+        // إرسال رسالة
+        function messageFriend(id) {
+            const friend = friendsData.friends.find(f => f.id === id);
+            alert(`📨 فتح محادثة مع ${friend.name}`);
+            // هتوديه على الشات
+        }
+
+        // هدية لصديق
+        function giftFriend(id) {
+            showSection('gifts');
+            document.getElementById('giftFriend').value = id;
+        }
+
+        // تبديل الأقسام
+        function showSection(section) {
+            document.getElementById('allFriendsSection').style.display = 'none';
+            document.getElementById('requestsSection').style.display = 'none';
+            document.getElementById('searchSection').style.display = 'none';
+            document.getElementById('giftsSection').style.display = 'none';
+            
+            document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (section === 'all') {
+                document.getElementById('allFriendsSection').style.display = 'block';
+                loadFriends();
+            } else if (section === 'online') {
+                document.getElementById('allFriendsSection').style.display = 'block';
+                loadFriends('online');
+            } else if (section === 'requests') {
+                document.getElementById('requestsSection').style.display = 'block';
+                loadRequests();
+            } else if (section === 'search') {
+                document.getElementById('searchSection').style.display = 'block';
+            } else if (section === 'gifts') {
+                document.getElementById('giftsSection').style.display = 'block';
+                loadGiftFriends();
+            }
+        }
+
+        // بحث عن أصدقاء
+        function searchFriends() {
+            const query = document.getElementById('searchInput').value;
+            
+            if (!query) return;
+            
+            // محاكاة نتائج البحث
+            const results = [
+                { name: 'عضو تجريبي 1', rank: 'متدرب 🧸', avatar: '👤' },
+                { name: 'عضو تجريبي 2', rank: 'حامل راية 🎀', avatar: '🎀' }
+            ];
+            
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '<h3 style="color: #a8e6ff; margin: 1rem 0;">نتائج البحث:</h3>';
+            
+            results.forEach(r => {
+                resultsDiv.innerHTML += `
+                    <div class="result-item">
+                        <div class="request-avatar">${r.avatar}</div>
+                        <div class="request-info">
+                            <div class="request-name">${r.name}</div>
+                            <div class="request-rank">${r.rank}</div>
+                        </div>
+                        <button class="add-friend-btn" onclick="sendFriendRequest('${r.name}')">➕ إضافة صديق</button>
+                    </div>
+                `;
+            });
+        }
+
+        // إرسال طلب صداقة
+        function sendFriendRequest(name) {
+            alert(`✅ تم إرسال طلب صداقة إلى ${name}`);
+        }
+
+        // إضافة إشعار
+        function addNotification(icon, title, message) {
+            // هتستدعي نظام الإشعارات
+        }
+
+        // تحميل الصفحة
+        window.onload = function() {
+            updateStats();
+            loadFriends();
+            loadRequests();
+        };
+    </script>
+</body>
+</html>
