@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الألعاب - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .games-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* رصيد النقاط */
+        .points-badge {
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            display: inline-block;
+            color: #0a1f2e;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(74,163,255,0.3);
+        }
+
+        /* بطاقات الألعاب */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .game-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 2px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: #4aa3ff;
+            box-shadow: 0 20px 40px rgba(74,163,255,0.3);
+        }
+
+        .game-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .game-title {
+            font-size: 1.8rem;
+            color: #a8e6ff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .game-description {
+            color: #b0d9ff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .game-prize {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid gold;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            color: gold;
+            margin: 0 auto 1rem;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(74,163,255,0.3);
+            color: #6b8ca6;
+        }
+
+        /* لعبة التحدي اليومي */
+        .daily-challenge {
+            background: linear-gradient(135deg, #4aa3ff20, #a8e6ff20);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid #4aa3ff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-challenge::before {
+            content: '⭐';
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            top: -20px;
+            left: -20px;
+            transform: rotate(15deg);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-title {
+            font-size: 2rem;
+            color: gold;
+        }
+
+        .challenge-timer {
+            background: #0a1f2e;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #4aa3ff;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+
+        .challenge-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .challenge-question {
+            font-size: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .challenge-options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .challenge-option {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(74,163,255,0.3);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .challenge-option:hover {
+            background: rgba(74,163,255,0.2);
+            transform: scale(1.02);
+        }
+
+        .challenge-option.selected {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            border-color: #4aa3ff;
+        }
+
+        /* لعبة الحظ */
+        .slot-machine {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .slot-reels {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .slot-reel {
+            width: 100px;
+            height: 100px;
+            background: #0a1f2e;
+            border: 3px solid #4aa3ff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            animation: spin 0.5s ease-out;
+        }
+
+        @keyframes spin {
+            0% { transform: rotateX(0deg); }
+            100% { transform: rotateX(360deg); }
+        }
+
+        .spin-btn {
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0a1f2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .spin-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #4aa3ff;
+        }
+
+        .spin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ترتيب اللاعبين */
+        .leaderboard {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        .rank {
+            width: 40px;
+            height: 40px;
+            background: #4aa3ff20;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #a8e6ff;
+        }
+
+        .rank-1 .rank { background: gold; color: #0a1f2e; }
+        .rank-2 .rank { background: silver; color: #0a1f2e; }
+        .rank-3 .rank { background: #cd7f32; color: #0a1f2e; }
+
+        .player-name {
+            flex: 1;
+            color: #e0f2fe;
+        }
+
+        .player-score {
+            font-weight: bold;
+            color: gold;
+        }
+
+        /* رسائل النصر */
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, gold, orange);
+            color: #0a1f2e;
+            padding: 2rem 4rem;
+            border-radius: 50px;
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 1000;
+            animation: popIn 0.5s ease;
+            box-shadow: 0 0 50px gold;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            80% { transform: translate(-50%, -50%) scale(1.2); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* تأثيرات confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 20px;
+            background: gold;
+            position: fixed;
+            top: -10px;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .challenge-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .slot-reels {
+                gap: 0.5rem;
+            }
+            
+            .slot-reel {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="bank.html">البنك</a></li>
+                <li><a href="games.html" class="active">الألعاب</a></li>
+                <li><a href="shop.html">المتجر</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="games-container">
+        <!-- رصيد النقاط -->
+        <div class="points-badge" id="userPoints">
+            ⭐ رصيدك: 1000 نقطة
+        </div>
+
+        <!-- التحدي اليومي -->
+        <div class="daily-challenge" id="dailyChallenge">
+            <div class="challenge-header">
+                <h2 class="challenge-title">🎯 التحدي اليومي</h2>
+                <div class="challenge-timer" id="challengeTimer">23:59:59</div>
+            </div>
+            <div class="challenge-content" id="challengeContent">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- ألعاب سريعة -->
+        <h2 style="color: #a8e6ff; margin: 2rem 0;">🎮 ألعاب سريعة</h2>
+        <div class="games-grid">
+            <!-- لعبة الحظ -->
+            <div class="game-card" onclick="openGame('slot')">
+                <div class="game-icon">🎰</div>
+                <h3 class="game-title">لعبة الحظ</h3>
+                <p class="game-description">جرب حظك واربح حتى 500 نقطة في دقيقة!</p>
+                <div class="game-prize">🏆 جائزة كبرى: 500 نقطة</div>
+                <div class="game-stats">
+                    <span>👥 ١٢٣ لاعب اليوم</span>
+                    <span>💰 رهان: ٥٠ نقطة</span>
+                </div>
+            </div>
+
+            <!-- تخمين الشخصية -->
+            <div class="game-card" onclick="openGame('guess')">
+                <div class="game-icon">🤔</div>
+                <h3 class="game-title">خمن الشخصية</h3>
+                <p class="game-description">خمن شخصية الأنمي من الصورة</p>
+                <div class="game-prize">🏆 جائزة: ١٠٠ نقطة</div>
+                <div class="game-stats">
+                    <span>👥 ٨٩ لاعب اليوم</span>
+                    <span>💰 مجاني</span>
+                </div>
+            </div>
+
+            <!-- سباق الأسئلة -->
+            <div class="game-card" onclick="openGame('quiz')">
+                <div class="game-icon">❓</div>
+                <h3 class="game-title">سباق الأسئلة</h3>
+                <p class="game-description">أسئلة عامة عن الأنمي مع تحدي الوقت</p>
+                <div class="game-prize">🏆 جائزة: ٢٠٠ نقطة</div>
+                <div class="game-stats">
+                    <span>👥 ٦٧ لاعب اليوم</span>
+                    <span>💰 ٢٥ نقطة</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- لعبة الحظ (تظهر عند الضغط) -->
+        <div id="slotGame" style="display: none;">
+            <div class="slot-machine">
+                <h3 style="color: #a8e6ff; margin-bottom: 1rem;">🎰 العب واربح</h3>
+                <div class="slot-reels">
+                    <div class="slot-reel" id="reel1">❄️</div>
+                    <div class="slot-reel" id="reel2">❄️</div>
+                    <div class="slot-reel" id="reel3">❄️</div>
+                </div>
+                <button class="spin-btn" onclick="spinSlot()" id="spinBtn">🔄 دورة (٥٠ نقطة)</button>
+                <p style="color: #b0d9ff;">جرب حظك! 🍀</p>
+            </div>
+        </div>
+
+        <!-- لعبة تخمين الشخصية -->
+        <div id="guessGame" style="display: none;">
+            <!-- هيتحمّل بالجافاسكريبت -->
+        </div>
+
+        <!-- لعبة الأسئلة -->
+        <div id="quizGame" style="display: none;">
+            <!-- هيتحمّل بالجافاسكريبت -->
+        </div>
+
+        <!-- ترتيب اللاعبين -->
+        <div class="leaderboard">
+            <h3 style="color: #a8e6ff; margin-bottom: 1.5rem;">🏆 أفضل اللاعبين</h3>
+            <div id="leaderboard">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'زائر',
+            points: 1000,
+            gamesPlayed: 0,
+            gamesWon: 0
+        };
+
+        // بيانات الألعاب
+        let gameStats = JSON.parse(localStorage.getItem('snowKoralGames')) || {
+            slot: { plays: 0, wins: 0 },
+            guess: { plays: 0, wins: 0 },
+            quiz: { plays: 0, wins: 0 },
+            leaderboard: []
+        };
+
+        // تحديث رصيد المستخدم
+        function updateUserPoints() {
+            document.getElementById('userPoints').innerHTML = `⭐ رصيدك: ${currentUser.points} نقطة`;
+        }
+
+        // ==================== لعبة الحظ ====================
+        let slotLocked = false;
+
+        function openGame(game) {
+            // إخفاء كل الألعاب
+            document.getElementById('slotGame').style.display = 'none';
+            document.getElementById('guessGame').style.display = 'none';
+            document.getElementById('quizGame').style.display = 'none';
+            
+            // إظهار اللعبة المطلوبة
+            if (game === 'slot') {
+                document.getElementById('slotGame').style.display = 'block';
+                // تمرير سلس للعبة
+                document.getElementById('slotGame').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function spinSlot() {
+            if (slotLocked) return;
+            
+            const cost = 50;
+            if (currentUser.points < cost) {
+                alert('❌ رصيدك غير كافٍ');
+                return;
+            }
+
+            // خصم النقاط
+            currentUser.points -= cost;
+            updateUserPoints();
+            slotLocked = true;
+            document.getElementById('spinBtn').disabled = true;
+
+            // تأثير الدوران
+            const reel1 = document.getElementById('reel1');
+            const reel2 = document.getElementById('reel2');
+            const reel3 = document.getElementById('reel3');
+
+            const symbols = ['❄️', '⭐', '👑', '🎮', '💎', '🎰'];
+            
+            let spins = 0;
+            const spinInterval = setInterval(() => {
+                reel1.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                reel2.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                reel3.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                spins++;
+                
+                if (spins >= 10) {
+                    clearInterval(spinInterval);
+                    
+                    // النتيجة النهائية
+                    const result1 = symbols[Math.floor(Math.random() * symbols.length)];
+                    const result2 = symbols[Math.floor(Math.random() * symbols.length)];
+                    const result3 = symbols[Math.floor(Math.random() * symbols.length)];
+                    
+                    reel1.textContent = result1;
+                    reel2.textContent = result2;
+                    reel3.textContent = result3;
+                    
+                    // حساب الجائزة
+                    let prize = 0;
+                    if (result1 === result2 && result2 === result3) {
+                        prize = 500; // ثلاث مرات متطابقة
+                        showWinMessage(`🎉 جاكبوت! ربحت 500 نقطة!`);
+                    } else if (result1 === result2 || result2 === result3 || result1 === result3) {
+                        prize = 100; // اثنين متطابقين
+                        showWinMessage(`🎉 ربحت 100 نقطة!`);
+                    } else {
+                        showWinMessage(`😢 حظ أوفر المرة الجاية`);
+                    }
+                    
+                    if (prize > 0) {
+                        currentUser.points += prize;
+                        updateUserPoints();
+                        
+                        // تحديث الإحصائيات
+                        gameStats.slot.wins++;
+                        createConfetti();
+                    }
+                    
+                    gameStats.slot.plays++;
+                    localStorage.setItem('snowKoralGames', JSON.stringify(gameStats));
+                    
+                    slotLocked = false;
+                    document.getElementById('spinBtn').disabled = false;
+                }
+            }, 100);
+        }
+
+        // ==================== رسالة الفوز ====================
+        function showWinMessage(message) {
+            const msg = document.createElement('div');
+            msg.className = 'win-message';
+            msg.textContent = message;
+            document.body.appendChild(msg);
+            
+            setTimeout(() => {
+                msg.remove();
+            }, 3000);
+        }
+
+        // ==================== تأثير confetti ====================
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        // ==================== التحدي اليومي ====================
+        const dailyChallenges = [
+            {
+                question: "من هو صاحب عبارة 'أريد أن أصبح الهوكاجي'؟",
+                options: ["ناروتو", "ساسكي", "كاكاشي", "جيرايا"],
+                answer: 0
+            },
+            {
+                question: "ما اسم قبعة لوفي؟",
+                options: ["قش", "قماش", "حديد", "ذهب"],
+                answer: 0
+            },
+            {
+                question: "من هو أقوى عمود في Demon Slayer؟",
+                options: ["ريوكو", "تنجن", "جييو", "سانيمي"],
+                answer: 2
+            }
+        ];
+
+        let currentChallenge = 0;
+
+        function loadDailyChallenge() {
+            const challenge = dailyChallenges[Math.floor(Math.random() * dailyChallenges.length)];
+            const container = document.getElementById('challengeContent');
+            
+            let optionsHtml = '';
+            challenge.options.forEach((opt, index) => {
+                optionsHtml += `
+                    <div class="challenge-option" onclick="selectAnswer(${index}, ${challenge.answer})">
+                        ${opt}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = `
+                <div class="challenge-question">${challenge.question}</div>
+                <div class="challenge-options">${optionsHtml}</div>
+            `;
+        }
+
+        function selectAnswer(selected, correct) {
+            if (selected === correct) {
+                // جائزة التحدي اليومي
+                currentUser.points += 200;
+                updateUserPoints();
+                showWinMessage('🎉 إجابة صحيحة! ربحت 200 نقطة!');
+                createConfetti();
+                
+                // تحديث التحدي
+                loadDailyChallenge();
+            } else {
+                showWinMessage('😢 إجابة خاطئة');
+            }
+        }
+
+        // ==================== ترتيب اللاعبين ====================
+        function loadLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            
+            // بيانات تجريبية
+            const players = [
+                { name: 'فـانـتـيـاس', score: 15000 },
+                { name: 'سـكـونـا', score: 12000 },
+                { name: 'هـيـنـاتـا', score: 11000 },
+                { name: 'جان', score: 9000 },
+                { name: currentUser.username, score: currentUser.points }
+            ].sort((a, b) => b.score - a.score).slice(0, 10);
+            
+            leaderboard.innerHTML = '';
+            players.forEach((player, index) => {
+                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                
+                leaderboard.innerHTML += `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div class="rank">${index + 1}</div>
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-score">⭐ ${player.score}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // ==================== عداد التحدي اليومي ====================
+        function updateChallengeTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('challengeTimer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // حفظ بيانات المستخدم
+        function saveUserData() {
+            localStorage.setItem('snowKoralCurrentUser', JSON.stringify(currentUser));
+        }
+
+        // ==================== تحميل الصفحة ====================
+        window.onload = function() {
+            updateUserPoints();
+            loadDailyChallenge();
+            loadLeaderboard();
+            setInterval(updateChallengeTimer, 1000);
+            
+            // حفظ البيانات كل دقيقة
+            setInterval(saveUserData, 60000);
+        };
+    </script>
+</body>
+</html>
