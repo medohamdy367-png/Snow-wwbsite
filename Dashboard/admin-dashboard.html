@@ -362,8 +362,8 @@
                             <div class="admin-card-icon">👥</div>
                             <span>إجمالي الأعضاء</span>
                         </div>
-                        <div class="admin-card-value" id="totalMembers">50</div>
-                        <div style="color: #00cc66;">+12 هذا الشهر</div>
+                        <div class="admin-card-value" id="totalMembers">0</div>
+                        <div style="color: #00cc66;" id="newMembersCount">+0 هذا الشهر</div>
                     </div>
                     
                     <div class="admin-card">
@@ -371,8 +371,8 @@
                             <div class="admin-card-icon">📊</div>
                             <span>النشاط اليومي</span>
                         </div>
-                        <div class="admin-card-value" id="activeToday">35</div>
-                        <div style="color: #ffaa00;">نشط الآن: 12</div>
+                        <div class="admin-card-value" id="activeToday">0</div>
+                        <div style="color: #ffaa00;" id="activeNow">نشط الآن: 0</div>
                     </div>
                     
                     <div class="admin-card">
@@ -390,7 +390,7 @@
                             <span>إنذارات نشطة</span>
                         </div>
                         <div class="admin-card-value" id="activeWarnings">3</div>
-                        <div style="color: #ff4444;">2 أعضاء محظورين</div>
+                        <div style="color: #ff4444;" id="blockedCount">2 أعضاء محظورين</div>
                     </div>
                 </div>
                 
@@ -429,7 +429,7 @@
                             </tr>
                         </thead>
                         <tbody id="newMembersTable">
-                            <!-- هتتعبأ بالجافاسكريبت -->
+                            <tr><td colspan="5">جاري التحميل...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -472,7 +472,7 @@
                             </tr>
                         </thead>
                         <tbody id="allMembersTable">
-                            <!-- هتتعبأ بالجافاسكريبت -->
+                            <tr><td colspan="7">جاري التحميل...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -500,10 +500,10 @@
                                 <th>إجراءات</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="ranksTableBody">
                             <tr>
                                 <td>الامبراطور ⛓️</td>
-                                <td>١</td>
+                                <td id="rankCount1">١</td>
                                 <td>٥٠٠٠</td>
                                 <td>مؤسس النقابة</td>
                                 <td class="admin-actions">
@@ -512,7 +512,7 @@
                             </tr>
                             <tr>
                                 <td>نائب الامبراطور ⛄</td>
-                                <td>٢</td>
+                                <td id="rankCount2">٢</td>
                                 <td>٤٥٠٠</td>
                                 <td>٣٠٠٠ نقطة + موافقة</td>
                                 <td class="admin-actions">
@@ -521,7 +521,7 @@
                             </tr>
                             <tr>
                                 <td>المستشار 🌹</td>
-                                <td>١</td>
+                                <td id="rankCount3">١</td>
                                 <td>٤٠٠٠</td>
                                 <td>٢٥٠٠ نقطة</td>
                                 <td class="admin-actions">
@@ -539,15 +539,15 @@
                 
                 <div class="admin-cards">
                     <div class="admin-card">
-                        <div class="admin-card-value">٣</div>
+                        <div class="admin-card-value" id="warningsCount">٣</div>
                         <div>إنذارات نشطة</div>
                     </div>
                     <div class="admin-card">
-                        <div class="admin-card-value">٢</div>
+                        <div class="admin-card-value" id="blockedUsersCount">٢</div>
                         <div>أعضاء محظورين</div>
                     </div>
                     <div class="admin-card">
-                        <div class="admin-card-value">٥</div>
+                        <div class="admin-card-value" id="restrictedCount">٥</div>
                         <div>مقيدين مؤقتاً</div>
                     </div>
                 </div>
@@ -564,7 +564,7 @@
                                 <th>إجراءات</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="punishmentsTableBody">
                             <tr>
                                 <td>عضو ١</td>
                                 <td>كثرة الإزعاج</td>
@@ -608,11 +608,15 @@
             <form onsubmit="addMember(event)">
                 <div class="form-group">
                     <label>اسم المستخدم</label>
-                    <input type="text" required>
+                    <input type="text" id="newUserName" required>
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="newUserEmail">
                 </div>
                 <div class="form-group">
                     <label>الرتبة</label>
-                    <select>
+                    <select id="newUserRank">
                         <option>متدرب 🧸</option>
                         <option>حامل راية 🎀</option>
                         <option>حامل بريق ✨</option>
@@ -621,11 +625,11 @@
                 </div>
                 <div class="form-group">
                     <label>رقم الواتساب</label>
-                    <input type="tel" placeholder="01xxxxxxxxx">
+                    <input type="tel" id="newUserPhone" placeholder="01xxxxxxxxx">
                 </div>
                 <div class="form-group">
                     <label>نقاط البداية</label>
-                    <input type="number" value="0">
+                    <input type="number" id="newUserPoints" value="100">
                 </div>
                 <button type="submit" class="submit-btn">إضافة العضو</button>
             </form>
@@ -633,19 +637,279 @@
     </div>
     
     <script>
-        // بيانات وهمية للأعضاء
-        const members = [
-            { id: 1, name: 'فـانـتـيـاس', rank: 'الامبراطور ⛓️', points: 5000, status: 'active', lastActive: 'الآن', joinDate: '2024-01-15' },
-            { id: 2, name: 'سـكـونـا', rank: 'نائب الامبراطور ⛄', points: 4500, status: 'active', lastActive: 'منذ 5 دقائق', joinDate: '2024-01-20' },
-            { id: 3, name: 'هـيـنـاتـا', rank: 'نائب الامبراطور ⛄', points: 4400, status: 'active', lastActive: 'منذ ساعة', joinDate: '2024-01-20' },
-            { id: 4, name: 'جان 🔥', rank: 'المستشار 🌹', points: 4000, status: 'active', lastActive: 'منذ 3 ساعات', joinDate: '2024-02-01' },
-            { id: 5, name: 'زورو', rank: 'جنرال ⚙️', points: 3500, status: 'active', lastActive: 'منذ 10 دقائق', joinDate: '2024-02-15' },
-            { id: 6, name: 'سانجي', rank: 'نائب جنرال 🧭', points: 3200, status: 'warning', lastActive: 'منذ يوم', joinDate: '2024-02-20' },
-            { id: 7, name: 'نورمان', rank: 'عميد 🕯', points: 3000, status: 'active', lastActive: 'منذ 2 ساعة', joinDate: '2024-03-01' },
-            { id: 8, name: 'رايو', rank: 'تشيبوكاي 🧮', points: 2800, status: 'blocked', lastActive: 'منذ 3 أيام', joinDate: '2024-03-10' },
-        ];
+        // ==================== تحميل البيانات من localStorage ====================
+        function loadMembers() {
+            // جلب الأعضاء من localStorage
+            let users = JSON.parse(localStorage.getItem('snowKoralUsers')) || [];
+            
+            // لو مفيش بيانات، نحط بيانات تجريبية
+            if (users.length === 0) {
+                users = [
+                    { id: 1, name: 'فـانـتـيـاس', username: 'فـانـتـيـاس', rank: 'الامبراطور ⛓️', points: 5000, status: 'active', lastActive: 'الآن', joinDate: '2024-01-15' },
+                    { id: 2, name: 'سـكـونـا', username: 'سـكـونـا', rank: 'نائب الامبراطور ⛄', points: 4500, status: 'active', lastActive: 'منذ 5 دقائق', joinDate: '2024-01-20' },
+                    { id: 3, name: 'هـيـنـاتـا', username: 'هـيـنـاتـا', rank: 'نائب الامبراطور ⛄', points: 4400, status: 'active', lastActive: 'منذ ساعة', joinDate: '2024-01-20' },
+                    { id: 4, name: 'جان 🔥', username: 'جان 🔥', rank: 'المستشار 🌹', points: 4000, status: 'active', lastActive: 'منذ 3 ساعات', joinDate: '2024-02-01' },
+                    { id: 5, name: 'زورو', username: 'زورو', rank: 'جنرال ⚙️', points: 3500, status: 'active', lastActive: 'منذ 10 دقائق', joinDate: '2024-02-15' },
+                ];
+                
+                // حفظ البيانات التجريبية في localStorage
+                localStorage.setItem('snowKoralUsers', JSON.stringify(users));
+            }
+            
+            return users;
+        }
         
-        // عرض الأقسام
+        // ==================== تحديث الإحصائيات ====================
+        function updateStats() {
+            const users = loadMembers();
+            const now = new Date();
+            
+            // إجمالي الأعضاء
+            document.getElementById('totalMembers').textContent = users.length;
+            
+            // الأعضاء الجدد هذا الشهر
+            const newMembers = users.filter(u => {
+                if (!u.joinDate) return false;
+                const joinDate = new Date(u.joinDate);
+                const diffDays = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+                return diffDays <= 30;
+            }).length;
+            document.getElementById('newMembersCount').textContent = `+${newMembers} هذا الشهر`;
+            
+            // النشطاء اليوم
+            const activeToday = users.filter(u => u.status === 'active').length;
+            document.getElementById('activeToday').textContent = activeToday;
+            document.getElementById('activeNow').textContent = `نشط الآن: ${Math.floor(activeToday / 2)}`;
+            
+            // المحظورين
+            const blockedCount = users.filter(u => u.status === 'blocked').length;
+            document.getElementById('blockedCount').textContent = `${blockedCount} أعضاء محظورين`;
+        }
+        
+        // ==================== تحميل جدول الأعضاء ====================
+        function loadMembersTable() {
+            const users = loadMembers();
+            const tbody = document.getElementById('allMembersTable');
+            tbody.innerHTML = '';
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7">لا يوجد أعضاء</td></tr>';
+                return;
+            }
+            
+            users.forEach((user, index) => {
+                const statusClass = user.status === 'active' ? 'status-active' : 
+                                   user.status === 'warning' ? 'status-warning' : 'status-blocked';
+                const statusText = user.status === 'active' ? 'نشط' : 
+                                  user.status === 'warning' ? 'محذر' : 'محظور';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.name || user.username || 'غير معروف'}</td>
+                        <td>${user.rank || 'متدرب 🧸'}</td>
+                        <td>${user.points || 0}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${user.lastActive || 'منذ فترة'}</td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${user.id || index})">تعديل</button>
+                            <button class="admin-btn btn-promote" onclick="promoteMember(${user.id || index})">ترقية</button>
+                            <button class="admin-btn btn-delete" onclick="deleteMember(${user.id || index})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // تحميل آخر الأعضاء
+            loadNewMembers();
+        }
+        
+        // ==================== آخر الأعضاء ====================
+        function loadNewMembers() {
+            const users = loadMembers();
+            const tbody = document.getElementById('newMembersTable');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">لا يوجد أعضاء</td></tr>';
+                return;
+            }
+            
+            // آخر 5 أعضاء
+            const newMembers = users.slice(-5).reverse();
+            
+            tbody.innerHTML = '';
+            newMembers.forEach(user => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${user.name || user.username || 'غير معروف'}</td>
+                        <td>${user.rank || 'متدرب 🧸'}</td>
+                        <td>${user.joinDate || '2026-03-01'}</td>
+                        <td><span class="status-badge ${user.status === 'active' ? 'status-active' : 'status-blocked'}">${user.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember('${user.id}')">عرض</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // ==================== فلترة الأعضاء ====================
+        function filterMembers(filter) {
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const users = loadMembers();
+            
+            // فلترة حسب الحالة
+            let filtered = users;
+            if (filter === 'active') {
+                filtered = users.filter(u => u.status === 'active');
+            } else if (filter === 'warning') {
+                filtered = users.filter(u => u.status === 'warning');
+            } else if (filter === 'blocked') {
+                filtered = users.filter(u => u.status === 'blocked');
+            }
+            
+            const tbody = document.getElementById('allMembersTable');
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7">لا يوجد أعضاء</td></tr>';
+                return;
+            }
+            
+            filtered.forEach((user, index) => {
+                const statusClass = user.status === 'active' ? 'status-active' : 
+                                   user.status === 'warning' ? 'status-warning' : 'status-blocked';
+                const statusText = user.status === 'active' ? 'نشط' : 
+                                  user.status === 'warning' ? 'محذر' : 'محظور';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.name || user.username}</td>
+                        <td>${user.rank}</td>
+                        <td>${user.points || 0}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${user.lastActive || 'منذ فترة'}</td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${user.id || index})">تعديل</button>
+                            <button class="admin-btn btn-promote" onclick="promoteMember(${user.id || index})">ترقية</button>
+                            <button class="admin-btn btn-delete" onclick="deleteMember(${user.id || index})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // ==================== بحث في الأعضاء ====================
+        function searchMembers() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const users = loadMembers();
+            
+            if (!searchText) {
+                loadMembersTable();
+                return;
+            }
+            
+            const filtered = users.filter(m => 
+                (m.name && m.name.toLowerCase().includes(searchText)) || 
+                (m.username && m.username.toLowerCase().includes(searchText))
+            );
+            
+            const tbody = document.getElementById('allMembersTable');
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7">لا توجد نتائج</td></tr>';
+                return;
+            }
+            
+            filtered.forEach((user, index) => {
+                const statusClass = user.status === 'active' ? 'status-active' : 
+                                   user.status === 'warning' ? 'status-warning' : 'status-blocked';
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.name || user.username}</td>
+                        <td>${user.rank}</td>
+                        <td>${user.points}</td>
+                        <td><span class="status-badge ${statusClass}">${user.status}</span></td>
+                        <td>${user.lastActive}</td>
+                        <td class="admin-actions">
+                            <button class="admin-btn btn-edit" onclick="editMember(${user.id || index})">تعديل</button>
+                            <button class="admin-btn btn-promote" onclick="promoteMember(${user.id || index})">ترقية</button>
+                            <button class="admin-btn btn-delete" onclick="deleteMember(${user.id || index})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // ==================== دوال الإجراءات ====================
+        function editMember(id) {
+            alert(`🔧 تعديل بيانات العضو رقم ${id} - هذه الميزة قيد التطوير`);
+        }
+        
+        function promoteMember(id) {
+            if (confirm('⭐ هل أنت متأكد من ترقية هذا العضو؟')) {
+                alert(`✅ تم ترقية العضو ${id}`);
+            }
+        }
+        
+        function deleteMember(id) {
+            if (confirm('⚠️ تحذير: هل أنت متأكد من حذف هذا العضو؟')) {
+                let users = loadMembers();
+                users = users.filter(u => u.id !== id);
+                localStorage.setItem('snowKoralUsers', JSON.stringify(users));
+                alert('✅ تم حذف العضو بنجاح');
+                loadMembersTable();
+                updateStats();
+            }
+        }
+        
+        // ==================== إضافة عضو جديد ====================
+        function openAddMemberModal() {
+            document.getElementById('addMemberModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function addMember(event) {
+            event.preventDefault();
+            
+            const newUser = {
+                id: Date.now(),
+                name: document.getElementById('newUserName').value,
+                username: document.getElementById('newUserName').value,
+                email: document.getElementById('newUserEmail').value,
+                phone: document.getElementById('newUserPhone').value,
+                rank: document.getElementById('newUserRank').value,
+                points: parseInt(document.getElementById('newUserPoints').value) || 100,
+                status: 'active',
+                joinDate: new Date().toISOString().split('T')[0],
+                lastActive: 'الآن'
+            };
+            
+            let users = loadMembers();
+            users.push(newUser);
+            localStorage.setItem('snowKoralUsers', JSON.stringify(users));
+            
+            alert('✅ تم إضافة العضو بنجاح');
+            closeModal('addMemberModal');
+            loadMembersTable();
+            updateStats();
+            
+            // تفريغ النموذج
+            document.getElementById('newUserName').value = '';
+            document.getElementById('newUserEmail').value = '';
+            document.getElementById('newUserPhone').value = '';
+        }
+        
+        // ==================== عرض الأقسام ====================
         function showSection(section) {
             // إخفاء الكل
             document.getElementById('dashboard-section').style.display = 'none';
@@ -670,162 +934,7 @@
             event.target.classList.add('active');
         }
         
-        // تحميل جدول الأعضاء
-        function loadMembersTable() {
-            const tbody = document.getElementById('allMembersTable');
-            tbody.innerHTML = '';
-            
-            members.forEach((member, index) => {
-                const statusClass = member.status === 'active' ? 'status-active' : 
-                                   member.status === 'warning' ? 'status-warning' : 'status-blocked';
-                const statusText = member.status === 'active' ? 'نشط' : 
-                                  member.status === 'warning' ? 'محذر' : 'محظور';
-                
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${member.name}</td>
-                        <td>${member.rank}</td>
-                        <td>${member.points}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>${member.lastActive}</td>
-                        <td class="admin-actions">
-                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">تعديل</button>
-                            <button class="admin-btn btn-promote" onclick="promoteMember(${member.id})">ترقية</button>
-                            <button class="admin-btn btn-delete" onclick="deleteMember(${member.id})">حذف</button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            // تحميل آخر الأعضاء
-            loadNewMembers();
-        }
-        
-        // آخر الأعضاء
-        function loadNewMembers() {
-            const tbody = document.getElementById('newMembersTable');
-            const newMembers = members.slice(-3);
-            
-            tbody.innerHTML = '';
-            newMembers.forEach(member => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${member.name}</td>
-                        <td>${member.rank}</td>
-                        <td>${member.joinDate}</td>
-                        <td><span class="status-badge status-active">نشط</span></td>
-                        <td class="admin-actions">
-                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">عرض</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-        
-        // فلترة الأعضاء
-        function filterMembers(filter) {
-            // تحديث التبز
-            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // فلترة حسب الحالة
-            const filtered = filter === 'all' ? members : members.filter(m => m.status === filter);
-            
-            const tbody = document.getElementById('allMembersTable');
-            tbody.innerHTML = '';
-            
-            filtered.forEach((member, index) => {
-                const statusClass = member.status === 'active' ? 'status-active' : 
-                                   member.status === 'warning' ? 'status-warning' : 'status-blocked';
-                const statusText = member.status === 'active' ? 'نشط' : 
-                                  member.status === 'warning' ? 'محذر' : 'محظور';
-                
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${member.name}</td>
-                        <td>${member.rank}</td>
-                        <td>${member.points}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>${member.lastActive}</td>
-                        <td class="admin-actions">
-                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">تعديل</button>
-                            <button class="admin-btn btn-promote" onclick="promoteMember(${member.id})">ترقية</button>
-                            <button class="admin-btn btn-delete" onclick="deleteMember(${member.id})">حذف</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-        
-        // بحث في الأعضاء
-        function searchMembers() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            
-            if (!searchText) {
-                loadMembersTable();
-                return;
-            }
-            
-            const filtered = members.filter(m => m.name.toLowerCase().includes(searchText));
-            
-            const tbody = document.getElementById('allMembersTable');
-            tbody.innerHTML = '';
-            
-            filtered.forEach((member, index) => {
-                const statusClass = member.status === 'active' ? 'status-active' : 
-                                   member.status === 'warning' ? 'status-warning' : 'status-blocked';
-                
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${member.name}</td>
-                        <td>${member.rank}</td>
-                        <td>${member.points}</td>
-                        <td><span class="status-badge ${statusClass}">${member.status}</span></td>
-                        <td>${member.lastActive}</td>
-                        <td class="admin-actions">
-                            <button class="admin-btn btn-edit" onclick="editMember(${member.id})">تعديل</button>
-                            <button class="admin-btn btn-promote" onclick="promoteMember(${member.id})">ترقية</button>
-                            <button class="admin-btn btn-delete" onclick="deleteMember(${member.id})">حذف</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-        
-        // دوال الإجراءات
-        function editMember(id) {
-            alert(`تعديل بيانات العضو رقم ${id}`);
-        }
-        
-        function promoteMember(id) {
-            if (confirm('هل أنت متأكد من ترقية هذا العضو؟')) {
-                alert(`تم ترقية العضو ${id}`);
-            }
-        }
-        
-        function deleteMember(id) {
-            if (confirm('⚠️ تحذير: هل أنت متأكد من حذف هذا العضو؟')) {
-                alert(`تم حذف العضو ${id}`);
-            }
-        }
-        
-        function openAddMemberModal() {
-            document.getElementById('addMemberModal').classList.add('active');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-        
-        function addMember(event) {
-            event.preventDefault();
-            alert('✅ تم إضافة العضو بنجاح');
-            closeModal('addMemberModal');
-        }
-        
+        // ==================== دوال إضافية ====================
         function createEvent() {
             alert('🌟 سيتم فتح نافذة إنشاء فعالية جديدة');
         }
@@ -835,21 +944,30 @@
         }
         
         function backupData() {
+            const users = loadMembers();
+            const data = JSON.stringify(users, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `snow-koral-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
             alert('💾 تم أخذ نسخة احتياطية من البيانات');
         }
         
         function openAddRankModal() {
-            alert('➕ إضافة رتبة جديدة');
+            alert('➕ إضافة رتبة جديدة - قيد التطوير');
         }
         
         function openPunishmentModal() {
-            alert('⚠️ إضافة مخالفة جديدة');
+            alert('⚠️ إضافة مخالفة جديدة - قيد التطوير');
         }
         
-        // تحميل البيانات عند فتح الصفحة
+        // ==================== تحميل البيانات عند فتح الصفحة ====================
         window.onload = function() {
+            updateStats();
             loadMembersTable();
         };
     </script>
 </body>
-  </html>
+</html>
