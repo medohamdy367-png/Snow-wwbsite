@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الحضور - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .attendance-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* بطاقة الحضور اليومي */
+        .daily-card {
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: #0a1f2e;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .daily-card::before {
+            content: '📅';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            bottom: -20px;
+            left: -20px;
+            transform: rotate(15deg);
+        }
+
+        .daily-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .daily-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .daily-streak {
+            background: #0a1f2e;
+            color: gold;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+        }
+
+        .checkin-btn {
+            background: #0a1f2e;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 3rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .checkin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(10,31,46,0.5);
+        }
+
+        .checkin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* سلسلة الحضور */
+        .streak-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .streak-day {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(74,163,255,0.3);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .streak-day.active {
+            background: #4aa3ff;
+            border-color: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        .streak-day.today {
+            border-color: gold;
+            box-shadow: 0 0 20px gold;
+        }
+
+        .day-name {
+            font-size: 0.9rem;
+            color: #b0d9ff;
+        }
+
+        .streak-day.active .day-name {
+            color: #0a1f2e;
+        }
+
+        .day-points {
+            font-weight: bold;
+        }
+
+        /* إحصائيات الحضور */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #b0d9ff;
+            margin-top: 0.5rem;
+        }
+
+        /* جدول الحضور الشهري */
+        .monthly-calendar {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .calendar-weekday {
+            padding: 0.5rem;
+            background: rgba(74,163,255,0.2);
+            border-radius: 10px;
+            color: #a8e6ff;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-cell {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .calendar-cell.attended {
+            background: #4aa3ff40;
+            border-color: #4aa3ff;
+        }
+
+        .calendar-cell.today {
+            border: 2px solid gold;
+        }
+
+        .calendar-day {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .calendar-points {
+            font-size: 0.8rem;
+            color: gold;
+        }
+
+        /* المكافآت */
+        .rewards-section {
+            margin: 2rem 0;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .reward-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(74,163,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reward-card.locked {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+        }
+
+        .reward-card.unlocked {
+            border-color: gold;
+            box-shadow: 0 0 30px gold;
+        }
+
+        .reward-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .reward-title {
+            color: #a8e6ff;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .reward-requirement {
+            color: #b0d9ff;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .reward-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: gold;
+            color: #0a1f2e;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* ترتيب المواظبين */
+        .leaderboard {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+        }
+
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            background: #4aa3ff20;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .rank-1 .rank-badge { background: gold; color: #0a1f2e; }
+        .rank-2 .rank-badge { background: silver; color: #0a1f2e; }
+        .rank-3 .rank-badge { background: #cd7f32; color: #0a1f2e; }
+
+        .player-streak {
+            color: gold;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="attendance.html" class="active">📅 الحضور</a></li>
+                <li><a href="bank.html">🏦 البنك</a></li>
+                <li><a href="games.html">🎮 الألعاب</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="attendance-container">
+        <!-- بطاقة الحضور اليومي -->
+        <div class="daily-card">
+            <div class="daily-header">
+                <span class="daily-title">📅 الحضور اليومي</span>
+                <span class="daily-streak" id="streakCount">🔥 0 يوم</span>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="checkin-btn" id="checkinBtn" onclick="checkIn()">✅ سجل حضورك اليومي</button>
+                <p id="checkinMessage" style="color: #0a1f2e; margin-top: 0.5rem;"></p>
+            </div>
+
+            <!-- سلسلة آخر 7 أيام -->
+            <div class="streak-grid" id="weekStreak">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- إحصائيات الحضور -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalAttendance">0</div>
+                <div class="stat-label">إجمالي أيام الحضور</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="monthlyAttendance">0</div>
+                <div class="stat-label">هذا الشهر</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalPoints">0</div>
+                <div class="stat-label">نقاط المكافآت</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="rankPosition">#0</div>
+                <div class="stat-label">ترتيبك</div>
+            </div>
+        </div>
+
+        <!-- المكافآت -->
+        <div class="rewards-section">
+            <h2 class="section-title">🎁 مكافآت المواظبة</h2>
+            <div class="rewards-grid" id="rewardsGrid">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- تقويم الشهر -->
+        <div class="monthly-calendar">
+            <h2 style="color: #a8e6ff; margin-bottom: 1rem;">📆 حضور شهر مارس</h2>
+            <div class="calendar-header">
+                <div class="calendar-weekday">أحد</div>
+                <div class="calendar-weekday">إثنين</div>
+                <div class="calendar-weekday">ثلاثاء</div>
+                <div class="calendar-weekday">أربعاء</div>
+                <div class="calendar-weekday">خميس</div>
+                <div class="calendar-weekday">جمعة</div>
+                <div class="calendar-weekday">سبت</div>
+            </div>
+            <div class="calendar-grid" id="monthlyCalendar">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- ترتيب المواظبين -->
+        <div class="leaderboard">
+            <h2 style="color: #a8e6ff; margin-bottom: 1rem;">👑 أكثر الأعضاء مواظبة</h2>
+            <div id="attendanceLeaderboard">
+                <!-- هيتحمّل بالجافاسكريبت -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'زائر',
+            points: 1000
+        };
+
+        // بيانات الحضور
+        let attendanceData = JSON.parse(localStorage.getItem('snowKoralAttendance')) || {
+            users: {}
+        };
+
+        // تهيئة بيانات المستخدم
+        if (!attendanceData.users[currentUser.username]) {
+            attendanceData.users[currentUser.username] = {
+                streak: 0,
+                total: 0,
+                lastCheckin: null,
+                history: [],
+                monthlyPoints: 0
+            };
+            saveAttendanceData();
+        }
+
+        function saveAttendanceData() {
+            localStorage.setItem('snowKoralAttendance', JSON.stringify(attendanceData));
+        }
+
+        // ==================== دوال الحضور ====================
+        function checkIn() {
+            const userData = attendanceData.users[currentUser.username];
+            const today = new Date().toDateString();
+            const now = new Date();
+            
+            // التحقق من عدم تسجيل الحضور اليوم
+            if (userData.lastCheckin === today) {
+                document.getElementById('checkinMessage').textContent = '❌ لقد سجلت حضورك اليوم بالفعل';
+                return;
+            }
+
+            // حساب المكافأة
+            let points = 10; // أساسي
+            
+            // مكافأة الاستمرار
+            if (userData.lastCheckin) {
+                const lastDate = new Date(userData.lastCheckin);
+                const yesterday = new Date(now);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (lastDate.toDateString() === yesterday.toDateString()) {
+                    userData.streak++;
+                    points += userData.streak * 5; // 5 نقاط إضافية لكل يوم استمرار
+                } else {
+                    userData.streak = 1;
+                }
+            } else {
+                userData.streak = 1;
+            }
+
+            // تحديث البيانات
+            userData.lastCheckin = today;
+            userData.total++;
+            userData.history.push({
+                date: today,
+                points: points
+            });
+            
+            // إضافة النقاط
+            currentUser.points += points;
+            userData.monthlyPoints += points;
+            
+            // حفظ كل البيانات
+            localStorage.setItem('snowKoralCurrentUser', JSON.stringify(currentUser));
+            saveAttendanceData();
+
+            // تحديث الواجهة
+            document.getElementById('checkinMessage').textContent = `✅ تم تسجيل حضورك! ربحت ${points} نقطة`;
+            document.getElementById('checkinBtn').disabled = true;
+            
+            updateAll();
+            showCelebration(points);
+        }
+
+        // ==================== تحديث الواجهة ====================
+        function updateAll() {
+            updateStats();
+            updateWeekStreak();
+            updateRewards();
+            updateCalendar();
+            updateLeaderboard();
+        }
+
+        function updateStats() {
+            const userData = attendanceData.users[currentUser.username];
+            
+            document.getElementById('streakCount').textContent = `🔥 ${userData.streak} يوم`;
+            document.getElementById('totalAttendance').textContent = userData.total;
+            
+            // حساب حضور هذا الشهر
+            const now = new Date();
+            const thisMonth = userData.history.filter(h => {
+                const d = new Date(h.date);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            }).length;
+            
+            document.getElementById('monthlyAttendance').textContent = thisMonth;
+            document.getElementById('totalPoints').textContent = userData.monthlyPoints;
+            
+            // التحقق من زر الحضور
+            if (userData.lastCheckin === new Date().toDateString()) {
+                document.getElementById('checkinBtn').disabled = true;
+            }
+        }
+
+        function updateWeekStreak() {
+            const weekContainer = document.getElementById('weekStreak');
+            weekContainer.innerHTML = '';
+            
+            const days = ['أحد', 'إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+            const now = new Date();
+            
+            for (let i = 6; i >= 0; i--) {
+                const day = new Date(now);
+                day.setDate(day.getDate() - i);
+                
+                const dayStr = day.toDateString();
+                const isToday = i === 0;
+                const isAttended = attendanceData.users[currentUser.username].history.some(h => h.date === dayStr);
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = `streak-day ${isAttended ? 'active' : ''} ${isToday ? 'today' : ''}`;
+                dayElement.innerHTML = `
+                    <span class="day-name">${days[day.getDay()]}</span>
+                    <span class="day-points">${isAttended ? '✓' : '○'}</span>
+                `;
+                
+                weekContainer.appendChild(dayElement);
+            }
+        }
+
+        function updateRewards() {
+            const rewardsContainer = document.getElementById('rewardsGrid');
+            const userData = attendanceData.users[currentUser.username];
+            
+            const rewards = [
+                { icon: '🎁', title: 'بداية موفقة', requirement: 'أول 5 أيام', points: 50, minDays: 5 },
+                { icon: '🌟', title: 'عضو نشط', requirement: '10 أيام حضور', points: 100, minDays: 10 },
+                { icon: '💫', title: 'نجم الأسبوع', requirement: 'أسبوع كامل', points: 200, minDays: 7 },
+                { icon: '👑', title: 'أسطورة المواظبة', requirement: '30 يوم', points: 500, minDays: 30 },
+                { icon: '🔥', title: 'سلسلة نارية', requirement: 'أسبوعين متواصلين', points: 300, minDays: 14 },
+                { icon: '❄️', title: 'عضو ثلجي', requirement: 'شهر كامل', points: 1000, minDays: 30 }
+            ];
+            
+            rewardsContainer.innerHTML = '';
+            
+            rewards.forEach(reward => {
+                const isUnlocked = userData.total >= reward.minDays;
+                const cardClass = `reward-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+                
+                rewardsContainer.innerHTML += `
+                    <div class="${cardClass}">
+                        ${isUnlocked ? '<span class="reward-badge">✅ مفتوح</span>' : ''}
+                        <div class="reward-icon">${reward.icon}</div>
+                        <div class="reward-title">${reward.title}</div>
+                        <div class="reward-requirement">${reward.requirement}</div>
+                        <div style="color: gold;">🏆 ${reward.points} نقطة</div>
+                    </div>
+                `;
+            });
+        }
+
+        function updateCalendar() {
+            const calendar = document.getElementById('monthlyCalendar');
+            calendar.innerHTML = '';
+            
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            // إضافة أيام فارغة قبل أول يوم
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                calendar.innerHTML += '<div class="calendar-cell"></div>';
+            }
+            
+            // إضافة أيام الشهر
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+                const date = new Date(year, month, d);
+                const dateStr = date.toDateString();
+                const isToday = date.toDateString() === now.toDateString();
+                const isAttended = attendanceData.users[currentUser.username].history.some(h => h.date === dateStr);
+                
+                const attendance = attendanceData.users[currentUser.username].history.find(h => h.date === dateStr);
+                
+                calendar.innerHTML += `
+                    <div class="calendar-cell ${isAttended ? 'attended' : ''} ${isToday ? 'today' : ''}">
+                        <span class="calendar-day">${d}</span>
+                        ${attendance ? `<span class="calendar-points">+${attendance.points}</span>` : ''}
+                    </div>
+                `;
+            }
+        }
+
+        function updateLeaderboard() {
+            const leaderboard = document.getElementById('attendanceLeaderboard');
+            
+            // ترتيب المستخدمين حسب إجمالي الحضور
+            const users = Object.entries(attendanceData.users)
+                .map(([name, data]) => ({ name, total: data.total, streak: data.streak }))
+                .sort((a, b) => b.total - a.total)
+                .slice(0, 10);
+            
+            leaderboard.innerHTML = '';
+            
+            users.forEach((user, index) => {
+                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                
+                leaderboard.innerHTML += `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div class="rank-badge">${index + 1}</div>
+                        <div style="flex: 1;">${user.name}</div>
+                        <div class="player-streak">🔥 ${user.streak}</div>
+                        <div style="color: #a8e6ff;">📅 ${user.total} يوم</div>
+                    </div>
+                `;
+            });
+            
+            // تحديث ترتيب المستخدم
+            const userRank = users.findIndex(u => u.name === currentUser.username) + 1;
+            document.getElementById('rankPosition').textContent = `#${userRank || 'غير مصنف'}`;
+        }
+
+        // ==================== احتفالية ====================
+        function showCelebration(points) {
+            const msg = document.createElement('div');
+            msg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, gold, orange);
+                color: #0a1f2e;
+                padding: 2rem 4rem;
+                border-radius: 50px;
+                font-size: 2rem;
+                font-weight: bold;
+                z-index: 1000;
+                animation: popIn 0.5s ease;
+                box-shadow: 0 0 50px gold;
+            `;
+            msg.textContent = `🎉 +${points} نقطة!`;
+            document.body.appendChild(msg);
+            
+            setTimeout(() => msg.remove(), 3000);
+            
+            // كونفيتي
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}%;
+                        top: -10px;
+                        width: 10px;
+                        height: 20px;
+                        background: hsl(${Math.random() * 360}, 100%, 50%);
+                        animation: confettiFall 3s linear;
+                        z-index: 999;
+                    `;
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 100);
+            }
+        }
+
+        // ==================== تحميل الصفحة ====================
+        window.onload = function() {
+            updateAll();
+            
+            // إضافة الـ animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes popIn {
+                    0% { transform: translate(-50%, -50%) scale(0); }
+                    80% { transform: translate(-50%, -50%) scale(1.2); }
+                    100% { transform: translate(-50%, -50%) scale(1); }
+                }
+                @keyframes confettiFall {
+                    to { transform: translateY(100vh) rotate(720deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        };
+    </script>
+</body>
+</html>
