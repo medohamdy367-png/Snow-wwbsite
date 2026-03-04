@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البنك - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* تنسيقات البنك */
+        .bank-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        /* بطاقة الرصيد */
+        .balance-card {
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: #0a1f2e;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(74,163,255,0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .balance-card::before {
+            content: '💰';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            bottom: -20px;
+            right: -20px;
+            transform: rotate(15deg);
+        }
+        
+        .balance-label {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+        
+        .balance-amount {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .balance-sub {
+            display: flex;
+            gap: 2rem;
+            font-size: 1rem;
+        }
+        
+        /* إحصائيات سريعة */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #b0d9ff;
+            margin-top: 0.5rem;
+        }
+        
+        /* أزرار الإجراءات السريعة */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .action-btn {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #4aa3ff;
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #e0f2fe;
+        }
+        
+        .action-btn:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(74,163,255,0.3);
+        }
+        
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* سجل المعاملات */
+        .transactions-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            margin-top: 2rem;
+        }
+        
+        .section-title {
+            color: #a8e6ff;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .transaction-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 20px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+        
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            border-right: 4px solid transparent;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .transaction-item.deposit {
+            border-right-color: #00cc66;
+        }
+        
+        .transaction-item.withdraw {
+            border-right-color: #ff4444;
+        }
+        
+        .transaction-item.transfer {
+            border-right-color: #4aa3ff;
+        }
+        
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .icon-deposit {
+            background: #00cc6620;
+            color: #00cc66;
+        }
+        
+        .icon-withdraw {
+            background: #ff444420;
+            color: #ff4444;
+        }
+        
+        .icon-transfer {
+            background: #4aa3ff20;
+            color: #4aa3ff;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-weight: bold;
+            color: #a8e6ff;
+            margin-bottom: 0.2rem;
+        }
+        
+        .transaction-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #6b8ca6;
+        }
+        
+        .transaction-amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .amount-positive {
+            color: #00cc66;
+        }
+        
+        .amount-negative {
+            color: #ff4444;
+        }
+        
+        /* التصنيفات */
+        .rank-badges {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .rank-badge {
+            padding: 0.3rem 1rem;
+            background: rgba(74,163,255,0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #4aa3ff;
+        }
+        
+        /* المودال */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #0a1f2e;
+            border: 2px solid #4aa3ff;
+            border-radius: 30px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-close {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ff4444;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b0d9ff;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(74,163,255,0.3);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border: none;
+            border-radius: 15px;
+            color: #0a1f2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* الترتيب */
+        .leaderboard {
+            margin-top: 2rem;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            margin: 0.5rem 0;
+        }
+        
+        .rank-number {
+            width: 30px;
+            height: 30px;
+            background: #4aa3ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a1f2e;
+            font-weight: bold;
+        }
+        
+        .rank-1 .rank-number {
+            background: gold;
+        }
+        
+        .rank-2 .rank-number {
+            background: silver;
+        }
+        
+        .rank-3 .rank-number {
+            background: #cd7f32;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="ranks.html">الرتب</a></li>
+                <li><a href="members.html">الأعضاء</a></li>
+                <li><a href="bank.html" class="active">البنك</a></li>
+                <li><a href="shop.html">المتجر</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="bank-container">
+        <!-- بطاقة الرصيد -->
+        <div class="balance-card">
+            <div class="balance-label">💰 رصيدك الحالي</div>
+            <div class="balance-amount" id="userBalance">1500</div>
+            <div class="balance-sub">
+                <span>⭐ نقاط التميز</span>
+                <span>💎 عملة المملكة</span>
+            </div>
+        </div>
+
+        <!-- إحصائيات سريعة -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-value" id="totalTransactions">47</div>
+                <div class="stat-label">إجمالي المعاملات</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📤</div>
+                <div class="stat-value" id="totalSent">12</div>
+                <div class="stat-label">تم الإرسال</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📥</div>
+                <div class="stat-value" id="totalReceived">35</div>
+                <div class="stat-label">تم الاستلام</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="userRank">#5</div>
+                <div class="stat-label">ترتيبك</div>
+            </div>
+        </div>
+
+        <!-- أزرار الإجراءات -->
+        <div class="action-buttons">
+            <div class="action-btn" onclick="openModal('deposit')">
+                <div class="action-icon">📥</div>
+                <div>إيداع</div>
+            </div>
+            <div class="action-btn" onclick="openModal('withdraw')">
+                <div class="action-icon">📤</div>
+                <div>سحب</div>
+            </div>
+            <div class="action-btn" onclick="openModal('transfer')">
+                <div class="action-icon">🔄</div>
+                <div>تحويل</div>
+            </div>
+            <div class="action-btn" onclick="openModal('loan')">
+                <div class="action-icon">💳</div>
+                <div>تسليف</div>
+            </div>
+        </div>
+
+        <!-- ترتيب المتصدرين -->
+        <div style="margin: 2rem 0;">
+            <h3 class="section-title">🏆 ترتيب الأغنياء</h3>
+            <div class="leaderboard" id="leaderboard">
+                <!-- هيتعبأ بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- سجل المعاملات -->
+        <div class="transactions-section">
+            <h3 class="section-title">📋 سجل المعاملات</h3>
+            
+            <div class="transaction-filters">
+                <button class="filter-btn active" onclick="filterTransactions('all')">الكل</button>
+                <button class="filter-btn" onclick="filterTransactions('deposit')">إيداعات</button>
+                <button class="filter-btn" onclick="filterTransactions('withdraw')">سحوبات</button>
+                <button class="filter-btn" onclick="filterTransactions('transfer')">تحويلات</button>
+            </div>
+            
+            <div class="transactions-list" id="transactionsList">
+                <!-- هيتعبأ بالجافاسكريبت -->
+            </div>
+        </div>
+    </main>
+
+    <!-- مودال الإيداع -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📥 إيداع نقاط</h3>
+                <span class="modal-close" onclick="closeModal('depositModal')">&times;</span>
+            </div>
+            <form onsubmit="handleDeposit(event)">
+                <div class="form-group">
+                    <label>المبلغ</label>
+                    <input type="number" id="depositAmount" min="1" required placeholder="أدخل المبلغ">
+                </div>
+                <div class="form-group">
+                    <label>السبب (اختياري)</label>
+                    <input type="text" id="depositReason" placeholder="مثلاً: مكافأة نشاط">
+                </div>
+                <button type="submit" class="submit-btn">تأكيد الإيداع</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- مودال السحب -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📤 سحب نقاط</h3>
+                <span class="modal-close" onclick="closeModal('withdrawModal')">&times;</span>
+            </div>
+            <form onsubmit="handleWithdraw(event)">
+                <div class="form-group">
+                    <label>المبلغ</label>
+                    <input type="number" id="withdrawAmount" min="1" required placeholder="أدخل المبلغ">
+                </div>
+                <div class="form-group">
+                    <label>الغرض</label>
+                    <input type="text" id="withdrawReason" required placeholder="مثلاً: شراء من المتجر">
+                </div>
+                <button type="submit" class="submit-btn">تأكيد السحب</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- مودال التحويل -->
+    <div class="modal" id="transferModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔄 تحويل نقاط</h3>
+                <span class="modal-close" onclick="closeModal('transferModal')">&times;</span>
+            </div>
+            <form onsubmit="handleTransfer(event)">
+                <div class="form-group">
+                    <label>إلى مستخدم</label>
+                    <input type="text" id="transferTo" required placeholder="اسم المستخدم">
+                </div>
+                <div class="form-group">
+                    <label>المبلغ</label>
+                    <input type="number" id="transferAmount" min="1" required placeholder="أدخل المبلغ">
+                </div>
+                <div class="form-group">
+                    <label>السبب (اختياري)</label>
+                    <input type="text" id="transferReason" placeholder="هدية، سداد دين، إلخ">
+                </div>
+                <button type="submit" class="submit-btn">تأكيد التحويل</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- مودال التسليف -->
+    <div class="modal" id="loanModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💳 طلب تسليف</h3>
+                <span class="modal-close" onclick="closeModal('loanModal')">&times;</span>
+            </div>
+            <form onsubmit="handleLoan(event)">
+                <div class="form-group">
+                    <label>المبلغ (الحد الأقصى 500)</label>
+                    <input type="number" id="loanAmount" min="1" max="500" required placeholder="أدخل المبلغ">
+                </div>
+                <div class="form-group">
+                    <label>السبب</label>
+                    <input type="text" id="loanReason" required placeholder="لماذا تحتاج التسليف؟">
+                </div>
+                <div class="form-group">
+                    <label>مدة السداد (بالأيام)</label>
+                    <input type="number" id="loanPeriod" min="1" max="30" value="7" required>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <p>💰 الفائدة: <span id="loanInterest">10%</span></p>
+                    <p>💸 الإجمالي: <span id="loanTotal">0</span> نقطة</p>
+                </div>
+                <button type="submit" class="submit-btn">تقديم الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'زائر',
+            rank: 'متدرب 🧸',
+            points: 1000
+        };
+        
+        // ==================== بيانات البنك ====================
+        let bankData = JSON.parse(localStorage.getItem('snowKoralBank')) || {
+            users: {},
+            transactions: [],
+            loans: []
+        };
+        
+        // تهيئة بيانات المستخدم
+        if (!bankData.users[currentUser.username]) {
+            bankData.users[currentUser.username] = {
+                balance: currentUser.points || 1000,
+                totalDeposits: 0,
+                totalWithdrawals: 0,
+                totalTransfers: 0
+            };
+            saveBankData();
+        }
+        
+        // حفظ البيانات
+        function saveBankData() {
+            localStorage.setItem('snowKoralBank', JSON.stringify(bankData));
+        }
+        
+        // تحديث الرصيد
+        function updateBalance() {
+            const userData = bankData.users[currentUser.username];
+            document.getElementById('userBalance').textContent = userData.balance;
+            
+            // تحديث إحصائيات المستخدم
+            const userTransactions = bankData.transactions.filter(t => 
+                t.from === currentUser.username || t.to === currentUser.username
+            );
+            
+            const sent = userTransactions.filter(t => t.from === currentUser.username && t.type !== 'deposit').length;
+            const received = userTransactions.filter(t => t.to === currentUser.username && t.type !== 'withdraw').length;
+            
+            document.getElementById('totalTransactions').textContent = userTransactions.length;
+            document.getElementById('totalSent').textContent = sent;
+            document.getElementById('totalReceived').textContent = received;
+        }
+        
+        // ==================== عرض سجل المعاملات ====================
+        function loadTransactions(filter = 'all') {
+            const list = document.getElementById('transactionsList');
+            list.innerHTML = '';
+            
+            let transactions = bankData.transactions
+                .filter(t => t.from === currentUser.username || t.to === currentUser.username)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 20);
+            
+            if (filter !== 'all') {
+                transactions = transactions.filter(t => t.type === filter);
+            }
+            
+            if (transactions.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #6b8ca6;">لا توجد معاملات</p>';
+                return;
+            }
+            
+            transactions.forEach(t => {
+                let icon, iconClass, title, amount, amountClass;
+                
+                if (t.type === 'deposit') {
+                    icon = '📥';
+                    iconClass = 'icon-deposit';
+                    title = 'إيداع';
+                    amount = `+${t.amount}`;
+                    amountClass = 'amount-positive';
+                } else if (t.type === 'withdraw') {
+                    icon = '📤';
+                    iconClass = 'icon-withdraw';
+                    title = 'سحب';
+                    amount = `-${t.amount}`;
+                    amountClass = 'amount-negative';
+                } else if (t.type === 'transfer') {
+                    icon = '🔄';
+                    iconClass = 'icon-transfer';
+                    if (t.from === currentUser.username) {
+                        title = `تحويل إلى ${t.to}`;
+                        amount = `-${t.amount}`;
+                        amountClass = 'amount-negative';
+                    } else {
+                        title = `تحويل من ${t.from}`;
+                        amount = `+${t.amount}`;
+                        amountClass = 'amount-positive';
+                    }
+                }
+                
+                const date = new Date(t.date).toLocaleDateString('ar-EG');
+                const time = new Date(t.date).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+                
+                list.innerHTML += `
+                    <div class="transaction-item ${t.type}">
+                        <div class="transaction-icon ${iconClass}">${icon}</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">${title}</div>
+                            <div class="transaction-meta">
+                                <span>${date}</span>
+                                <span>${time}</span>
+                                ${t.reason ? `<span>${t.reason}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="transaction-amount ${amountClass}">${amount}</div>
+                    </div>
+                `;
+            });
+        }
+        
+        // فلترة المعاملات
+        function filterTransactions(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadTransactions(filter);
+        }
+        
+        // ==================== عمليات البنك ====================
+        
+        // إيداع
+        function handleDeposit(e) {
+            e.preventDefault();
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            const reason = document.getElementById('depositReason').value || 'إيداع';
+            
+            const userData = bankData.users[currentUser.username];
+            userData.balance += amount;
+            userData.totalDeposits += amount;
+            
+            bankData.transactions.push({
+                type: 'deposit',
+                from: currentUser.username,
+                amount: amount,
+                reason: reason,
+                date: new Date().toISOString()
+            });
+            
+            saveBankData();
+            updateBalance();
+            loadTransactions();
+            closeModal('depositModal');
+            
+            alert(`✅ تم إيداع ${amount} نقطة بنجاح`);
+        }
+        
+        // سحب
+        function handleWithdraw(e) {
+            e.preventDefault();
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+            const reason = document.getElementById('withdrawReason').value;
+            
+            const userData = bankData.users[currentUser.username];
+            
+            if (userData.balance < amount) {
+                alert('❌ رصيد غير كافٍ');
+                return;
+            }
+            
+            userData.balance -= amount;
+            userData.totalWithdrawals += amount;
+            
+            bankData.transactions.push({
+                type: 'withdraw',
+                from: currentUser.username,
+                amount: amount,
+                reason: reason,
+                date: new Date().toISOString()
+            });
+            
+            saveBankData();
+            updateBalance();
+            loadTransactions();
+            closeModal('withdrawModal');
+            
+            alert(`✅ تم سحب ${amount} نقطة بنجاح`);
+        }
+        
+        // تحويل
+        function handleTransfer(e) {
+            e.preventDefault();
+            const to = document.getElementById('transferTo').value;
+            const amount = parseInt(document.getElementById('transferAmount').value);
+            const reason = document.getElementById('transferReason').value || 'تحويل';
+            
+            const userData = bankData.users[currentUser.username];
+            
+            if (!bankData.users[to]) {
+                alert('❌ المستخدم غير موجود');
+                return;
+            }
+            
+            if (userData.balance < amount) {
+                alert('❌ رصيد غير كافٍ');
+                return;
+            }
+            
+            // خصم من المرسل
+            userData.balance -= amount;
+            userData.totalTransfers += amount;
+            
+            // إضافة للمستلم
+            bankData.users[to].balance += amount;
+            
+            bankData.transactions.push({
+                type: 'transfer',
+                from: currentUser.username,
+                to: to,
+                amount: amount,
+                reason: reason,
+                date: new Date().toISOString()
+            });
+            
+            saveBankData();
+            updateBalance();
+            loadTransactions();
+            closeModal('transferModal');
+            
+            alert(`✅ تم تحويل ${amount} نقطة إلى ${to}`);
+        }
+        
+        // تسليف
+        function handleLoan(e) {
+            e.preventDefault();
+            const amount = parseInt(document.getElementById('loanAmount').value);
+            const reason = document.getElementById('loanReason').value;
+            const period = parseInt(document.getElementById('loanPeriod').value);
+            
+            // حساب الفائدة (10%)
+            const interest = Math.floor(amount * 0.1);
+            const total = amount + interest;
+            
+            if (amount > 500) {
+                alert('❌ الحد الأقصى للتسليف 500 نقطة');
+                return;
+            }
+            
+            // التحقق من وجود تسليف سابق غير مسدد
+            const existingLoan = bankData.loans.find(l => 
+                l.user === currentUser.username && !l.paid
+            );
+            
+            if (existingLoan) {
+                alert('❌ لديك تسليف سابق غير مسدد');
+                return;
+            }
+            
+            const loan = {
+                id: Date.now(),
+                user: currentUser.username,
+                amount: amount,
+                interest: interest,
+                total: total,
+                reason: reason,
+                period: period,
+                date: new Date().toISOString(),
+                dueDate: new Date(Date.now() + period * 24 * 60 * 60 * 1000).toISOString(),
+                paid: false
+            };
+            
+            bankData.loans.push(loan);
+            
+            // إضافة المبلغ للرصيد
+            bankData.users[currentUser.username].balance += amount;
+            
+            bankData.transactions.push({
+                type: 'deposit',
+                from: 'بنك SNOW KORAL',
+                to: currentUser.username,
+                amount: amount,
+                reason: 'تسليف',
+                date: new Date().toISOString()
+            });
+            
+            saveBankData();
+            updateBalance();
+            closeModal('loanModal');
+            
+            alert(`✅ تمت الموافقة على التسليف\nالمبلغ: ${amount}\nالفائدة: ${interest}\nالإجمالي: ${total}\nتاريخ السداد: ${new Date(loan.dueDate).toLocaleDateString('ar-EG')}`);
+        }
+        
+        // ==================== ترتيب المتصدرين ====================
+        function loadLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '';
+            
+            // ترتيب المستخدمين حسب الرصيد
+            const sorted = Object.entries(bankData.users)
+                .map(([name, data]) => ({ name, balance: data.balance }))
+                .sort((a, b) => b.balance - a.balance)
+                .slice(0, 10);
+            
+            sorted.forEach((user, index) => {
+                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                
+                leaderboard.innerHTML += `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div class="rank-number">${index + 1}</div>
+                        <div style="flex: 1;">
+                            <span style="color: #a8e6ff;">${user.name}</span>
+                        </div>
+                        <div style="color: gold; font-weight: bold;">💰 ${user.balance}</div>
+                    </div>
+                `;
+            });
+            
+            // تحديث ترتيب المستخدم
+            const userRank = sorted.findIndex(u => u.name === currentUser.username) + 1;
+            document.getElementById('userRank').textContent = userRank > 0 ? `#${userRank}` : 'غير مصنف';
+        }
+        
+        // ==================== المودالات ====================
+        function openModal(type) {
+            if (type === 'deposit') {
+                document.getElementById('depositModal').classList.add('active');
+            } else if (type === 'withdraw') {
+                document.getElementById('withdrawModal').classList.add('active');
+            } else if (type === 'transfer') {
+                document.getElementById('transferModal').classList.add('active');
+            } else if (type === 'loan') {
+                document.getElementById('loanModal').classList.add('active');
+                updateLoanTotal();
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // حساب إجمالي التسليف
+        function updateLoanTotal() {
+            const amount = document.getElementById('loanAmount').value || 0;
+            const interest = Math.floor(amount * 0.1);
+            const total = parseInt(amount) + interest;
+            
+            document.getElementById('loanInterest').textContent = '10%';
+            document.getElementById('loanTotal').textContent = total;
+        }
+        
+        // ربط حساب التسليف
+        document.getElementById('loanAmount')?.addEventListener('input', updateLoanTotal);
+        
+        // ==================== تحميل الصفحة ====================
+        window.onload = function() {
+            updateBalance();
+            loadTransactions();
+            loadLeaderboard();
+        };
+    </script>
+</body>
+</html>
