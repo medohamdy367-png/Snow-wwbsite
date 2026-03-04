@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شات SNOW KORAL المتكامل ❄️</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-messaging-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a1f2e 0%, #1e3b4f 100%);
+            color: #e0f2fe;
+            min-height: 100vh;
+        }
+        
+        /* الشات الرئيسي */
+        .chat-main-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 250px;
+            height: calc(100vh - 80px);
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* ===== قائمة المحادثات الجانبية ===== */
+        .chats-sidebar {
+            background: rgba(10, 31, 46, 0.95);
+            border-left: 1px solid rgba(74, 163, 255, 0.3);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .sidebar-header {
+            padding: 1rem;
+            border-bottom: 2px solid #4aa3ff;
+            margin-bottom: 1rem;
+        }
+        
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .chat-item:hover, .chat-item.active {
+            background: rgba(74, 163, 255, 0.2);
+        }
+        
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chat-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .online-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            border: 2px solid #0a1f2e;
+        }
+        
+        .online { background: #00cc66; }
+        .offline { background: #6b8ca6; }
+        
+        .chat-info {
+            flex: 1;
+        }
+        
+        .chat-name {
+            font-weight: bold;
+            color: #a8e6ff;
+        }
+        
+        .chat-last-msg {
+            font-size: 0.8rem;
+            color: #6b8ca6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+        
+        .unread-badge {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+        
+        /* ===== منطقة المحادثة الرئيسية ===== */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .chat-header {
+            padding: 1.5rem;
+            background: rgba(10, 31, 46, 0.8);
+            border-bottom: 1px solid rgba(74, 163, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .header-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .header-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .header-name {
+            font-size: 1.3rem;
+            color: #a8e6ff;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message {
+            display: flex;
+            gap: 1rem;
+            max-width: 70%;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .message-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .message.sent .message-content {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .message-sender {
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .message.sent .message-sender {
+            color: #0a1f2e;
+        }
+        
+        .message-time {
+            color: #6b8ca6;
+            font-size: 0.7rem;
+        }
+        
+        .message-text {
+            line-height: 1.5;
+        }
+        
+        .message-sticker {
+            font-size: 4rem;
+        }
+        
+        .message-image {
+            max-width: 200px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .message-reactions {
+            display: flex;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+        
+        .reaction {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        /* ===== منطقة الإدخال ===== */
+        .chat-input-area {
+            padding: 1.5rem;
+            background: rgba(10, 31, 46, 0.8);
+            border-top: 1px solid rgba(74, 163, 255, 0.3);
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .message-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(74, 163, 255, 0.3);
+            border-radius: 30px;
+            padding: 0.3rem;
+        }
+        
+        .message-input input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.8rem 1rem;
+            color: white;
+        }
+        
+        .message-input input:focus {
+            outline: none;
+        }
+        
+        .input-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .input-btn:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+        
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border: none;
+            color: #0a1f2e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+        
+        /* ===== لوحة الستيكرات والملفات ===== */
+        .stickers-panel {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: #0a1f2e;
+            border: 2px solid #4aa3ff;
+            border-radius: 20px;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: none;
+        }
+        
+        .stickers-panel.show {
+            display: grid;
+            animation: slideUp 0.3s ease;
+        }
+        
+        .sticker {
+            font-size: 2rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .sticker:hover {
+            transform: scale(1.3);
+            background: rgba(74, 163, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        /* ===== لوحة الملف الشخصي الجانبية ===== */
+        .profile-sidebar {
+            background: rgba(10, 31, 46, 0.95);
+            border-right: 1px solid rgba(74, 163, 255, 0.3);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .profile-avatar:hover .avatar-overlay {
+            opacity: 1;
+        }
+        
+        .profile-name {
+            font-size: 1.5rem;
+            color: #a8e6ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-rank {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(74, 163, 255, 0.2);
+            border-radius: 20px;
+            color: #4aa3ff;
+        }
+        
+        .profile-stats {
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(74, 163, 255, 0.1);
+        }
+        
+        .stat-label {
+            color: #6b8ca6;
+        }
+        
+        .stat-value {
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        /* ===== الإشعارات ===== */
+        .notification-popup {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #4aa3ff;
+            color: #0a1f2e;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* ===== مؤشر الكتابة ===== */
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            width: fit-content;
+            margin: 0.5rem 0;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #4aa3ff;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+        
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        /* ===== التجاوب مع الشاشات الصغيرة ===== */
+        @media (max-width: 768px) {
+            .chat-main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chats-sidebar, .profile-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-main-container">
+        <!-- القائمة الجانبية للمحادثات -->
+        <div class="chats-sidebar">
+            <div class="sidebar-header">
+                <h3>❄️ المحادثات</h3>
+                <div style="margin-top: 1rem;">
+                    <input type="text" placeholder="🔍 بحث عن عضو..." style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(74,163,255,0.3); border-radius: 10px; color: white;">
+                </div>
+            </div>
+            
+            <div id="chatsList">
+                <!-- هتتعبأ بالجافاسكريبت -->
+            </div>
+        </div>
+        
+        <!-- منطقة المحادثة الرئيسية -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="header-info">
+                    <div class="header-avatar">
+                        <img src="default-avatar.png" alt="Avatar" id="currentChatAvatar">
+                    </div>
+                    <div>
+                        <div class="header-name" id="currentChatName">اختر محادثة</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span class="online-status online" id="currentChatStatus"></span>
+                            <span id="currentChatStatusText">غير متصل</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="input-btn" onclick="clearChat()">🗑️</button>
+                    <button class="input-btn" onclick="blockUser()">🚫</button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- الرسائل هتظهر هنا -->
+            </div>
+            
+            <!-- لوحة الستيكرات -->
+            <div class="stickers-panel" id="stickersPanel">
+                <span class="sticker" onclick="sendSticker('😊')">😊</span>
+                <span class="sticker" onclick="sendSticker('😂')">😂</span>
+                <span class="sticker" onclick="sendSticker('❤️')">❤️</span>
+                <span class="sticker" onclick="sendSticker('🎮')">🎮</span>
+                <span class="sticker" onclick="sendSticker('👑')">👑</span>
+                <span class="sticker" onclick="sendSticker('❄️')">❄️</span>
+                <span class="sticker" onclick="sendSticker('🔥')">🔥</span>
+                <span class="sticker" onclick="sendSticker('🎌')">🎌</span>
+                <span class="sticker" onclick="sendSticker('⚔️')">⚔️</span>
+                <span class="sticker" onclick="sendSticker('🛡️')">🛡️</span>
+                <span class="sticker" onclick="sendSticker('🏆')">🏆</span>
+                <span class="sticker" onclick="sendSticker('🍜')">🍜</span>
+                <span class="sticker" onclick="sendSticker('⭐')">⭐</span>
+                <span class="sticker" onclick="sendSticker('💫')">💫</span>
+                <span class="sticker" onclick="sendSticker('✨')">✨</span>
+            </div>
+            
+            <!-- مؤشر الكتابة -->
+            <div id="typingIndicator" style="display: none; padding: 0 2rem;">
+                <div class="typing-indicator">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span style="margin-right: 0.5rem; color: #6b8ca6;">يكتب...</span>
+                </div>
+            </div>
+            
+            <!-- منطقة كتابة الرسالة -->
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <div class="message-input">
+                        <input type="text" placeholder="اكتب رسالتك..." id="messageInput" onkeyup="checkTyping()" onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button class="input-btn" onclick="toggleStickers()">😊</button>
+                        <button class="input-btn" onclick="attachFile()">📎</button>
+                        <button class="input-btn" onclick="sendImage()">📷</button>
+                    </div>
+                    <button class="send-btn" onclick="sendMessage()">➤</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- لوحة الملف الشخصي -->
+        <div class="profile-sidebar">
+            <div class="profile-header">
+                <div class="profile-avatar" onclick="uploadAvatar()" id="profileAvatar">
+                    <img src="default-avatar.png" alt="Profile" id="avatarImage">
+                    <div class="avatar-overlay">
+                        <span>تغيير</span>
+                    </div>
+                </div>
+                <div class="profile-name" id="profileName">جار التحميل...</div>
+                <div class="profile-rank" id="profileRank">...</div>
+            </div>
+            
+            <div class="profile-stats">
+                <h4 style="color: #a8e6ff; margin-bottom: 1rem;">📊 الإحصائيات</h4>
+                <div class="stat-item">
+                    <span class="stat-label">النقاط</span>
+                    <span class="stat-value" id="profilePoints">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">الرتبة</span>
+                    <span class="stat-value" id="profileRankDetail">...</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">تاريخ الانضمام</span>
+                    <span class="stat-value" id="profileJoinDate">2026</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">آخر ظهور</span>
+                    <span class="stat-value" id="profileLastSeen">الآن</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <h4 style="color: #a8e6ff; margin-bottom: 1rem;">🖼️ الستيكرات المفضلة</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                    <span class="sticker" onclick="sendSticker('😊')">😊</span>
+                    <span class="sticker" onclick="sendSticker('❤️')">❤️</span>
+                    <span class="sticker" onclick="sendSticker('🔥')">🔥</span>
+                    <span class="sticker" onclick="sendSticker('🎮')">🎮</span>
+                    <span class="sticker" onclick="sendSticker('👑')">👑</span>
+                    <span class="sticker" onclick="sendSticker('❄️')">❄️</span>
+                </div>
+            </div>
+            
+            <button onclick="logout()" style="width: 100%; padding: 1rem; margin-top: 2rem; background: #ff4444; border: none; border-radius: 10px; color: white; cursor: pointer;">
+                تسجيل خروج
+            </button>
+        </div>
+    </div>
+    
+    <!-- عنصر الإشعارات -->
+    <div id="notificationContainer"></div>
+    
+    <!-- نموذج رفع الصور المخفي -->
+    <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="uploadImage(this)">
+    <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="uploadAvatarFile(this)">
+
+    <script>
+        // ==================== إعداد Firebase ====================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKey123456789", // استبدل بمفاتيحك الحقيقية
+            authDomain: "snow-koral.firebaseapp.com",
+            databaseURL: "https://snow-koral-default-rtdb.firebaseio.com",
+            projectId: "snow-koral",
+            storageBucket: "snow-koral.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abc123def456"
+        };
+        
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const storage = firebase.storage();
+        
+        // ==================== بيانات المستخدم الحالي ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser'));
+        
+        // إذا مفيش مستخدم، حول لصفحة تسجيل الدخول
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+        
+        // تحديث الملف الشخصي
+        document.getElementById('profileName').textContent = currentUser.username;
+        document.getElementById('profileRank').textContent = currentUser.rank;
+        document.getElementById('profileRankDetail').textContent = currentUser.rank;
+        document.getElementById('profilePoints').textContent = currentUser.points || 0;
+        
+        // ==================== إدارة حالة المستخدم ====================
+        const userStatusRef = database.ref('status/' + currentUser.username);
+        const userInfoRef = database.ref('users/' + currentUser.username);
+        
+        // حفظ معلومات المستخدم
+        userInfoRef.set({
+            username: currentUser.username,
+            rank: currentUser.rank,
+            points: currentUser.points || 0,
+            avatar: currentUser.avatar || 'default-avatar.png',
+            lastSeen: Date.now()
+        });
+        
+        // تحديث الحالة
+        userStatusRef.set({
+            online: true,
+            lastSeen: Date.now()
+        });
+        
+        userStatusRef.onDisconnect().set({
+            online: false,
+            lastSeen: Date.now()
+        });
+        
+        // ==================== نظام الرسائل ====================
+        const messagesRef = database.ref('messages');
+        
+        // إرسال رسالة نصية
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            const message = {
+                sender: currentUser.username,
+                senderRank: currentUser.rank,
+                senderAvatar: currentUser.avatar || 'default-avatar.png',
+                text: text,
+                type: 'text',
+                timestamp: Date.now(),
+                read: false
+            };
+            
+            messagesRef.push(message);
+            input.value = '';
+            
+            // إرسال إشعار للمستخدمين الآخرين
+            sendNotification(currentUser.username, 'رسالة جديدة', text);
+        }
+        
+        // إرسال ستيكر
+        function sendSticker(sticker) {
+            const message = {
+                sender: currentUser.username,
+                senderRank: currentUser.rank,
+                senderAvatar: currentUser.avatar || 'default-avatar.png',
+                sticker: sticker,
+                type: 'sticker',
+                timestamp: Date.now(),
+                read: false
+            };
+            
+            messagesRef.push(message);
+            toggleStickers();
+        }
+        
+        // إرسال صورة
+        function sendImage() {
+            document.getElementById('imageUpload').click();
+        }
+        
+        // رفع الصورة
+        function uploadImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const storageRef = storage.ref('chat-images/' + Date.now() + '_' + file.name);
+            const uploadTask = storageRef.put(file);
+            
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    // أثناء الرفع
+                },
+                (error) => {
+                    alert('❌ فشل رفع الصورة');
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        const message = {
+                            sender: currentUser.username,
+                            senderRank: currentUser.rank,
+                            senderAvatar: currentUser.avatar || 'default-avatar.png',
+                            image: downloadURL,
+                            type: 'image',
+                            timestamp: Date.now(),
+                            read: false
+                        };
+                        
+                        messagesRef.push(message);
+                    });
+                }
+            );
+        }
+        
+        // تغيير الصورة الشخصية
+        function uploadAvatar() {
+            document.getElementById('avatarUpload').click();
+        }
+        
+        function uploadAvatarFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const storageRef = storage.ref('avatars/' + currentUser.username + '_' + Date.now());
+            const uploadTask = storageRef.put(file);
+            
+            uploadTask.on('state_changed',
+                null,
+                (error) => {
+                    alert('❌ فشل رفع الصورة');
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        // تحديث الصورة في قاعدة البيانات
+                        userInfoRef.update({ avatar: downloadURL });
+                        currentUser.avatar = downloadURL;
+                        localStorage.setItem('snowKoralCurrentUser', JSON.stringify(currentUser));
+                        
+                        // تحديث الصورة في الصفحة
+                        document.getElementById('avatarImage').src = downloadURL;
+                        document.querySelectorAll('.chat-avatar img, .message-avatar img').forEach(img => {
+                            if (img.closest('.message')?.querySelector('.message-sender')?.textContent === currentUser.username) {
+                                img.src = downloadURL;
+                            }
+                        });
+                    });
+                }
+            );
+        }
+        
+        // استقبال الرسائل
+        messagesRef.orderByChild('timestamp').on('child_added', (snapshot) => {
+            const msg = snapshot.val();
+            displayMessage(msg);
+            
+            // إشعار إذا كانت الرسالة من شخص آخر والمستخدم مش في الشات
+            if (msg.sender !== currentUser.username && !document.hasFocus()) {
+                showNotification(msg.sender, msg.text || msg.sticker || '📷 صورة');
+            }
+        });
+        
+        // عرض الرسالة
+        function displayMessage(msg) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const isMe = msg.sender === currentUser.username;
+            
+            const time = new Date(msg.timestamp).toLocaleTimeString('ar-EG', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            let content = '';
+            if (msg.type === 'sticker') {
+                content = `<div class="message-sticker">${msg.sticker}</div>`;
+            } else if (msg.type === 'image') {
+                content = `<img src="${msg.image}" class="message-image" onclick="window.open(this.src)">`;
+            } else {
+                content = `<div class="message-text">${msg.text}</div>`;
+            }
+            
+            const avatar = msg.senderAvatar || 'default-avatar.png';
+            
+            messagesDiv.innerHTML += `
+                <div class="message ${isMe ? 'sent' : 'received'}">
+                    <div class="message-avatar">
+                        <img src="${avatar}" alt="${msg.sender}">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-sender">${msg.sender} (${msg.senderRank})</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        ${content}
+                    </div>
+                </div>
+            `;
+            
+            // تمرير لآخر رسالة
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        // ==================== نظام الإشعارات ====================
+        function showNotification(title, body) {
+            // إشعار في الصفحة
+            const notification = document.createElement('div');
+            notification.className = 'notification-popup';
+            notification.innerHTML = `
+                <div style="font-size: 2rem;">❄️</div>
+                <div>
+                    <div style="font-weight: bold;">${title}</div>
+                    <div>${body}</div>
+                </div>
+            `;
+            
+            document.getElementById('notificationContainer').appendChild(notification);
+            
+            // إخفاء بعد 3 ثواني
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+            
+            // إشعار المتصفح
+            if (Notification.permission === 'granted') {
+                new Notification(title, { body });
+            }
+        }
+        
+        // طلب إذن الإشعارات
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+        
+        // إرسال إشعار للمستخدمين الآخرين
+        function sendNotification(from, title, body) {
+            database.ref('notifications').push({
+                from,
+                title,
+                body,
+                timestamp: Date.now(),
+                read: false
+            });
+        }
+        
+        // ==================== متابعة المستخدمين المتصلين ====================
+        database.ref('status').on('value', (snapshot) => {
+            const status = snapshot.val();
+            const onlineUsers = [];
+            
+            for (let user in status) {
+                if (status[user]?.online) {
+                    onlineUsers.push(user);
+                }
+            }
+            
+            updateOnlineStatus(onlineUsers);
+        });
+        
+        function updateOnlineStatus(onlineUsers) {
+            const chatItems = document.querySelectorAll('.chat-item');
+            
+            chatItems.forEach(item => {
+                const name = item.querySelector('.chat-name')?.textContent;
+                if (name) {
+                    const statusDot = item.querySelector('.online-status');
+                    if (onlineUsers.includes(name)) {
+                        statusDot.className = 'online-status online';
+                    } else {
+                        statusDot.className = 'online-status offline';
+                    }
+                }
+            });
+            
+            // تحديث حالة المحادثة الحالية
+            if (onlineUsers.includes(document.getElementById('currentChatName').textContent)) {
+                document.getElementById('currentChatStatus').className = 'online-status online';
+                document.getElementById('currentChatStatusText').textContent = 'متصل';
+            } else {
+                document.getElementById('currentChatStatus').className = 'online-status offline';
+                document.getElementById('currentChatStatusText').textContent = 'غير متصل';
+            }
+        }
+        
+        // ==================== مؤشر الكتابة ====================
+        let typingTimeout;
+        
+        function checkTyping() {
+            const typingRef = database.ref('typing/' + currentUser.username);
+            typingRef.set(true);
+            
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                typingRef.remove();
+            }, 2000);
+        }
+        
+        database.ref('typing').on('value', (snapshot) => {
+            const typing = snapshot.val();
+            const currentChat = document.getElementById('currentChatName').textContent;
+            
+            if (typing && typing[currentChat]) {
+                document.getElementById('typingIndicator').style.display = 'block';
+            } else {
+                document.getElementById('typingIndicator').style.display = 'none';
+            }
+        });
+        
+        // ==================== دوال مساعدة ====================
+        function toggleStickers() {
+            document.getElementById('stickersPanel').classList.toggle('show');
+        }
+        
+        function attachFile() {
+            alert('📎 سيتم إضافة رفع الملفات قريباً');
+        }
+        
+        function clearChat() {
+            if (confirm('هل تريد مسح المحادثة؟')) {
+                document.getElementById('chatMessages').innerHTML = '';
+            }
+        }
+        
+        function blockUser() {
+            if (confirm('هل تريد حظر هذا المستخدم؟')) {
+                alert('تم الحظر');
+            }
+        }
+        
+        function logout() {
+            userStatusRef.update({ online: false, lastSeen: Date.now() });
+            localStorage.removeItem('snowKoralCurrentUser');
+            window.location.href = 'index.html';
+        }
+        
+        // تحميل المحادثات
+        function loadChats() {
+            // هنا هتتحمل من قاعدة البيانات
+        }
+        
+        // ==================== تهيئة الصفحة ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChats();
+            
+            // تحديث الصورة الشخصية إذا كانت موجودة
+            if (currentUser.avatar) {
+                document.getElementById('avatarImage').src = currentUser.avatar;
+            }
+        });
+    </script>
+</body>
+  </html>
