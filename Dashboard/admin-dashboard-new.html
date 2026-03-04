@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* تنسيقات لوحة التحكم */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a1f2e 0%, #1e3b4f 100%);
+        }
+        
+        /* القائمة الجانبية */
+        .admin-sidebar {
+            width: 280px;
+            background: rgba(10, 31, 46, 0.95);
+            border-left: 2px solid #4aa3ff;
+            padding: 2rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .admin-logo {
+            font-size: 2rem;
+            color: #a8e6ff;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #4aa3ff;
+        }
+        
+        .admin-menu {
+            list-style: none;
+        }
+        
+        .admin-menu li {
+            margin: 1rem 0;
+        }
+        
+        .admin-menu a {
+            color: #e0f2fe;
+            text-decoration: none;
+            display: block;
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-menu a:hover,
+        .admin-menu a.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+            transform: translateX(-10px);
+        }
+        
+        /* المحتوى الرئيسي */
+        .admin-main {
+            flex: 1;
+            margin-right: 280px;
+            padding: 2rem;
+        }
+        
+        /* بطاقات الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74, 163, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #0a1f2e;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #b0d9ff;
+            margin-top: 0.5rem;
+        }
+        
+        /* جدول الأعضاء */
+        .members-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74, 163, 255, 0.3);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: right;
+            padding: 1rem;
+            background: rgba(74, 163, 255, 0.2);
+            color: #a8e6ff;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(74, 163, 255, 0.1);
+        }
+        
+        tr:hover {
+            background: rgba(74, 163, 255, 0.1);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .badge-active {
+            background: #00cc6620;
+            color: #00cc66;
+            border: 1px solid #00cc66;
+        }
+        
+        .badge-inactive {
+            background: #ff444420;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view {
+            background: #4aa3ff20;
+            color: #4aa3ff;
+        }
+        
+        .btn-view:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+        
+        /* الفلاتر */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(74, 163, 255, 0.3);
+            border-radius: 20px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+        
+        /* البحث */
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(74, 163, 255, 0.3);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        /* التحميل */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #a8e6ff;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .admin-main {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- القائمة الجانبية -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <span>❄️</span>
+                <h2>SNOW KORAL</h2>
+                <p style="font-size: 0.9rem; color: #4aa3ff;">لوحة التحكم</p>
+            </div>
+            
+            <ul class="admin-menu">
+                <li><a href="#dashboard" class="active" onclick="showSection('dashboard')">📊 الرئيسية</a></li>
+                <li><a href="#members" onclick="showSection('members')">👥 الأعضاء</a></li>
+                <li><a href="#analytics" onclick="showSection('analytics')">📈 الإحصائيات</a></li>
+                <li><a href="#settings" onclick="showSection('settings')">⚙️ الإعدادات</a></li>
+                <li><a href="../index.html">🔙 العودة للموقع</a></li>
+            </ul>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(74,163,255,0.1); border-radius: 10px;">
+                <p style="color: #a8e6ff;">👑 الإمبراطور</p>
+                <p style="font-size: 0.9rem;">فـانـتـيـاس</p>
+            </div>
+        </aside>
+        
+        <!-- المحتوى الرئيسي -->
+        <main class="admin-main">
+            <!-- قسم الرئيسية -->
+            <div id="dashboard-section">
+                <h2 style="color: #a8e6ff; margin-bottom: 2rem;">📊 نظرة عامة</h2>
+                
+                <!-- بطاقات الإحصائيات -->
+                <div class="stats-grid" id="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">👥</div>
+                            <span class="stat-value" id="total-members">0</span>
+                        </div>
+                        <div class="stat-label">إجمالي الأعضاء</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">✨</div>
+                            <span class="stat-value" id="new-members">0</span>
+                        </div>
+                        <div class="stat-label">جديد هذا الأسبوع</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">⚡</div>
+                            <span class="stat-value" id="active-today">0</span>
+                        </div>
+                        <div class="stat-label">نشط اليوم</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">👑</div>
+                            <span class="stat-value" id="total-ranks">22</span>
+                        </div>
+                        <div class="stat-label">عدد الرتب</div>
+                    </div>
+                </div>
+                
+                <!-- آخر الأعضاء المنضمين -->
+                <h3 style="color: #a8e6ff; margin: 2rem 0 1rem;">🆕 آخر المنضمين</h3>
+                <div class="members-table">
+                    <table id="recent-members">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم المستخدم</th>
+                                <th>الرتبة</th>
+                                <th>تاريخ الانضمام</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-members-body">
+                            <tr>
+                                <td colspan="5" class="loading">جاري التحميل...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- قسم الأعضاء -->
+            <div id="members-section" style="display: none;">
+                <h2 style="color: #a8e6ff; margin-bottom: 2rem;">👥 إدارة الأعضاء</h2>
+                
+                <!-- البحث والفلاتر -->
+                <div class="search-box">
+                    <input type="text" id="search-member" placeholder="🔍 بحث عن عضو..." onkeyup="searchMembers()">
+                </div>
+                
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filterMembers('all')">الكل</button>
+                    <button class="filter-btn" onclick="filterMembers('active')">نشط</button>
+                    <button class="filter-btn" onclick="filterMembers('inactive')">غير نشط</button>
+                    <button class="filter-btn" onclick="filterMembers('new')">جديد</button>
+                </div>
+                
+                <!-- جدول الأعضاء -->
+                <div class="members-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم المستخدم</th>
+                                <th>البريد</th>
+                                <th>الرتبة</th>
+                                <th>النقاط</th>
+                                <th>تاريخ الانضمام</th>
+                                <th>الحالة</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-table-body">
+                            <tr>
+                                <td colspan="8" class="loading">جاري التحميل...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- قسم الإحصائيات -->
+            <div id="analytics-section" style="display: none;">
+                <h2 style="color: #a8e6ff; margin-bottom: 2rem;">📈 إحصائيات متقدمة</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">⭐</div>
+                            <span class="stat-value" id="total-points">0</span>
+                        </div>
+                        <div class="stat-label">إجمالي النقاط</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">📊</div>
+                            <span class="stat-value" id="avg-points">0</span>
+                        </div>
+                        <div class="stat-label">متوسط النقاط</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">👑</div>
+                            <span class="stat-value" id="top-rank">0</span>
+                        </div>
+                        <div class="stat-label">أعلى رتبة</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">📅</div>
+                            <span class="stat-value" id="oldest-member">0</span>
+                        </div>
+                        <div class="stat-label">أقدم عضو</div>
+                    </div>
+                </div>
+                
+                <!-- ترتيب المتصدرين -->
+                <h3 style="color: #a8e6ff; margin: 2rem 0 1rem;">🏆 أفضل 10 أعضاء</h3>
+                <div class="members-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم المستخدم</th>
+                                <th>الرتبة</th>
+                                <th>النقاط</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <tr>
+                                <td colspan="4" class="loading">جاري التحميل...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- قسم الإعدادات -->
+            <div id="settings-section" style="display: none;">
+                <h2 style="color: #a8e6ff; margin-bottom: 2rem;">⚙️ إعدادات النقابة</h2>
+                
+                <div class="members-table">
+                    <h3 style="color: #a8e6ff; margin-bottom: 1rem;">📤 تصدير البيانات</h3>
+                    <button onclick="exportData()" style="padding: 1rem 2rem; background: #4aa3ff; color: #0a1f2e; border: none; border-radius: 10px; cursor: pointer;">
+                        📥 تحميل نسخة احتياطية
+                    </button>
+                </div>
+                
+                <div class="members-table" style="margin-top: 2rem;">
+                    <h3 style="color: #a8e6ff; margin-bottom: 1rem;">📥 استيراد البيانات</h3>
+                    <input type="file" id="import-file" accept=".json" onchange="importData(this)">
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // ==================== تحميل البيانات من localStorage ====================
+        function loadMembers() {
+            // جلب الأعضاء من localStorage
+            let users = JSON.parse(localStorage.getItem('snowKoralUsers')) || [];
+            
+            // لو مفيش بيانات، نحط بيانات تجريبية
+            if (users.length === 0) {
+                users = [
+                    { username: 'فـانـتـيـاس', email: 'fantas@snk.com', phone: '01204479735', rank: 'الامبراطور ⛓️', points: 5000, joinDate: '2024-01-15', status: 'active' },
+                    { username: 'سـكـونـا', email: 'skona@snk.com', phone: '', rank: 'نائب الامبراطور ⛄', points: 4500, joinDate: '2024-01-20', status: 'active' },
+                    { username: 'هـيـنـاتـا', email: 'hinata@snk.com', phone: '', rank: 'نائب الامبراطور ⛄', points: 4400, joinDate: '2024-01-20', status: 'active' },
+                    { username: 'جان', email: 'jan@snk.com', phone: '', rank: 'المستشار 🌹', points: 4000, joinDate: '2024-02-01', status: 'active' },
+                ];
+                
+                // إضافة 10 أعضاء تجريبيين
+                for (let i = 1; i <= 10; i++) {
+                    users.push({
+                        username: `عضو ${i}`,
+                        email: `member${i}@snk.com`,
+                        phone: `0123456789${i}`,
+                        rank: 'متدرب 🧸',
+                        points: Math.floor(Math.random() * 500) + 100,
+                        joinDate: new Date(2026, 2, Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0],
+                        status: Math.random() > 0.3 ? 'active' : 'inactive'
+                    });
+                }
+            }
+            
+            return users;
+        }
+        
+        // تحديث الإحصائيات
+        function updateStats() {
+            const users = loadMembers();
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            
+            document.getElementById('total-members').textContent = users.length;
+            
+            // الأعضاء الجدد هذا الأسبوع
+            const newMembers = users.filter(u => {
+                const joinDate = new Date(u.joinDate);
+                const diffDays = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+                return diffDays <= 7;
+            }).length;
+            document.getElementById('new-members').textContent = newMembers;
+            
+            // النشطاء اليوم
+            const activeToday = users.filter(u => u.status === 'active').length;
+            document.getElementById('active-today').textContent = activeToday;
+            
+            // إجمالي النقاط
+            const totalPoints = users.reduce((sum, u) => sum + (u.points || 0), 0);
+            document.getElementById('total-points').textContent = totalPoints;
+            
+            // متوسط النقاط
+            const avgPoints = users.length > 0 ? Math.round(totalPoints / users.length) : 0;
+            document.getElementById('avg-points').textContent = avgPoints;
+            
+            // أعلى رتبة
+            const ranks = users.map(u => u.rank);
+            const uniqueRanks = [...new Set(ranks)];
+            document.getElementById('top-rank').textContent = uniqueRanks.length;
+            
+            // أقدم عضو
+            const oldest = users.sort((a, b) => new Date(a.joinDate) - new Date(b.joinDate))[0];
+            document.getElementById('oldest-member').textContent = oldest ? oldest.username : '0';
+        }
+        
+        // عرض آخر الأعضاء
+        function displayRecentMembers() {
+            const users = loadMembers();
+            const recent = users.slice(-5).reverse();
+            const tbody = document.getElementById('recent-members-body');
+            
+            tbody.innerHTML = '';
+            recent.forEach((user, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.username}</td>
+                        <td>${user.rank}</td>
+                        <td>${user.joinDate}</td>
+                        <td><span class="badge ${user.status === 'active' ? 'badge-active' : 'badge-inactive'}">${user.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // عرض كل الأعضاء
+        function displayAllMembers(filter = 'all') {
+            let users = loadMembers();
+            const tbody = document.getElementById('members-table-body');
+            
+            // تطبيق الفلتر
+            if (filter === 'active') {
+                users = users.filter(u => u.status === 'active');
+            } else if (filter === 'inactive') {
+                users = users.filter(u => u.status !== 'active');
+            } else if (filter === 'new') {
+                const now = new Date();
+                users = users.filter(u => {
+                    const joinDate = new Date(u.joinDate);
+                    const diffDays = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+                    return diffDays <= 7;
+                });
+            }
+            
+            tbody.innerHTML = '';
+            users.forEach((user, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email || '—'}</td>
+                        <td>${user.rank}</td>
+                        <td>${user.points || 0}</td>
+                        <td>${user.joinDate}</td>
+                        <td><span class="badge ${user.status === 'active' ? 'badge-active' : 'badge-inactive'}">${user.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+                        <td class="actions">
+                            <button class="btn-action btn-view" onclick="viewMember('${user.username}')">عرض</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // عرض المتصدرين
+        function displayLeaderboard() {
+            let users = loadMembers();
+            users.sort((a, b) => (b.points || 0) - (a.points || 0));
+            const top10 = users.slice(0, 10);
+            const tbody = document.getElementById('leaderboard-body');
+            
+            tbody.innerHTML = '';
+            top10.forEach((user, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.username}</td>
+                        <td>${user.rank}</td>
+                        <td>${user.points || 0}</td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // البحث في الأعضاء
+        function searchMembers() {
+            const searchTerm = document.getElementById('search-member').value.toLowerCase();
+            let users = loadMembers();
+            
+            if (searchTerm) {
+                users = users.filter(u => 
+                    u.username.toLowerCase().includes(searchTerm) || 
+                    (u.email && u.email.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            const tbody = document.getElementById('members-table-body');
+            tbody.innerHTML = '';
+            users.forEach((user, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email || '—'}</td>
+                        <td>${user.rank}</td>
+                        <td>${user.points || 0}</td>
+                        <td>${user.joinDate}</td>
+                        <td><span class="badge ${user.status === 'active' ? 'badge-active' : 'badge-inactive'}">${user.status === 'active' ? 'نشط' : 'غير نشط'}</span></td>
+                        <td class="actions">
+                            <button class="btn-action btn-view" onclick="viewMember('${user.username}')">عرض</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // فلترة الأعضاء
+        function filterMembers(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            displayAllMembers(filter);
+        }
+        
+        // عرض عضو معين
+        function viewMember(username) {
+            alert(`🔍 عرض بيانات العضو: ${username}\n(سيتم فتح صفحة التفاصيل قريباً)`);
+        }
+        
+        // تصدير البيانات
+        function exportData() {
+            const users = loadMembers();
+            const data = JSON.stringify(users, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `snow-koral-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+        
+        // استيراد البيانات
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem('snowKoralUsers', JSON.stringify(data));
+                    alert('✅ تم استيراد البيانات بنجاح');
+                    location.reload();
+                } catch (error) {
+                    alert('❌ خطأ في قراءة الملف');
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // تبديل الأقسام
+        function showSection(section) {
+            document.querySelectorAll('.admin-main > div').forEach(div => div.style.display = 'none');
+            document.querySelectorAll('.admin-menu a').forEach(a => a.classList.remove('active'));
+            
+            if (section === 'dashboard') {
+                document.getElementById('dashboard-section').style.display = 'block';
+                document.querySelector('.admin-menu a[href="#dashboard"]').classList.add('active');
+            } else if (section === 'members') {
+                document.getElementById('members-section').style.display = 'block';
+                document.querySelector('.admin-menu a[href="#members"]').classList.add('active');
+                displayAllMembers();
+            } else if (section === 'analytics') {
+                document.getElementById('analytics-section').style.display = 'block';
+                document.querySelector('.admin-menu a[href="#analytics"]').classList.add('active');
+                displayLeaderboard();
+            } else if (section === 'settings') {
+                document.getElementById('settings-section').style.display = 'block';
+                document.querySelector('.admin-menu a[href="#settings"]').classList.add('active');
+            }
+        }
+        
+        // تحميل الصفحة
+        window.onload = function() {
+            updateStats();
+            displayRecentMembers();
+            displayAllMembers();
+            displayLeaderboard();
+        };
+    </script>
+</body>
+</html>
