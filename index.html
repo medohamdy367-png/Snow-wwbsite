@@ -5,6 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مملكة SNOW KORAL ❄️ النقابة الرسمية</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* إضافات للصفحة الرئيسية */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(74,163,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #4aa3ff;
+            box-shadow: 0 10px 30px rgba(74,163,255,0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            color: #a8e6ff;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            color: #b0d9ff;
+            font-size: 0.9rem;
+        }
+        
+        .stats-banner {
+            background: linear-gradient(135deg, #4aa3ff20, #a8e6ff20);
+            border-radius: 30px;
+            padding: 3rem;
+            margin: 4rem 0;
+            text-align: center;
+            border: 2px solid #4aa3ff;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #b0d9ff;
+            margin-top: 0.5rem;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin: 4rem 0;
+            padding: 3rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 30px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .cta-btn {
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-primary {
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            color: #0a1f2e;
+        }
+        
+        .cta-secondary {
+            background: transparent;
+            border: 2px solid #4aa3ff;
+            color: #4aa3ff;
+        }
+        
+        .cta-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #4aa3ff;
+        }
+        
+        .cta-secondary:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,7 +133,8 @@
                 <li><a href="index.html" class="active">الرئيسية</a></li>
                 <li><a href="ranks.html">الرتب</a></li>
                 <li><a href="members.html">الأعضاء</a></li>
-                <li><a href="about.html">عن النقابة</a></li>
+                <li><a href="bank.html">🏦 البنك</a></li>
+                <li><a href="games.html">🎮 الألعاب</a></li>
                 <li><a href="events.html">الفعاليات</a></li>
                 <li><a href="contact.html">التواصل</a></li>
             </ul>
@@ -37,6 +154,57 @@
             </a>
         </section>
 
+        <!-- قسم المميزات الجديدة -->
+        <section>
+            <h2 class="section-title">✨ مميزات المملكة</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏦</div>
+                    <h3 class="feature-title">البنك</h3>
+                    <p class="feature-desc">نظام نقاط متكامل، إيداع، سحب، تحويل، وتسليف بفائدة 10%</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3 class="feature-title">الألعاب</h3>
+                    <p class="feature-desc">العاب تفاعلية، تحديات يومية، وجوائز تصل لـ 500 نقطة</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">الشات</h3>
+                    <p class="feature-desc">شات داخلي مع الأعضاء، ستيكرات، وإشعارات لحظية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛒</div>
+                    <h3 class="feature-title">المتجر</h3>
+                    <p class="feature-desc">استبدل نقاطك بجوائز حقيقية ورتب مميزة</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- إحصائيات سريعة -->
+        <div class="stats-banner">
+            <h2 style="color: #a8e6ff;">📊 المملكة في أرقام</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">٥٠+</div>
+                    <div class="stat-label">عضو</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">٢٢</div>
+                    <div class="stat-label">رتبة</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">١٠٠٠+</div>
+                    <div class="stat-label">نقطة متداولة</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">١٢</div>
+                    <div class="stat-label">فعالية هذا الشهر</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم الرتب (نفس الكود القديم) -->
         <section class="ranks-section">
             <h2 class="section-title">الرتب العليا للمملكة</h2>
             <div class="ranks-grid">
@@ -201,6 +369,18 @@
                 </div>
             </div>
         </section>
+
+        <!-- قسم دعوة للانضمام -->
+        <section class="cta-section">
+            <h2 style="color: #a8e6ff;">🚀 انضم إلينا الآن</h2>
+            <p style="color: #b0d9ff; font-size: 1.2rem; margin: 1rem 0;">
+                وابدأ رحلتك في مملكة SNOW KORAL مع أكثر من ٥٠ عضو
+            </p>
+            <div class="cta-buttons">
+                <a href="signup.html" class="cta-btn cta-primary">إنشاء حساب جديد</a>
+                <a href="login.html" class="cta-btn cta-secondary">تسجيل دخول</a>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -209,12 +389,14 @@
                 <h3>❄️ SNOW KORAL</h3>
                 <p>نقابة الأنمي الرسمية - مملكة الثلج</p>
                 <p>عدد الأعضاء: ٥٠ عضو</p>
+                <p>للتواصل: 01204479735</p>
             </div>
             <div class="footer-section">
                 <h3>روابط سريعة</h3>
                 <a href="ranks.html">الرتب</a>
                 <a href="members.html">الأعضاء</a>
-                <a href="rules.html">القوانين</a>
+                <a href="bank.html">🏦 البنك</a>
+                <a href="games.html">🎮 الألعاب</a>
                 <a href="events.html">الفعاليات</a>
             </div>
             <div class="footer-section">
