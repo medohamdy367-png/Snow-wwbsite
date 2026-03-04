@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .notifications-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* رأس الإشعارات */
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title-icon {
+            font-size: 2.5rem;
+        }
+
+        .title-text {
+            font-size: 2rem;
+            color: #a8e6ff;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 20px;
+            color: #e0f2fe;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        /* فلاتر الإشعارات */
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(74,163,255,0.3);
+            border-radius: 20px;
+            color: #b0d9ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        /* قائمة الإشعارات */
+        .notifications-list {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 1rem;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification-item:hover {
+            background: rgba(74,163,255,0.1);
+        }
+
+        .notification-item.unread {
+            background: rgba(74,163,255,0.2);
+            border-right: 4px solid #4aa3ff;
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .icon-achievement { background: gold20; color: gold; }
+        .icon-game { background: #4aa3ff20; color: #4aa3ff; }
+        .icon-event { background: #ffaa0020; color: #ffaa00; }
+        .icon-social { background: #ff6b6b20; color: #ff6b6b; }
+        .icon-system { background: #00cc6620; color: #00cc66; }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            color: #a8e6ff;
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-message {
+            color: #b0d9ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #6b8ca6;
+        }
+
+        .notification-badge {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4aa3ff;
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .notif-action {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: #b0d9ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notif-action:hover {
+            background: #4aa3ff;
+            color: #0a1f2e;
+        }
+
+        /* إحصائيات الإشعارات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            color: #a8e6ff;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #b0d9ff;
+            font-size: 0.9rem;
+        }
+
+        /* إعدادات الإشعارات */
+        .settings-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .settings-title {
+            color: #a8e6ff;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(74,163,255,0.1);
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-name {
+            color: #e0f2fe;
+            margin-bottom: 0.2rem;
+        }
+
+        .setting-desc {
+            color: #6b8ca6;
+            font-size: 0.9rem;
+        }
+
+        /* Toggle switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #4aa3ff;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #4aa3ff;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* إشعار عائم */
+        .floating-notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #4aa3ff;
+            color: #0a1f2e;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 30px rgba(74,163,255,0.5);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .floating-icon {
+            font-size: 1.5rem;
+        }
+
+        .floating-close {
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-close:hover {
+            opacity: 1;
+        }
+
+        /* علامة التبويب */
+        .tab-badge {
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="notifications.html" class="active">🔔 الإشعارات</a></li>
+                <li><a href="profile.html">👤 الملف</a></li>
+                <li><a href="achievements.html">🏆 الإنجازات</a></li>
+                <li><a href="bank.html">🏦 البنك</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="notifications-container">
+        <!-- رأس الصفحة -->
+        <div class="notifications-header">
+            <div class="header-title">
+                <span class="title-icon">🔔</span>
+                <h1 class="title-text">الإشعارات</h1>
+                <span class="tab-badge" id="unreadBadge">3</span>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" onclick="markAllAsRead()">📚 تحديد الكل كمقروء</button>
+                <button class="action-btn" onclick="clearAll()">🗑️ مسح الكل</button>
+            </div>
+        </div>
+
+        <!-- إحصائيات -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number" id="totalNotif">24</div>
+                <div class="stat-label">إجمالي الإشعارات</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="unreadNotif">3</div>
+                <div class="stat-label">غير مقروءة</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="weeklyNotif">8</div>
+                <div class="stat-label">هذا الأسبوع</div>
+            </div>
+        </div>
+
+        <!-- فلاتر -->
+        <div class="filters-bar">
+            <button class="filter-btn active" onclick="filterNotifications('all')">الكل</button>
+            <button class="filter-btn" onclick="filterNotifications('achievement')">🏆 إنجازات</button>
+            <button class="filter-btn" onclick="filterNotifications('game')">🎮 ألعاب</button>
+            <button class="filter-btn" onclick="filterNotifications('event')">🎉 فعاليات</button>
+            <button class="filter-btn" onclick="filterNotifications('social')">👥 اجتماعي</button>
+        </div>
+
+        <!-- قائمة الإشعارات -->
+        <div class="notifications-list" id="notificationsList">
+            <!-- هتتعبأ بالجافاسكريبت -->
+        </div>
+
+        <!-- إعدادات الإشعارات -->
+        <div class="settings-section">
+            <h3 class="settings-title">⚙️ إعدادات الإشعارات</h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-name">إشعارات الإنجازات</div>
+                    <div class="setting-desc">عند فتح إنجاز جديد أو الحصول على شارة</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="notifAchievement" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-name">إشعارات الألعاب</div>
+                    <div class="setting-desc">نتائج الألعاب، جوائز، تحديات جديدة</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="notifGame" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-name">إشعارات الفعاليات</div>
+                    <div class="setting-desc">فعاليات جديدة، تذكيرات، نتائج</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="notifEvent" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-name">إشعارات اجتماعية</div>
+                    <div class="setting-desc">طلبات صداقة، رسائل، هدايا</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="notifSocial" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-name">إشعارات المتصفح</div>
+                    <div class="setting-desc">استقبال إشعارات حتى لو كنت خارج الموقع</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="notifBrowser" onclick="requestBrowserPermission()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'فـانـتـيـاس',
+            rank: 'الامبراطور ⛓️'
+        };
+
+        // بيانات الإشعارات
+        let notificationsData = JSON.parse(localStorage.getItem('snowKoralNotifications')) || {
+            items: [],
+            settings: {
+                achievement: true,
+                game: true,
+                event: true,
+                social: true,
+                browser: false
+            }
+        };
+
+        // إشعارات تجريبية
+        const sampleNotifications = [
+            {
+                id: 1,
+                type: 'achievement',
+                icon: '🏆',
+                title: 'إنجاز جديد!',
+                message: 'لقد فتحت إنجاز "بداية موفقة"',
+                time: new Date(Date.now() - 1000*60*30).toISOString(), // 30 دقيقة
+                read: false,
+                link: 'achievements.html'
+            },
+            {
+                id: 2,
+                type: 'game',
+                icon: '🎮',
+                title: 'فوز في لعبة الحظ',
+                message: 'ربحت 100 نقطة في لعبة الحظ',
+                time: new Date(Date.now() - 1000*60*60*2).toISOString(), // ساعتين
+                read: false,
+                link: 'games.html'
+            },
+            {
+                id: 3,
+                type: 'event',
+                icon: '🎉',
+                title: 'فعالية جديدة',
+                message: 'بطولة ناروتو تبدأ بعد ساعة',
+                time: new Date(Date.now() - 1000*60*60*5).toISOString(), // 5 ساعات
+                read: false,
+                link: 'events.html'
+            },
+            {
+                id: 4,
+                type: 'social',
+                icon: '👥',
+                title: 'طلب صداقة',
+                message: 'سـكـونـا أرسل لك طلب صداقة',
+                time: new Date(Date.now() - 1000*60*60*24).toISOString(), // يوم
+                read: true,
+                link: 'friends.html'
+            },
+            {
+                id: 5,
+                type: 'achievement',
+                icon: '🌟',
+                title: 'شارة جديدة',
+                message: 'حصلت على شارة "المواظب"',
+                time: new Date(Date.now() - 1000*60*60*24*2).toISOString(), // يومين
+                read: true,
+                link: 'achievements.html'
+            }
+        ];
+
+        // تهيئة البيانات
+        if (notificationsData.items.length === 0) {
+            notificationsData.items = sampleNotifications;
+            saveNotificationsData();
+        }
+
+        function saveNotificationsData() {
+            localStorage.setItem('snowKoralNotifications', JSON.stringify(notificationsData));
+        }
+
+        // تحميل الإشعارات
+        function loadNotifications(filter = 'all') {
+            const list = document.getElementById('notificationsList');
+            
+            let filtered = notificationsData.items;
+            if (filter !== 'all') {
+                filtered = notificationsData.items.filter(n => n.type === filter);
+            }
+            
+            // ترتيب من الأحدث للأقدم
+            filtered.sort((a, b) => new Date(b.time) - new Date(a.time));
+            
+            list.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #6b8ca6; padding: 2rem;">لا توجد إشعارات</p>';
+                return;
+            }
+            
+            filtered.forEach(notif => {
+                const timeAgo = getTimeAgo(new Date(notif.time));
+                const unreadClass = notif.read ? '' : 'unread';
+                const iconClass = `icon-${notif.type}`;
+                
+                list.innerHTML += `
+                    <div class="notification-item ${unreadClass}" data-id="${notif.id}" onclick="openNotification(${notif.id})">
+                        <div class="notification-icon ${iconClass}">${notif.icon}</div>
+                        <div class="notification-content">
+                            <div class="notification-title">${notif.title}</div>
+                            <div class="notification-message">${notif.message}</div>
+                            <div class="notification-time">${timeAgo}</div>
+                        </div>
+                        ${!notif.read ? '<div class="notification-badge"></div>' : ''}
+                        <div class="notification-actions" onclick="event.stopPropagation()">
+                            <button class="notif-action" onclick="markAsRead(${notif.id})">✓</button>
+                            <button class="notif-action" onclick="deleteNotification(${notif.id})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            updateStats();
+        }
+
+        // حساب الوقت المنقضي
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            if (seconds < 60) return 'منذ لحظات';
+            if (seconds < 3600) return `منذ ${Math.floor(seconds / 60)} دقيقة`;
+            if (seconds < 86400) return `منذ ${Math.floor(seconds / 3600)} ساعة`;
+            if (seconds < 2592000) return `منذ ${Math.floor(seconds / 86400)} يوم`;
+            return `منذ ${Math.floor(seconds / 2592000)} شهر`;
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            const total = notificationsData.items.length;
+            const unread = notificationsData.items.filter(n => !n.read).length;
+            
+            // إشعارات هذا الأسبوع
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const weekly = notificationsData.items.filter(n => new Date(n.time) > weekAgo).length;
+            
+            document.getElementById('totalNotif').textContent = total;
+            document.getElementById('unreadNotif').textContent = unread;
+            document.getElementById('unreadBadge').textContent = unread;
+            document.getElementById('weeklyNotif').textContent = weekly;
+        }
+
+        // فلترة الإشعارات
+        function filterNotifications(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadNotifications(filter);
+        }
+
+        // تحديد الكل كمقروء
+        function markAllAsRead() {
+            notificationsData.items.forEach(n => n.read = true);
+            saveNotificationsData();
+            loadNotifications();
+            
+            // إشعار عائم
+            showFloatingNotification('✅', 'تم تحديد الكل كمقروء');
+        }
+
+        // تحديد كمقروء
+        function markAsRead(id) {
+            const notif = notificationsData.items.find(n => n.id === id);
+            if (notif) {
+                notif.read = true;
+                saveNotificationsData();
+                loadNotifications();
+            }
+        }
+
+        // حذف إشعار
+        function deleteNotification(id) {
+            notificationsData.items = notificationsData.items.filter(n => n.id !== id);
+            saveNotificationsData();
+            loadNotifications();
+            
+            showFloatingNotification('🗑️', 'تم حذف الإشعار');
+        }
+
+        // مسح الكل
+        function clearAll() {
+            if (confirm('هل أنت متأكد من مسح كل الإشعارات؟')) {
+                notificationsData.items = [];
+                saveNotificationsData();
+                loadNotifications();
+                showFloatingNotification('✅', 'تم مسح كل الإشعارات');
+            }
+        }
+
+        // فتح الإشعار
+        function openNotification(id) {
+            const notif = notificationsData.items.find(n => n.id === id);
+            if (notif && !notif.read) {
+                markAsRead(id);
+            }
+            
+            if (notif.link) {
+                window.location.href = notif.link;
+            }
+        }
+
+        // إشعار عائم
+        function showFloatingNotification(icon, message) {
+            const notif = document.createElement('div');
+            notif.className = 'floating-notification';
+            notif.innerHTML = `
+                <span class="floating-icon">${icon}</span>
+                <span>${message}</span>
+                <span class="floating-close" onclick="this.parentElement.remove()">✕</span>
+            `;
+            
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.style.animation = 'slideOutLeft 0.3s ease';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+
+        // طلب إذن إشعارات المتصفح
+        function requestBrowserPermission() {
+            if (!('Notification' in window)) {
+                alert('المتصفح لا يدعم الإشعارات');
+                return;
+            }
+            
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission();
+            }
+        }
+
+        // إضافة إشعار جديد
+        function addNotification(type, icon, title, message, link = '') {
+            const newNotif = {
+                id: Date.now(),
+                type,
+                icon,
+                title,
+                message,
+                time: new Date().toISOString(),
+                read: false,
+                link
+            };
+            
+            notificationsData.items.unshift(newNotif);
+            saveNotificationsData();
+            loadNotifications();
+            
+            // إشعار عائم
+            showFloatingNotification(icon, title);
+            
+            // إشعار متصفح
+            if (notificationsData.settings.browser && Notification.permission === 'granted') {
+                new Notification(title, { body: message });
+            }
+        }
+
+        // تحميل الصفحة
+        window.onload = function() {
+            loadNotifications();
+            
+            // تطبيق الإعدادات المحفوظة
+            document.getElementById('notifAchievement').checked = notificationsData.settings.achievement;
+            document.getElementById('notifGame').checked = notificationsData.settings.game;
+            document.getElementById('notifEvent').checked = notificationsData.settings.event;
+            document.getElementById('notifSocial').checked = notificationsData.settings.social;
+            
+            // إضافة animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideOutLeft {
+                    to {
+                        transform: translateX(-100%);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        };
+    </script>
+</body>
+</html>
