@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مملكة SNOW KORAL ❄️ النقابة الرسمية</title>
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SNOW KORAL">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="theme-color" content="#4aa3ff">
+    
     <style>
         /* إضافات للصفحة الرئيسية */
         .features-grid {
@@ -120,6 +129,43 @@
             background: #4aa3ff;
             color: #0a1f2e;
         }
+        
+        /* Service Worker و PWA */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            color: #0a1f2e;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 30px rgba(74,163,255,0.5);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .install-btn {
+            background: #0a1f2e;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -135,8 +181,8 @@
                 <li><a href="members.html">الأعضاء</a></li>
                 <li><a href="bank.html">🏦 البنك</a></li>
                 <li><a href="games.html">🎮 الألعاب</a></li>
-                <li><a href="events.html">الفعاليات</a></li>
-                <li><a href="contact.html">التواصل</a></li>
+                <li><a href="library.html">📖 المكتبة</a></li>
+                <li><a href="profile.html">👤 ملفي</a></li>
             </ul>
             <div class="auth-buttons">
                 <a href="login.html" class="btn btn-login">تسجيل دخول</a>
@@ -154,30 +200,66 @@
             </a>
         </section>
 
-        <!-- قسم المميزات الجديدة -->
+        <!-- قسم المميزات الجديدة (كل الأنظمة اللي عملناها) -->
         <section>
-            <h2 class="section-title">✨ مميزات المملكة</h2>
+            <h2 class="section-title">✨ أنظمة المملكة</h2>
             <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏦</div>
-                    <h3 class="feature-title">البنك</h3>
-                    <p class="feature-desc">نظام نقاط متكامل، إيداع، سحب، تحويل، وتسليف بفائدة 10%</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3 class="feature-title">الألعاب</h3>
-                    <p class="feature-desc">العاب تفاعلية، تحديات يومية، وجوائز تصل لـ 500 نقطة</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3 class="feature-title">الشات</h3>
-                    <p class="feature-desc">شات داخلي مع الأعضاء، ستيكرات، وإشعارات لحظية</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛒</div>
-                    <h3 class="feature-title">المتجر</h3>
-                    <p class="feature-desc">استبدل نقاطك بجوائز حقيقية ورتب مميزة</p>
-                </div>
+                <a href="bank.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏦</div>
+                        <h3 class="feature-title">البنك</h3>
+                        <p class="feature-desc">نظام نقاط متكامل، إيداع، سحب، تحويل، وتسليف</p>
+                    </div>
+                </a>
+                <a href="games.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎮</div>
+                        <h3 class="feature-title">الألعاب</h3>
+                        <p class="feature-desc">ألعاب تفاعلية، تحديات يومية، وجوائز تصل لـ 500 نقطة</p>
+                    </div>
+                </a>
+                <a href="attendance.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3 class="feature-title">الحضور اليومي</h3>
+                        <p class="feature-desc">سجل حضورك يومياً واكسب نقاط إضافية</p>
+                    </div>
+                </a>
+                <a href="achievements.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3 class="feature-title">الإنجازات</h3>
+                        <p class="feature-desc">12 إنجاز وشارات خاصة تفتحها</p>
+                    </div>
+                </a>
+                <a href="profile.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3 class="feature-title">الملف الشخصي</h3>
+                        <p class="feature-desc">خصص ملفك بالثيمات والألوان</p>
+                    </div>
+                </a>
+                <a href="friends.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">🤝</div>
+                        <h3 class="feature-title">الأصدقاء</h3>
+                        <p class="feature-desc">أضف أصدقاء وأرسل هدايا</p>
+                    </div>
+                </a>
+                <a href="chat.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3 class="feature-title">الشات</h3>
+                        <p class="feature-desc">محادثات خاصة مع الأعضاء</p>
+                    </div>
+                </a>
+                <a href="library.html" style="text-decoration: none;">
+                    <div class="feature-card">
+                        <div class="feature-icon">📖</div>
+                        <h3 class="feature-title">المكتبة</h3>
+                        <p class="feature-desc">أكثر من 200 أنمي مع تقييمات</p>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -199,176 +281,40 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">١٢</div>
-                    <div class="stat-label">فعالية هذا الشهر</div>
+                    <div class="stat-label">إنجاز</div>
                 </div>
             </div>
         </div>
 
-        <!-- قسم الرتب (نفس الكود القديم) -->
+        <!-- الرتب العليا -->
         <section class="ranks-section">
             <h2 class="section-title">الرتب العليا للمملكة</h2>
             <div class="ranks-grid">
-                <!-- الامبراطور -->
                 <div class="rank-card imperial-rank">
                     <div class="rank-icon">👑⛓️</div>
                     <h3 class="rank-title">الامبراطور ⛓️</h3>
                     <div class="rank-member">فـانـتـيـاس 🌹🌑</div>
                 </div>
-
-                <!-- نائب الامبراطور -->
                 <div class="rank-card imperial-rank">
                     <div class="rank-icon">👥⛄</div>
                     <h3 class="rank-title">نائب الامبراطور ⛄</h3>
                     <div class="rank-member">سـكـونـا + هـيـنـاتـا</div>
                 </div>
-
-                <!-- المستشار -->
                 <div class="rank-card royal-rank">
                     <div class="rank-icon">📜🌹</div>
                     <h3 class="rank-title">المستشار 🌹</h3>
                     <div class="rank-member">جان 🔥</div>
                 </div>
-
-                <!-- اللورد -->
-                <div class="rank-card royal-rank">
-                    <div class="rank-icon">🏰🌷</div>
-                    <h3 class="rank-title">اللورد 🌷</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-
-                <!-- نائب اللورد -->
-                <div class="rank-card royal-rank">
-                    <div class="rank-icon">⚡🏰</div>
-                    <h3 class="rank-title">نائب اللورد ⚡</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
             </div>
         </section>
 
-        <section class="ranks-section">
-            <h2 class="section-title">الرتب الملكية</h2>
-            <div class="ranks-grid">
-                <!-- الملك -->
-                <div class="rank-card royal-rank">
-                    <div class="rank-icon">👑🔱</div>
-                    <h3 class="rank-title">الملك 🔱</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-
-                <!-- نائب الملك -->
-                <div class="rank-card royal-rank">
-                    <div class="rank-icon">👑⚜️</div>
-                    <h3 class="rank-title">نائب الملك ⚜️</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="ranks-section">
-            <h2 class="section-title">الرتب الوزارية</h2>
-            <div class="ranks-grid">
-                <!-- الوزير -->
-                <div class="rank-card minister-rank">
-                    <div class="rank-icon">💼🔦</div>
-                    <h3 class="rank-title">الوزير 🔦</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-
-                <!-- نائب الوزير -->
-                <div class="rank-card minister-rank">
-                    <div class="rank-icon">⏱️💼</div>
-                    <h3 class="rank-title">نائب الوزير ⏱️</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="ranks-section">
-            <h2 class="section-title">الرتب الإدارية</h2>
-            <div class="ranks-grid">
-                <div class="rank-card">
-                    <div class="rank-icon">⚙️</div>
-                    <h3 class="rank-title">جنرال ⚙️</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🧭</div>
-                    <h3 class="rank-title">نائب جنرال 🧭</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🕯</div>
-                    <h3 class="rank-title">عميد 🕯</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🧮</div>
-                    <h3 class="rank-title">تشيبوكاي 🧮</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">⚔️</div>
-                    <h3 class="rank-title">ملازم ⚔️</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">✨</div>
-                    <h3 class="rank-title">حامل بريق ✨</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🎀</div>
-                    <h3 class="rank-title">حامل راية 🎀</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🧸</div>
-                    <h3 class="rank-title">متدرب 🧸</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="ranks-section">
-            <h2 class="section-title">ملوك الاسبوع 👑</h2>
-            <div class="ranks-grid">
-                <div class="rank-card">
-                    <div class="rank-icon">🔥</div>
-                    <h3 class="rank-title">ملك التفاعل 🔥</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🌨️</div>
-                    <h3 class="rank-title">ملك الفعاليات 🌨️</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">☕</div>
-                    <h3 class="rank-title">ملك السوالف ☕</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🍷</div>
-                    <h3 class="rank-title">العضو الذهبي 🍷</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🫧</div>
-                    <h3 class="rank-title">المشرف الذهبي 🫧</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">🌙</div>
-                    <h3 class="rank-title">ملك النشر 🌙</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-                <div class="rank-card">
-                    <div class="rank-icon">💢</div>
-                    <h3 class="rank-title">المشرف المتخاذل 💢</h3>
-                    <div class="rank-member empty-rank">[ شاغر ]</div>
-                </div>
-            </div>
-        </section>
+        <!-- دعوة للتطبيق -->
+        <div class="install-prompt" id="installPrompt">
+            <span>📱</span>
+            <span>حمّل تطبيق SNOW KORAL</span>
+            <button class="install-btn" id="installBtn">تثبيت</button>
+            <span style="cursor: pointer;" onclick="document.getElementById('installPrompt').style.display='none'">✕</span>
+        </div>
 
         <!-- قسم دعوة للانضمام -->
         <section class="cta-section">
@@ -397,11 +343,13 @@
                 <a href="members.html">الأعضاء</a>
                 <a href="bank.html">🏦 البنك</a>
                 <a href="games.html">🎮 الألعاب</a>
+                <a href="library.html">📖 المكتبة</a>
                 <a href="events.html">الفعاليات</a>
             </div>
             <div class="footer-section">
                 <h3>تواصل معنا</h3>
                 <a href="https://chat.whatsapp.com/LqEuzfepPhu6JGaZx8Ab9u" target="_blank">جروب الواتساب</a>
+                <a href="contact.html">📞 اتصل بنا</a>
                 <div class="social-links">
                     <a href="#">📱</a>
                     <a href="#">💬</a>
@@ -411,9 +359,47 @@
         </div>
         <div style="text-align: center; margin-top: 2rem; color: #6b8ca6;">
             © 2026 مملكة SNOW KORAL - جميع الحقوق محفوظة
+            <br>
+            <small>📱 حمّل التطبيق من المتصفح</small>
         </div>
     </footer>
 
     <script src="js/main.js"></script>
+    
+    <script>
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('✅ Service Worker registered'))
+                    .catch(err => console.log('❌ Service Worker error:', err));
+            });
+        }
+        
+        // PWA Install Prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // إظهار الـ prompt
+            document.getElementById('installPrompt').style.display = 'flex';
+        });
+        
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('✅ User accepted installation');
+            }
+            
+            deferredPrompt = null;
+            document.getElementById('installPrompt').style.display = 'none';
+        });
+    </script>
 </body>
 </html>
