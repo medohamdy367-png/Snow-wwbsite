@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - SNOW KORAL ❄️</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* الشريط الجانبي */
+        .profile-sidebar {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid rgba(74,163,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            border: 4px solid gold;
+            transition: all 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #4aa3ff;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: white;
+        }
+
+        .avatar-container:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .username {
+            font-size: 1.8rem;
+            color: #a8e6ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .rank-badge {
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            color: #0a1f2e;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .points-box {
+            background: rgba(255,215,0,0.1);
+            border: 1px solid gold;
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .points-value {
+            font-size: 2rem;
+            color: gold;
+            font-weight: bold;
+        }
+
+        .points-label {
+            color: #b0d9ff;
+        }
+
+        /* تخصيصات */
+        .customization-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .section-title {
+            color: #a8e6ff;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .theme-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-card.selected {
+            border-color: gold;
+            box-shadow: 0 0 20px gold;
+        }
+
+        .theme-preview {
+            height: 100px;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-name {
+            color: #e0f2fe;
+        }
+
+        .theme-price {
+            color: gold;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* خلفيات */
+        .backgrounds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .background-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .background-card:hover {
+            transform: scale(1.05);
+        }
+
+        .background-card.selected {
+            border-color: gold;
+            box-shadow: 0 0 20px gold;
+        }
+
+        .background-preview {
+            height: 150px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 0.5rem;
+        }
+
+        /* شارات */
+        .badges-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .badge-display {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .badge-display:hover {
+            transform: scale(1.1);
+            border-color: gold;
+        }
+
+        .badge-display.selected {
+            border-color: gold;
+            background: rgba(255,215,0,0.1);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+        }
+
+        .badge-name {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #b0d9ff;
+        }
+
+        /* توقيع */
+        .signature-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .signature-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(74,163,255,0.3);
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .signature-preview {
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #b0d9ff;
+            border: 1px dashed #4aa3ff;
+        }
+
+        /* ألوان الرتبة */
+        .rank-colors {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .color-option {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        /* زر الحفظ */
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #4aa3ff, #a8e6ff);
+            border: none;
+            border-radius: 30px;
+            color: #0a1f2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+
+        .save-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px #4aa3ff;
+        }
+
+        /* معاينة الملف */
+        .profile-preview {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(74,163,255,0.3);
+        }
+
+        .preview-card {
+            background: var(--profile-bg, #0a1f2e);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4aa3ff, #a8e6ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .preview-info {
+            flex: 1;
+        }
+
+        .preview-name {
+            font-size: 1.3rem;
+            color: var(--name-color, #a8e6ff);
+            margin-bottom: 0.3rem;
+        }
+
+        .preview-rank {
+            color: var(--rank-color, #4aa3ff);
+        }
+
+        .preview-signature {
+            color: #6b8ca6;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <span class="snow-icon">❄️</span>
+                <h1>SNOW KORAL</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="profile.html" class="active">👤 الملف الشخصي</a></li>
+                <li><a href="achievements.html">🏆 الإنجازات</a></li>
+                <li><a href="attendance.html">📅 الحضور</a></li>
+                <li><a href="bank.html">🏦 البنك</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">تسجيل دخول</a>
+                <a href="signup.html" class="btn btn-signup">انضم الآن</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        <!-- الشريط الجانبي -->
+        <aside class="profile-sidebar">
+            <div class="avatar-section">
+                <div class="avatar-container" onclick="changeAvatar()">
+                    <div class="avatar" id="avatar">👤</div>
+                    <div class="avatar-overlay">تغيير</div>
+                </div>
+                <h2 class="username" id="username">فـانـتـيـاس</h2>
+                <span class="rank-badge" id="rank">الامبراطور ⛓️</span>
+                
+                <div class="points-box">
+                    <div class="points-value" id="points">5000</div>
+                    <div class="points-label">نقاطك</div>
+                </div>
+            </div>
+
+            <div class="badges-showcase" id="badgesShowcase">
+                <!-- الشارات هتظهر هنا -->
+            </div>
+        </aside>
+
+        <!-- قسم التخصيصات -->
+        <div class="customization-section">
+            <h3 class="section-title">🎨 تخصيص الملف الشخصي</h3>
+
+            <!-- الثيمات -->
+            <h4 style="color: #a8e6ff; margin: 1.5rem 0 1rem;">🌈 الثيمات</h4>
+            <div class="themes-grid" id="themes">
+                <div class="theme-card" onclick="selectTheme('default')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #0a1f2e, #1e3b4f);"></div>
+                    <div class="theme-name">الافتراضي</div>
+                    <div class="theme-price">مجاني</div>
+                </div>
+                <div class="theme-card" onclick="selectTheme('dark')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #000, #1a1a2e);"></div>
+                    <div class="theme-name">داكن</div>
+                    <div class="theme-price">200 نقطة</div>
+                </div>
+                <div class="theme-card" onclick="selectTheme('snow')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, #a8e6ff, #4aa3ff);"></div>
+                    <div class="theme-name">ثلجي</div>
+                    <div class="theme-price">300 نقطة</div>
+                </div>
+                <div class="theme-card" onclick="selectTheme('gold')">
+                    <div class="theme-preview" style="background: linear-gradient(135deg, gold, orange);"></div>
+                    <div class="theme-name">ذهبي</div>
+                    <div class="theme-price">500 نقطة</div>
+                </div>
+            </div>
+
+            <!-- خلفيات -->
+            <h4 style="color: #a8e6ff; margin: 2rem 0 1rem;">🖼️ خلفيات مخصصة</h4>
+            <div class="backgrounds-grid" id="backgrounds">
+                <div class="background-card" onclick="selectBackground('none')">
+                    <div class="background-preview" style="background: #0a1f2e;"></div>
+                    <div class="theme-name">بدون خلفية</div>
+                    <div class="theme-price">مجاني</div>
+                </div>
+                <div class="background-card" onclick="selectBackground('anime')">
+                    <div class="background-preview" style="background: linear-gradient(135deg, #ff6b6b, #4ecdc4);"></div>
+                    <div class="theme-name">أنمي</div>
+                    <div class="theme-price">150 نقطة</div>
+                </div>
+                <div class="background-card" onclick="selectBackground('stars')">
+                    <div class="background-preview" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);"></div>
+                    <div class="theme-name">نجوم</div>
+                    <div class="theme-price">250 نقطة</div>
+                </div>
+            </div>
+
+            <!-- ألوان الرتبة -->
+            <h4 style="color: #a8e6ff; margin: 2rem 0 1rem;">🎨 لون الرتبة</h4>
+            <div class="rank-colors" id="rankColors">
+                <div class="color-option" style="background: #4aa3ff;" onclick="selectRankColor('#4aa3ff')"></div>
+                <div class="color-option" style="background: gold;" onclick="selectRankColor('gold')"></div>
+                <div class="color-option" style="background: #ff6b6b;" onclick="selectRankColor('#ff6b6b')"></div>
+                <div class="color-option" style="background: #00cc66;" onclick="selectRankColor('#00cc66')"></div>
+                <div class="color-option" style="background: #ffaa00;" onclick="selectRankColor('#ffaa00')"></div>
+            </div>
+
+            <!-- توقيع شخصي -->
+            <h4 style="color: #a8e6ff; margin: 2rem 0 1rem;">✍️ توقيع شخصي</h4>
+            <div class="signature-box">
+                <input type="text" class="signature-input" id="signature" placeholder="اكتب توقيعك هنا..." maxlength="100">
+                <div class="signature-preview" id="signaturePreview">
+                    معاينة التوقيع: ...
+                </div>
+            </div>
+
+            <!-- معاينة الملف -->
+            <div class="profile-preview">
+                <h4 style="color: #a8e6ff; margin-bottom: 1rem;">👁️ معاينة الملف</h4>
+                <div class="preview-card" id="previewCard">
+                    <div class="preview-avatar" id="previewAvatar">👤</div>
+                    <div class="preview-info">
+                        <div class="preview-name" id="previewName">فـانـتـيـاس</div>
+                        <div class="preview-rank" id="previewRank">الامبراطور ⛓️</div>
+                        <div class="preview-signature" id="previewSignature"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveProfile()">💾 حفظ التغييرات</button>
+        </div>
+    </main>
+
+    <script>
+        // ==================== بيانات المستخدم ====================
+        let currentUser = JSON.parse(localStorage.getItem('snowKoralCurrentUser')) || {
+            username: 'فـانـتـيـاس',
+            rank: 'الامبراطور ⛓️',
+            points: 5000,
+            avatar: '👤',
+            theme: 'default',
+            background: 'none',
+            rankColor: '#4aa3ff',
+            signature: '',
+            badges: []
+        };
+
+        let profileCustomization = JSON.parse(localStorage.getItem('snowKoralProfile')) || {
+            theme: currentUser.theme || 'default',
+            background: currentUser.background || 'none',
+            rankColor: currentUser.rankColor || '#4aa3ff',
+            signature: currentUser.signature || ''
+        };
+
+        // تحديث واجهة المستخدم
+        function updateUI() {
+            document.getElementById('username').textContent = currentUser.username;
+            document.getElementById('rank').textContent = currentUser.rank;
+            document.getElementById('points').textContent = currentUser.points;
+            document.getElementById('avatar').textContent = currentUser.avatar || '👤';
+            document.getElementById('previewName').textContent = currentUser.username;
+            document.getElementById('previewRank').textContent = currentUser.rank;
+            document.getElementById('previewAvatar').textContent = currentUser.avatar || '👤';
+            
+            document.getElementById('signature').value = profileCustomization.signature;
+            updatePreview();
+            loadBadges();
+        }
+
+        // تحديث المعاينة
+        function updatePreview() {
+            const preview = document.getElementById('previewCard');
+            const previewRank = document.getElementById('previewRank');
+            const signature = document.getElementById('signature').value;
+            
+            // تطبيق الثيم
+            if (profileCustomization.theme === 'dark') {
+                preview.style.background = 'linear-gradient(135deg, #000, #1a1a2e)';
+            } else if (profileCustomization.theme === 'snow') {
+                preview.style.background = 'linear-gradient(135deg, #a8e6ff, #4aa3ff)';
+            } else if (profileCustomization.theme === 'gold') {
+                preview.style.background = 'linear-gradient(135deg, gold, orange)';
+            } else {
+                preview.style.background = '#0a1f2e';
+            }
+            
+            // تطبيق لون الرتبة
+            previewRank.style.color = profileCustomization.rankColor;
+            
+            // تطبيق التوقيع
+            document.getElementById('previewSignature').textContent = signature;
+            document.getElementById('signaturePreview').textContent = signature || 'معاينة التوقيع: ...';
+        }
+
+        // تغيير الصورة الشخصية
+        function changeAvatar() {
+            const avatars = ['👤', '👑', '😊', '🔥', '❄️', '⭐', '🎮', '👻'];
+            const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+            currentUser.avatar = randomAvatar;
+            document.getElementById('avatar').textContent = randomAvatar;
+            document.getElementById('previewAvatar').textContent = randomAvatar;
+        }
+
+        // اختيار ثيم
+        function selectTheme(theme) {
+            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            profileCustomization.theme = theme;
+            updatePreview();
+        }
+
+        // اختيار خلفية
+        function selectBackground(bg) {
+            document.querySelectorAll('.background-card').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            profileCustomization.background = bg;
+        }
+
+        // اختيار لون الرتبة
+        function selectRankColor(color) {
+            document.querySelectorAll('.color-option').forEach(c => c.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            profileCustomization.rankColor = color;
+            updatePreview();
+        }
+
+        // تحميل الشارات
+        function loadBadges() {
+            const container = document.getElementById('badgesShowcase');
+            const badges = [
+                { icon: '🌟', name: 'نجم', unlocked: true },
+                { icon: '🔥', name: 'ناري', unlocked: true },
+                { icon: '👑', name: 'ملك', unlocked: true },
+                { icon: '🎮', name: 'جيمر', unlocked: false },
+                { icon: '💎', name: 'ماسي', unlocked: false }
+            ];
+            
+            container.innerHTML = '';
+            badges.forEach(badge => {
+                container.innerHTML += `
+                    <div class="badge-display ${badge.unlocked ? '' : 'locked'}" onclick="${badge.unlocked ? 'selectBadge(this)' : ''}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-name">${badge.name}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // اختيار شارة
+        function selectBadge(element) {
+            document.querySelectorAll('.badge-display').forEach(b => b.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // حفظ الملف الشخصي
+        function saveProfile() {
+            profileCustomization.signature = document.getElementById('signature').value;
+            
+            // حفظ البيانات
+            localStorage.setItem('snowKoralCurrentUser', JSON.stringify(currentUser));
+            localStorage.setItem('snowKoralProfile', JSON.stringify(profileCustomization));
+            
+            alert('✅ تم حفظ التغييرات بنجاح!');
+        }
+
+        // تحميل الصفحة
+        window.onload = function() {
+            updateUI();
+        };
+    </script>
+</body>
+</html>
